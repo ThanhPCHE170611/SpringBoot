@@ -2,6 +2,10 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+  servlet:
+    session:
+      timeout: 60 # Set the session timeout to 3600 seconds (60 minutes)
+
 spring:
   datasource:
     password: 12345678
@@ -15,8 +19,3 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
-
-  server:
-    servlet:
-      session:
-        timeout : 1800
