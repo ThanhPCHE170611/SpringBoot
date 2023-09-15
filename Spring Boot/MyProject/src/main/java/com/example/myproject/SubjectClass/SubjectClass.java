@@ -34,5 +34,6 @@ public class SubjectClass {
 
     public SubjectClass() {
     }
+
 }
 
