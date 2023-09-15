@@ -3,38 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <title>Register Page</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Optionally include Bootstrap JS if needed -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 </head>
-<body>
-<form th:action="@{/register}" th:method="post">
-  <div>
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" th:required="required" th:value="${name}" />
+<body class="bg-light">
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form th:action="@{/register}" th:method="post" class="border p-4 bg-white">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" class="form-control" th:required="required" th:value="${name}" />
+        </div>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" th:required="required" th:value="${username}">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" th:required="required" th:value="${password}">
+        </div>
+        <div class="form-group">
+          <label for="re_password">Confirm Password</label>
+          <input type="password" id="re_password" name="re_password" class="form-control" th:required="required" th:value="${rePassword}">
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <div class="form-check">
+            <input type="radio" id="male" name="gender" value="male" class="form-check-input" th:checked="${gender == 'male'}" />
+            <label for="male" class="form-check-label">Male</label>
+          </div>
+          <div class="form-check">
+            <input type="radio" id="female" name="gender" value="female" class="form-check-input" th:checked="${gender == 'female'}" />
+            <label for="female" class="form-check-label">Female</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+      <p class="mt-3" th:if="${error != null}" th:text="${error}"></p>
+    </div>
   </div>
-  <div>
-    <label th:for="username">Username</label>
-    <input type="text" id="username" name="username" th:required="required" th:value="${username}">
-  </div>
-
-  <div>
-    <label th:for="password">Password</label>
-    <input type="password" id="password" name="password" th:required="required" th:value="${password}">
-  </div>
-
-  <div>
-    <label th:for="re_password">Confirm Password</label>
-    <input type="password" id="re_password" name="re_password" th:required="required" th:value="${rePassword}">
-  </div>
-
-  <div>
-    <label for="male">Male</label>
-    <input type="radio" id="male" name="gender" value="male" th:checked="${gender == 'male'}" />
-
-    <label for="female">Female</label>
-    <input type="radio" id="female" name="gender" value="female" th:checked="${gender == 'female'}" />
-  </div>
-
-  <input type="submit" value="Register">
-</form>
-<p th:if="${error != null}" th:text="${error}"></p>
+</div>
 </body>
 </html>

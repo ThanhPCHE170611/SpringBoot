@@ -22,4 +22,16 @@ public class Subject {
 
     public Subject() {
     }
+
+    public Subject(Long id, String subjectname) {
+        this.id = id;
+        this.subjectname = subjectname;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Subject student = (Subject) obj;
+        return id == student.id;
+    }
 }
