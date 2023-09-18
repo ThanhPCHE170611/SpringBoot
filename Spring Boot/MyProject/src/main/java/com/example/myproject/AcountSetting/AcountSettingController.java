@@ -1,6 +1,7 @@
 package com.example.myproject.AcountSetting;
 
 import com.example.myproject.Student.Student;
+import com.example.myproject.Teacher.Teacher;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpSession;
 public class AcountSettingController {
     private final PasswordEncoder passwordEncoder;
     private AccountSettingService accountSettingService;
-    @GetMapping(path = "/student/accountsetting")
+    @GetMapping(path = "/studenthome/accountsetting")
     public String AccountSetting(HttpSession session, Model model){
         //Get the student in the session
         Student student = (Student) session.getAttribute("user");
@@ -26,7 +27,7 @@ public class AcountSettingController {
         else model.addAttribute("gender", "female");
         return "accountsetting";
     }
-    @PostMapping(path = "/student/accountsetting")
+    @PostMapping(path = "/studenthome/accountsetting")
     public String UpdateInformation(@RequestParam String name, @RequestParam String oldpassword,
                                   @RequestParam String password, @RequestParam String gender, Model model, HttpSession session){
         String error = validateData(name, oldpassword, password,  gender, model, session);
@@ -36,7 +37,7 @@ public class AcountSettingController {
             return "accountsetting";
         } else {
             Student student = (Student) session.getAttribute("user");
-            if(passwordEncoder.matches(password, student.getPassword())){
+            if(passwordEncoder.matches(password, student.getPassword()) || password.equals(student.getPassword())){
                 accountSettingService.updateStudent(name, password, gender, session);
                 model.addAttribute("error", "Update information successful!");
                 return "studenthome";
@@ -46,6 +47,15 @@ public class AcountSettingController {
                 return "login";
             }
         }
+    }
+    @GetMapping(path = "/teacherhome/accountsetting")
+    public String teacherAccountSetting(HttpSession session, Model model){
+        //Get the student in the session
+        Teacher teacher = (Teacher) session.getAttribute("user");
+        model.addAttribute("name", teacher.getName());
+        if(teacher.isGender()) model.addAttribute("gender", "male");
+        else model.addAttribute("gender", "female");
+        return "teacheraccountsetting";
     }
 
     private String validateData(String name, String oldpassword, String password, String gender, Model model, HttpSession session) {
@@ -59,7 +69,7 @@ public class AcountSettingController {
             return "Name must start with an uppercase letter and be at least 4 characters long and dont have any number and speical chars.";
         }
         // Check oldpassword and newPassword
-        if (!passwordEncoder.matches(oldpassword, student.getPassword())) {
+        if (!passwordEncoder.matches(oldpassword, student.getPassword()) && !oldpassword.equals(student.getPassword())) {
             model.addAttribute("name", name);
             model.addAttribute("oldpassword", oldpassword);
             model.addAttribute("password", password);
@@ -83,5 +93,61 @@ public class AcountSettingController {
             return "New Password must contain only letters and numbers.";
         }
         return ""; // No validation errors
+    }
+    private String teacherValidateData(String name, String oldpassword, String password, String gender, Model model, HttpSession session) {
+        Teacher teacher = (Teacher) session.getAttribute("user");
+        // Check name
+        if (name == null || !name.matches("^[A-Z][a-zA-Z]{3,}$")) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            model.addAttribute("gender", gender);
+            return "Name must start with an uppercase letter and be at least 4 characters long and dont have any number and speical chars.";
+        }
+        // Check oldpassword and newPassword
+        if (!passwordEncoder.matches(oldpassword, teacher.getPassword()) && !oldpassword.equals(teacher.getPassword())) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            model.addAttribute("gender", gender);
+            return "Old Password isn't correct";
+        }
+
+        if (password.length() < 4) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            model.addAttribute("gender", gender);
+            return "New Password must be at least 4 characters long.";
+        }
+
+        if (!password.matches("^[a-zA-Z0-9]+$")) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            model.addAttribute("gender", gender);
+            return "New Password must contain only letters and numbers.";
+        }
+        return ""; // No validation errors
+    }
+
+    @PostMapping(path = "/teacherhome/accountsetting")
+    public String teacherUpdateInformation(@RequestParam String name, @RequestParam String oldpassword,
+                                    @RequestParam String password, @RequestParam String gender, Model model, HttpSession session) {
+        String error = teacherValidateData(name, oldpassword, password, gender, model, session);
+        if (!error.isEmpty()) {
+            model.addAttribute("error", error);
+            return "accountsetting";
+        } else {
+            Teacher teacher = (Teacher) session.getAttribute("user");
+            if (passwordEncoder.matches(password, teacher.getPassword()) || password.equals(teacher.getPassword())) {
+                accountSettingService.updateTeacher(name, password, gender, session);
+                model.addAttribute("error", "Update information successful!");
+                return "teacherhome";
+            } else {
+                accountSettingService.updateTeacher(name, password, gender, session);
+                return "login";
+            }
+        }
     }
 }

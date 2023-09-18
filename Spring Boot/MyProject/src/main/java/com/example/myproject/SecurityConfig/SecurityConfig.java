@@ -17,8 +17,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // Define security rules for HTTP requests
                 .authorizeRequests()
-                // Allow unrestricted access to URLs starting with "/public/"
                 .anyRequest().permitAll();
+
+                // Allow unrestricted access to URLs starting with "/public/"
+//                .anyRequest().permitAll();
                 // Require authentication for all other requests
     }
 

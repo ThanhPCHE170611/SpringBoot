@@ -20,4 +20,6 @@ public interface ClassRepository extends JpaRepository<Class, Long> {
     List<Class> findAllByIdNotEqual(Long id);
 
     Optional<Class> findClassByClassname(String classname);
+    @Query(value = "Select * from find_all_class_for_teacher(?1)", nativeQuery = true)
+    List<Object[]> findAllClassForTeacher(Long teacherId);
 }

@@ -22,4 +22,9 @@ public class Class {
 
     public Class() {
     }
+
+    public Class(Long id, String classname) {
+        this.id = id;
+        this.classname = classname;
+    }
 }
