@@ -25,9 +25,15 @@ public class ChangeClassService {
     private final ClassChangeRequestRepository classChangeRequestRepository;
 
     public boolean hasRequest(long id) {
-        if(classChangeRequestRepository.findClassChangeRequestByStudentId(id).isPresent()){
-            return true;
-        } else return false;
+        List<ClassChangeRequest> request = classChangeRequestRepository.findAllByStudentId(id);
+        if(request.isEmpty()){
+            return false;
+        } else {
+            int size = request.size();
+            if(request.get(size-1).getStatus().equals("process")){
+                return true;
+            } else return false;
+        }
     }
 
     public List<Class> listClassEnoughSlot(Class studentClass) {
@@ -56,5 +62,15 @@ public class ChangeClassService {
         Class newClass = classRepository.findById(newclassidL).get();
         ClassChangeRequest classChangeRequest = new ClassChangeRequest("process", student, oldClass,newClass);
         classChangeRequestRepository.save(classChangeRequest);
+    }
+    public List<ClassChangeRequest> listClassChangeRequest(){
+        return classChangeRequestRepository.findAll();
+    }
+    @Transactional
+    public void acceptRequest(Long id) {
+        ClassChangeRequest classChangeRequest = classChangeRequestRepository.findById(id).get();
+        classChangeRequest.setStatus("accepted");
+        Student student = studentRepository.findById(classChangeRequest.getStudent().getId()).get();
+        student.setStudentClass(classChangeRequest.getNewClass());
     }
 }

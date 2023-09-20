@@ -1,6 +1,7 @@
 package com.example.myproject.ChangeClass;
 
 import com.example.myproject.Class.Class;
+import com.example.myproject.ClassChangeRequest.ClassChangeRequest;
 import com.example.myproject.Student.Student;
 import com.example.myproject.Subject.Subject;
 import lombok.AllArgsConstructor;
@@ -73,5 +74,22 @@ public class ChangeClassController {
             model.addAttribute("error", "Request has been sent!");
         return "studenthome";
     }
-
+    @GetMapping(path = "/adminhome/requestmanager")
+    public String listRequest(HttpSession session, Model model){
+        List<ClassChangeRequest> requests = new ArrayList<>();
+        List<ClassChangeRequest> temp = classService.listClassChangeRequest();
+        for (ClassChangeRequest request : temp){
+            if (request.getStatus().equals("process")){
+                requests.add(request);
+            }
+        }
+        model.addAttribute("requests", requests);
+        return "requestmanager";
+    }
+    @GetMapping(path = "/adminhome/requestmanager/accept")
+    public String acceptRequest(@RequestParam Long id, Model model){
+        classService.acceptRequest(id);
+        model.addAttribute("error", "Update status successful");
+        return "requestmanager";
+    }
 }

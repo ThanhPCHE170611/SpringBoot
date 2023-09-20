@@ -7,10 +7,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
 public interface SubjectClassRepository extends JpaRepository<SubjectClass, Long> {
     @Query(value = "Select * from find_all_subject_in_class(?1)", nativeQuery = true)
     List<Object[]> findAllSubjectsInClass(Long classId);
+
+
+    List<SubjectClass> findAllBySubjectId(long subjectid);
 }
