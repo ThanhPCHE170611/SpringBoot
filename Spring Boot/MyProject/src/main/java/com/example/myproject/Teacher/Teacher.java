@@ -30,5 +30,10 @@ public class Teacher {
 
     public Teacher() {
     }
+
+    public Teacher(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
 

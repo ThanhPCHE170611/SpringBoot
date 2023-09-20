@@ -1,5 +1,7 @@
 package com.example.myproject.AcountSetting;
 
+import com.example.myproject.Admin.Admin;
+import com.example.myproject.Admin.AdminRepository;
 import com.example.myproject.Student.Student;
 import com.example.myproject.Student.StudentRepository;
 import com.example.myproject.Teacher.Teacher;
@@ -17,6 +19,7 @@ public class AccountSettingService {
     private final StudentRepository studentRepository;
     private final PasswordEncoder passwordEncoder;
     private final TeacherRepository teacherRepository;
+    private final AdminRepository adminRepository;
     @Transactional
     public void updateStudent(String name, String password, String gender, HttpSession session) {
         Student student = (Student) session.getAttribute("user");
@@ -40,5 +43,15 @@ public class AccountSettingService {
         if(gender.equals("male")) bGender = true; else bGender = false;
         teacherInDB.setGender(bGender);
         session.setAttribute("user", teacherInDB);
+    }
+
+    @Transactional
+    public void updateAdmin(String name, String password, HttpSession session) {
+        Admin admin = (Admin) session.getAttribute("user");
+        Admin adminInDB = adminRepository.findById(admin.getId()).get();
+        adminInDB.setName(name);
+        String encodePassword = passwordEncoder.encode(password);
+        adminInDB.setPassword(encodePassword);
+        session.setAttribute("user", adminInDB);
     }
 }

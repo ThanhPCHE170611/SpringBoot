@@ -1,5 +1,6 @@
 package com.example.myproject.AcountSetting;
 
+import com.example.myproject.Admin.Admin;
 import com.example.myproject.Student.Student;
 import com.example.myproject.Teacher.Teacher;
 import lombok.AllArgsConstructor;
@@ -137,7 +138,7 @@ public class AcountSettingController {
         String error = teacherValidateData(name, oldpassword, password, gender, model, session);
         if (!error.isEmpty()) {
             model.addAttribute("error", error);
-            return "accountsetting";
+            return "teacheraccountsetting";
         } else {
             Teacher teacher = (Teacher) session.getAttribute("user");
             if (passwordEncoder.matches(password, teacher.getPassword()) || password.equals(teacher.getPassword())) {
@@ -149,5 +150,64 @@ public class AcountSettingController {
                 return "login";
             }
         }
+    }
+    @GetMapping(path = "/adminhome/accountsetting")
+    public String adminAccountSetting(HttpSession session, Model model){
+        //Get the student in the session
+        Admin admin = (Admin) session.getAttribute("user");
+        model.addAttribute("name", admin.getName());
+        return "adminaccountsetting";
+    }
+
+    @PostMapping(path = "adminhome/accountsetting")
+    public String adminUpdateInformation(@RequestParam String name, @RequestParam String oldpassword,
+                                         @RequestParam String password, HttpSession session, Model model){
+        String error = this.adminValidateData(name, oldpassword, password, model, session);
+        if(!error.isEmpty()){
+            model.addAttribute("error", error);
+            return "adminaccountsetting";
+        } else {
+            Admin admin = (Admin) session.getAttribute("user");
+            if (passwordEncoder.matches(password, admin.getPassword()) || password.equals(admin.getPassword())) {
+                accountSettingService.updateAdmin(name, password, session);
+                model.addAttribute("error", "Update information successful!");
+                return "adminhome";
+            } else {
+                accountSettingService.updateAdmin(name, password,  session);
+                return "login";
+            }
+        }
+    }
+    private String adminValidateData(String name, String oldpassword, String password, Model model, HttpSession session) {
+        Admin admin = (Admin) session.getAttribute("user");
+        // Check name
+        if (name == null || !name.matches("^[A-Z][a-zA-Z]{3,}$")) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            return "Name must start with an uppercase letter and be at least 4 characters long and dont have any number and speical chars.";
+        }
+        // Check oldpassword and newPassword
+        if (!passwordEncoder.matches(oldpassword, admin.getPassword()) && !oldpassword.equals(admin.getPassword())) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            return "Old Password isn't correct";
+        }
+
+        if (password.length() < 4) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            return "New Password must be at least 4 characters long.";
+        }
+
+        if (!password.matches("^[a-zA-Z0-9]+$")) {
+            model.addAttribute("name", name);
+            model.addAttribute("oldpassword", oldpassword);
+            model.addAttribute("password", password);
+            return "New Password must contain only letters and numbers.";
+        }
+        return ""; // No validation errors
     }
 }

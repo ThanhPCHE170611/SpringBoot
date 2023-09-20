@@ -10,4 +10,5 @@ import java.util.Optional;
 @Transactional
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
     Optional<Teacher> findTeacherByUsername(String username);
+
 }
