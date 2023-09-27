@@ -4,6 +4,7 @@ import com.example.jwtspringboot.AppUser.AppUser;
 import com.example.jwtspringboot.AppUser.AppUserRepository;
 import com.example.jwtspringboot.Role.Role;
 import com.example.jwtspringboot.Role.RoleRepository;
+import com.example.jwtspringboot.SecurityConfig.TokenGenerate;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,11 +23,11 @@ import java.util.Collections;
 @RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthController {
-    private final AuthenticationManager authenticationManager;
+    private  AuthenticationManager authenticationManager;
     private AppUserRepository appUserRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-
+    private TokenGenerate tokenGenerate;
     @PostMapping(path = "/register")
     public String register(@RequestBody RegisterDto registerDto){
         if(appUserRepository.existsAppUserByUsername(registerDto.getUsername())){
@@ -45,6 +46,9 @@ public class AuthController {
     public String logIn(@RequestBody LoginDto logInDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(logInDto.getUsername(), logInDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = tokenGenerate.generateToken(authentication);
+        String username = tokenGenerate.getUsernameFormJwt(token);
+        System.out.println(username);
         return "homepage";
     }
 }
