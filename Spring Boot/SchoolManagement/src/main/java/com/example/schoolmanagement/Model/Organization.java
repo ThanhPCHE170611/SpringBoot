@@ -35,6 +35,6 @@ public class Organization {
     @JoinColumn(name = "class")
     private List<Class> aClass;
 
-
+    private String path;
 
 }
