@@ -1,10 +1,11 @@
 package com.example.schoolmanagement.Model;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -20,11 +21,6 @@ public class Class {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="class_subject", joinColumns = @JoinColumn(name ="rollnumber"),
             inverseJoinColumns = @JoinColumn(name="subjectcode"))
-    private List<Subject> subjects;
-
-    @ManyToOne
-    @JoinColumn(name = "organization")
-    private Organization organization;
-
+    private Set<Subject> subjects;
 
 }

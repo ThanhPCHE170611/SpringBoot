@@ -1,9 +1,9 @@
 package com.example.schoolmanagement.Model;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -13,27 +13,35 @@ import java.util.List;
 @Getter
 public class Organization {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long Id;
+
     private String schoolcode;
+
 
 
     private String schoolname;
 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "wardorganization")
+    private Organization wardorganization;
+
+
     @OneToOne
     @JoinColumn(name = "ward")
     private Ward ward;
-    @OneToOne
-    @JoinColumn(name = "district")
-    private District district;
-    @OneToOne
-    @JoinColumn(name = "city")
-    private District city;
 
     private String status;
     private Date operatingday;
 
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "classorganization")
+    private Organization classorganization;
+
     @OneToMany
     @JoinColumn(name = "class")
-    private List<Class> aClass;
+    private List<Class> classes;
+
 
     private String path;
 

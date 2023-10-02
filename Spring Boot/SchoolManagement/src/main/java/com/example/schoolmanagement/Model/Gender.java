@@ -1,17 +1,19 @@
 package com.example.schoolmanagement.Model;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @Table
 @Getter
 @Setter
 public class Gender {
-    @jakarta.persistence.Id
+    @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long Id;
     private String gender;
+    private String status;
 
 }
