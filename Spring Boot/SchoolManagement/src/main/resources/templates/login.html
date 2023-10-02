@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+</head>
+<body>
+<!-- Display the error message if it exists -->
+<div th:if="${error}" class="alert alert-danger">
+    <p th:text="${error}">Login failed</p>
+</div>
+
+<!-- Your login form here -->
+<form method="post" th:action="@{/auth/login}" th:object="${loginDTO}">
+    <!-- Form fields for username and password -->
+    <label for="username">Username</label>
+    <br>
+    <input type="text"  placeholder="Username" required id="username" th:field="*{username}"/>
+    <br>
+    <label for="password">Password</label>
+    <br>
+    <input type="password" placeholder="Password" required id="password"th:field="*{password}"/>
+    <br>
+    <button type="submit">Login</button>
+</form>
+    <a href="/oauth2/authorization/google">Login with google</a>
+</body>
+</html>

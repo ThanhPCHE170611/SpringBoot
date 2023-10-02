@@ -19,4 +19,16 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 710177561209-f48e675l83eh471c1o0ifnaussttmv99.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+logging:
+  level:
+    org:
+      springframework:
+        security: Trace

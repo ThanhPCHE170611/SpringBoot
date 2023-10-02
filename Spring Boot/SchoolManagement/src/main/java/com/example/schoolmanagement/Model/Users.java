@@ -1,19 +1,22 @@
 package com.example.schoolmanagement.Model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Table
 @Entity
 @Getter
 @Setter
-public class Users {
+public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String rollNumber;
@@ -23,15 +26,15 @@ public class Users {
     private String email;
 
     //Orgarnizaion
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "gender")
     private Gender gender;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ethnic")
     private Ethnic ethnic;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "religion")
     private Religion religions;
     private String picture;
@@ -47,12 +50,12 @@ public class Users {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="user_role", joinColumns = @JoinColumn(name ="rollnumber"),
             inverseJoinColumns = @JoinColumn(name="id"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="teacher_subject", joinColumns = @JoinColumn(name ="rollnumber"),
             inverseJoinColumns = @JoinColumn(name="subjectcode"))
-    private List<Subject> subjects;
+    private Set<Subject> subjects;
 
     @OneToOne
     @JoinColumn(name = "teacher_class")
@@ -62,5 +65,36 @@ public class Users {
     @JoinColumn(name = "student_class")
     private Class studentclass;
 
-    private Date lastchangepassword;
+    private Date lastchangepassword = new Date();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        // Iterate through user roles and add them as authorities
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRolename().toUpperCase()));
+        }
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

@@ -1,8 +1,11 @@
 package com.example.schoolmanagement.Model;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table
@@ -10,7 +13,6 @@ import lombok.Setter;
 @Setter
 public class Subject {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String subjectcode;
 
     private String subjectname;
