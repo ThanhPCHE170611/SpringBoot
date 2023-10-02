@@ -1,17 +1,12 @@
 package com.example.schoolmanagement.Controller;
 
 import com.example.schoolmanagement.DTO.LoginDTO;
-//import com.example.schoolmanagement.Model.Users;
 import com.example.schoolmanagement.Model.Users;
-import com.example.schoolmanagement.Repository.RoleRepository;
-//import com.example.schoolmanagement.Repository.UserRepository;
 import com.example.schoolmanagement.Repository.UserRepository;
 import com.example.schoolmanagement.Utilities.GoogleLoginHandle;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
