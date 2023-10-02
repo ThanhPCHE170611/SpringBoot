@@ -5,11 +5,6 @@
   <title>Login</title>
 </head>
 <body>
-<!-- Display the error message if it exists -->
-<div th:if="${error}" class="alert alert-danger">
-    <p th:text="${error}">Login failed</p>
-</div>
-
 <!-- Your login form here -->
 <form method="post" th:action="@{/auth/login}" th:object="${loginDTO}">
     <!-- Form fields for username and password -->
@@ -25,4 +20,7 @@
 </form>
     <a href="/oauth2/authorization/google">Login with google</a>
 </body>
+<div th:if="${error}" class="alert alert-danger">
+    <p th:text="${error}" style="color:red"></p>
+</div>
 </html>

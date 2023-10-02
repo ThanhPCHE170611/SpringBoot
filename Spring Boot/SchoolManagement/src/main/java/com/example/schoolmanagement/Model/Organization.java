@@ -41,9 +41,4 @@ public class Organization {
     @OneToMany
     @JoinColumn(name = "class")
     private List<Class> classes;
-
-
-    private String path;
-
-
 }

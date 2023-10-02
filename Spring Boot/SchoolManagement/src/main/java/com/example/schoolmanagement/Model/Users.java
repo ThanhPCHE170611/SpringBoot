@@ -37,6 +37,7 @@ public class Users implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "religion")
     private Religion religions;
+
     private String picture;
     private String hobbies;
     private String address;
@@ -65,7 +66,7 @@ public class Users implements UserDetails {
     @JoinColumn(name = "student_class")
     private Class studentclass;
 
-    private Date lastchangepassword = new Date();
+    private Date lastchangepassword;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -96,5 +97,9 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    @PrePersist
+    public void prePersist() {
+        this.lastchangepassword = new Date();
     }
 }

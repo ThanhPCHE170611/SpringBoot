@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.Provide;
 
+import com.example.schoolmanagement.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -18,23 +19,23 @@ import org.springframework.ui.Model;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private UserDetailsService userDetailsService;
+    private final UserRepository    userRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        System.out.println("username: " + username);
         String password = authentication.getCredentials().toString();
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
         if (userDetails == null) {
             throw new AuthenticationServiceException("User not found");
         }
-
+        if(!userRepository.findUsersByUsername(username).get().getStatus().equals("active")){
+            throw new BadCredentialsException("Bad credentials");
+        }
         if (passwordEncoder.matches(password, userDetails.getPassword()) || password.equals(userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         } else {
-
             throw new BadCredentialsException("Bad credentials");
         }
     }

@@ -37,18 +37,17 @@ public class SecurityConfig {
                     auth.antMatchers("/**").permitAll()
                             .antMatchers("/admin/**").hasRole("admin")
                             .antMatchers("/student/**").hasRole("student")
-                            .antMatchers("/teacher/**").hasRole("teacher")
-                            .antMatchers("/").hasRole("ANONYMOUS");
+                            .antMatchers("/teacher/**").hasRole("teacher");
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login()
                 .loginPage("/oauth2/authorization/google")
-                .failureUrl("/oauth2/authorization/google")
+                .failureUrl("/auth/login?error=true")
                 .defaultSuccessUrl("/user/welcome")
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
-                .failureUrl("/auth/login")
+                .failureUrl("/auth/login?error=true")
                 .defaultSuccessUrl("/user/welcome")
                 .permitAll()
                 .and()
