@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .permitAll()
                 .and()
                 .authenticationProvider(customAuthenticationProvider)
-                .userDetailsService(customeUserDetailService)// Add the custom AuthenticationProvider
+                .userDetailsService(customeUserDetailService)
                 .build();
     }
 

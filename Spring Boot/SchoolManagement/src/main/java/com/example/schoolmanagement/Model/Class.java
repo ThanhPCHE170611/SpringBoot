@@ -19,8 +19,7 @@ public class Class {
     private String classname;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="class_subject", joinColumns = @JoinColumn(name ="rollnumber"),
+    @JoinTable(name="class_subject", joinColumns = @JoinColumn(name ="classid"),
             inverseJoinColumns = @JoinColumn(name="subjectcode"))
     private Set<Subject> subjects;
-
 }

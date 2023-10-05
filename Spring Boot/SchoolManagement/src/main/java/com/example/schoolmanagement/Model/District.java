@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 public class District {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String districname;
 
@@ -20,5 +19,22 @@ public class District {
     private City city;
 
     private String status;
+
+    public District(long id, String distict) {
+        this.id = id;
+        this.districname = distict;
+        this.status = "active";
+    }
+
+    public District(long id, String distict, City city) {
+        this.id = id;
+        this.districname = distict;
+        this.status = "active";
+        this.city = city;
+    }
+
+    public District() {
+
+    }
 }
 
