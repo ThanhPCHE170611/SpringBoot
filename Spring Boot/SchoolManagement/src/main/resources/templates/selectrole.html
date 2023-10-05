@@ -5,8 +5,11 @@
   <title>Select Role</title>
 </head>
 <body>
-  <div th:each="role : ${roles}">
-    <a href="#" th:text="${role}"></a>
-  </div>
+<div th:each="role : ${roles}">
+  <a th:if="${role.getAuthority() == 'ROLE_STUDENT'}" href="/student/homepage" th:text="${role}"></a>
+  <a th:if="${role.getAuthority() == 'ROLE_TEACHER'}" href="/teacher/homepage" th:text="${role}"></a>
+  <a th:if="${role.getAuthority() == 'ROLE_ADMIN'}" href="/admin/homepage" th:text="${role}"></a>
+  <a th:if="${role.getAuthority() == 'ROLE_SUPERADMIN'}" href="/superadmin/homepage" th:text="${role}"></a>
+</div>
 </body>
 </html>

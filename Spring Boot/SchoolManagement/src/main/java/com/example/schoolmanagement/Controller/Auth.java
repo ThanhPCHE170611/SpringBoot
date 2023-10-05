@@ -41,7 +41,13 @@ public class Auth {
         }
         //handle for just one student role -> go student homepage
         if(roles.size() == 1 && roles.toString().contains("Role_Student")){
-            session.setAttribute("user", authentication.getName());
+            if(authentication.getName() == null){
+                String email = googleLoginHandle.getEmailFromOAuth2Authentication(authentication);
+                session.setAttribute("user", userRepository.findUsersByEmail(email).get());
+            } else {
+                String username = authentication.getName();
+                session.setAttribute("user", userRepository.findUsersByUsername(username).get());
+            }
             return "studenthome";
         }
         //handle for user role -> search email -> get user -> get role and accept homepage
@@ -60,9 +66,25 @@ public class Auth {
                 }
             }
         }
-        session.setAttribute("user", authentication.getName());
+        if(authentication.getName() == null){
+            String email = googleLoginHandle.getEmailFromOAuth2Authentication(authentication);
+            session.setAttribute("user", userRepository.findUsersByEmail(email).get());
+        }
+        else if(authentication.getPrincipal().toString().contains("email")){
+            String email = googleLoginHandle.getEmailFromOAuth2Authentication(authentication);
+            session.setAttribute("user", userRepository.findUsersByEmail(email).get());
+        }
+        else {
+            String username = authentication.getName();
+            session.setAttribute("user", userRepository.findUsersByUsername(username).get());
+        }
         model.addAttribute("roles", roles);
         return "selectrole";
+    }
+    @GetMapping(path = "/logout")
+    public String logOut(HttpSession session){
+        session.invalidate();
+        return "redirect:/auth/login";
     }
 
 }

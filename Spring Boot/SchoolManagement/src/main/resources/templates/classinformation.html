@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Class Information</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/student/homepage">Student Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/student/homepage">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/student/classinformation">Class information</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/student/changeclass">Change Class</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/student/changeschool">Change School</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/student/studenttranscript">Student transcript</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown"> <!-- Added dropdown class here -->
+        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Student Account
+        </a>
+        <div class="dropdown-menu" aria-labelledby="accountDropdown">
+          <a class="dropdown-item" href="/student/accountsetting">Setting</a>
+          <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container mt-5">
+  <h2> Class name: <span th:text="${class.getClassname()}" ></span> </h2>
+</div>
+<div class="container mt-5">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Full Name</th>
+      <th>Gender</th>
+      <th>Picture</th>
+      <th>Ethnic</th>
+      <th>Religion</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student, number : ${students}">
+      <td th:text="${number.index + 1}"></td>
+      <td th:text="${student.getFullname()}"></td>
+      <td th:text="${student.getGender().getGender()}"></td>
+      <td><img th:src="${student.getPicture()}" alt="ảnh học sinh"> </td>
+      <td th:text="${student.getEthnic().getEthnic()}"></td>
+      <td th:text="${student.getReligions().getReligion()}"></td>
+    </tbody>
+  </table>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

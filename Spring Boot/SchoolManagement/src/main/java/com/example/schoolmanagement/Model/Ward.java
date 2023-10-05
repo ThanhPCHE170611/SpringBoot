@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 public class Ward {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String wardname;
 
@@ -19,4 +18,20 @@ public class Ward {
     @JoinColumn(name="district")
     private District district;
     private String status;
+
+    public Ward(long id, String wardname) {
+        this.id = id;
+        this.wardname = wardname;
+        this.status = "active";
+    }
+
+    public Ward(long id, String wardname, District district) {
+        this.id = id;
+        this.wardname = wardname;
+        this.status = "active";
+        this.district = district;
+    }
+
+    public Ward() {
+    }
 }

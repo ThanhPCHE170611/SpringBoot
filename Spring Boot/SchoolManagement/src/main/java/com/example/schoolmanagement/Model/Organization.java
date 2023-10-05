@@ -38,7 +38,7 @@ public class Organization {
     @JoinColumn(name = "classorganization")
     private Organization classorganization;
 
-    @OneToMany
+    @OneToOne
     @JoinColumn(name = "class")
-    private List<Class> classes;
+    private Class aClass;
 }

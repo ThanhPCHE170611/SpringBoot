@@ -20,7 +20,7 @@ public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String rollNumber;
-
+    private String fullname;
     private String username;
     private String password;
     private String email;
