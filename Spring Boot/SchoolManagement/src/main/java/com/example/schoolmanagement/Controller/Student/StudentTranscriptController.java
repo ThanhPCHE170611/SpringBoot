@@ -112,9 +112,9 @@ public class StudentTranscriptController {
                 }
             }
         }
-        if(markList.size() == 6){
-            userService.updateStudentMark(student, markAVG);
-        }
+//        if(markList.size() == 6){
+//            userService.updateStudentMark(student, markAVG);
+//        }
         model.addAttribute("markAVG", markAVG);
         model.addAttribute("marks", markList);
         return "studenttranscript";
