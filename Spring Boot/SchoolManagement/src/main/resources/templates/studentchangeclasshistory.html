@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Class Information</title>
+  <title>Student Change Class History</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -40,29 +40,31 @@
     </ul>
   </div>
 </nav>
-<div class="container mt-5">
-  <h2> Class name: <span th:text="${class.getClassname()}" ></span> </h2>
-</div>
+
+
 <div class="container mt-5">
   <table class="table table-striped">
     <thead>
     <tr>
       <th>#</th>
-      <th>Full Name</th>
-      <th>Gender</th>
-      <th>Picture</th>
-      <th>Ethnic</th>
-      <th>Religion</th>
+      <th>Student RollNumber</th>
+      <th>Old Class</th>
+      <th>New Class</th>
+      <th>Semester</th>
+      <th>Status</th>
+      <th>Reason</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="student, number : ${students}">
-      <td th:text="${number.index + 1}"></td>
-      <td th:text="${student.getFullname()}"></td>
-      <td th:text="${student.getGender().getGender()}"></td>
-      <td><img th:src="${student.getPicture()}" alt="ảnh học sinh"> </td>
-      <td th:text="${student.getEthnic().getEthnic()}"></td>
-      <td th:text="${student.getReligions().getReligion()}"></td>
+    <tr th:each="request, number : ${requests}">
+      <td th:text="${number.index+1}"></td>
+      <td th:text="${request.getStudent().getRollNumber()}"></td>
+      <td th:text="${request.getOldClass().getClassname()}"></td>
+      <td th:text="${request.getNewClass().getClassname()}"></td>
+      <td th:text="${request.getSemester().getSemester() + request.getSemester().getYear()}"></td>
+      <td th:text="${request.getStatus()}"></td>
+      <td th:if="${request.getReason() != null}" th:text="${request.getReason()}"></td>
+    </tr>
     </tbody>
   </table>
 </div>

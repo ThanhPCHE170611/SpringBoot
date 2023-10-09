@@ -10,6 +10,10 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface ChangeClassRepository extends JpaRepository<ChangeClass, Long> {
+public interface ChangeClassRepository extends JpaRepository<ChangeClass, Integer> {
+
     List<ChangeClass> findAllByStudent(Users student);
+
+    List<ChangeClass> findTop10ByStudentOrderByIdDesc(Users student);
+
 }
