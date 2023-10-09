@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class ChangeClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private Long id;
 
     @OneToOne(optional = true)
     @JoinColumn(name = "student")
@@ -30,7 +30,21 @@ public class ChangeClass {
     @JoinColumn(name = "new_class_id")
     private Class newClass;
 
+    @ManyToOne
+    @JoinColumn(name = "semester")
+    private Semester semester;
+
     private String status;
     private String reason;
+
+    public ChangeClass(Users user, Class olcClass, Class newClass) {
+        this.student = user;
+        this.oldClass = olcClass;
+        this.newClass = newClass;
+        status = "process";
+    }
+
+    public ChangeClass() {
+    }
 }
 

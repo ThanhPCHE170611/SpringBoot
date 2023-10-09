@@ -39,8 +39,8 @@ public class Auth {
                 roles.add(grantedAuthority);
             }
         }
-        //handle for just one student role -> go student homepage
-        if(roles.size() == 1 && roles.toString().contains("Role_Student")){
+        //handle for just one student role -> go directly student homepage
+        if(roles.size() == 1 && roles.toString().contains("ROLE_STUDENT")){
             if(authentication.getName() == null){
                 String email = googleLoginHandle.getEmailFromOAuth2Authentication(authentication);
                 session.setAttribute("user", userRepository.findUsersByEmail(email).get());
@@ -48,7 +48,7 @@ public class Auth {
                 String username = authentication.getName();
                 session.setAttribute("user", userRepository.findUsersByUsername(username).get());
             }
-            return "studenthome";
+            return "redirect:/student/homepage";
         }
         //handle for user role -> search email -> get user -> get role and accept homepage
         for (GrantedAuthority grantedAuthority : authentication.getAuthorities()){
