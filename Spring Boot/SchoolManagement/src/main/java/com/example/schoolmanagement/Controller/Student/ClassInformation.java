@@ -19,11 +19,16 @@ public class ClassInformation {
 
     @GetMapping(path = "/student/classinformation")
     public String viewInformation(HttpSession session, Model model){
-        Users user = (Users) session.getAttribute("user");
-        Class aClass = user.getStudentclass();
-        model.addAttribute("class", aClass);
-        List<Users> students = userRepository.findAllBystudentclass(aClass);
-        model.addAttribute("students", students);
-        return "classinformation";
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        }
+        else {
+            Users user = (Users) session.getAttribute("user");
+            Class aClass = user.getStudentclass();
+            model.addAttribute("class", aClass);
+            List<Users> students = userRepository.findAllBystudentclass(aClass);
+            model.addAttribute("students", students);
+            return "classinformation";
+        }
     }
 }

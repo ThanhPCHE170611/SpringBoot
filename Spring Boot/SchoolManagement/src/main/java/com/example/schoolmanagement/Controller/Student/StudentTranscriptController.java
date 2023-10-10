@@ -24,21 +24,26 @@ public class StudentTranscriptController {
 
     @GetMapping(path = "/student/studenttranscript")
     public String getAllSemester(HttpSession session, Model model){
-        Users student = (Users) session.getAttribute("user");
-        //get all the semester of database
-        List<Semester> semesters = new ArrayList<>();
-        //check if the student have transcript of that semester or not
-        List<StudentTranscript> studentTranscripts = studentTranscriptRepository.findAllByStudent(student);
-        for (StudentTranscript studentTranscript : studentTranscripts){
-            semesters.add(studentTranscript.getSemester());
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
         }
-        for (int i = 0; i< semesters.size() - 1; i++){
-            if(semesters.get(i).getId() == semesters.get(i+1).getId()){
-                semesters.remove(i);
+        else {
+            Users student = (Users) session.getAttribute("user");
+            //get all the semester of database
+            List<Semester> semesters = new ArrayList<>();
+            //check if the student have transcript of that semester or not
+            List<StudentTranscript> studentTranscripts = studentTranscriptRepository.findAllByStudent(student);
+            for (StudentTranscript studentTranscript : studentTranscripts){
+                semesters.add(studentTranscript.getSemester());
             }
+            for (int i = 0; i< semesters.size() - 1; i++){
+                if(semesters.get(i).getId() == semesters.get(i+1).getId()){
+                    semesters.remove(i);
+                }
+            }
+            model.addAttribute("semesters", semesters);
+            return "studenttranscript";
         }
-        model.addAttribute("semesters", semesters);
-        return "studenttranscript";
     }
 
     @GetMapping("/student/studenttranscript/{semesterId}")
@@ -119,5 +124,4 @@ public class StudentTranscriptController {
         model.addAttribute("marks", markList);
         return "studenttranscript";
     }
-
 }

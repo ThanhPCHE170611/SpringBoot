@@ -17,8 +17,13 @@ public class StudentHomeController {
 
     @GetMapping(path = "/student/homepage")
     public String viewHomePage(HttpSession session, Model model){
-       Users user =(Users) session.getAttribute("user");
-        model.addAttribute("error", "Welcome back, student " + user.getFullname());
-        return "studenthome";
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        }
+        else {
+            Users user =(Users) session.getAttribute("user");
+            model.addAttribute("error", "Welcome back, student " + user.getFullname());
+            return "studenthome";
+        }
     }
 }

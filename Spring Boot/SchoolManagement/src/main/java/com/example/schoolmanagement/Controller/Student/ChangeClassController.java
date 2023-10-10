@@ -27,52 +27,57 @@ public class ChangeClassController {
 
     @GetMapping(path = "/student/changeclass")
     public String viewPage(HttpSession session, Model model){
-        Users user = (Users) session.getAttribute("user");
-        boolean sent = false;
-        boolean hasReject = false;
-        List<Semester> semesterList = new ArrayList<>();
-        // check if exist request but not response yet
-        //if the request has been reject then student can't sent more in that semester
-        List<ChangeClass> requests = changeClassRepository.findAllByStudent(user);
-        for (ChangeClass request : requests){
-            if(request.getStatus().equals("process")){
-                sent = true;
-            } else if(request.getStatus().equals("reject")){
-                semesterList.add(request.getSemester());
-            }
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
         }
-        Semester currentSemester = semesterRepository.findFirstByOrderByIdDesc();
-        System.out.println("current semester: " + currentSemester.getSemester() + currentSemester.getYear());
-        for (Semester semester : semesterList){
-            if(semester.getId() == currentSemester.getId()){
-                model.addAttribute("error", "You must sent 1 request per 1 semester!");
-                return "studentchangeclass";
-            }
-        }
-        if(sent){
-            model.addAttribute("error", "Your request has been sent. Go request history to view result!");
-        } else {
-            //show menu to select new class
-            Class currentClass = user.getStudentclass();
-            Organization classOrganizations = organizationRepository.findOrganizationByaClass(currentClass).get();
-            //get the school code
-            Organization schoolOrganization = organizationRepository.findOrganizationByclassorganization(classOrganizations).get();
-            String schoolCode = schoolOrganization.getSchoolcode();
-            List<Organization> allClass = organizationRepository.findAllByschoolcode(schoolCode);
-            List<Organization> classes = new ArrayList<>();
-            //Get Other Class confirm
-            //Check the amount of student in class (<50 accept ! not show)
-            //not display the old class of student
-            for (Organization aClass : allClass){
-                if(userRepository.findAllBystudentclass(aClass.getClassorganization().getAClass()).size() < 50
-                && currentClass.getId() != aClass.getClassorganization().getAClass().getId() && aClass.getClassorganization().getStatus().equals("active")){
-                    classes.add(aClass);
+        else {
+            Users user = (Users) session.getAttribute("user");
+            boolean sent = false;
+            boolean hasReject = false;
+            List<Semester> semesterList = new ArrayList<>();
+            // check if exist request but not response yet
+            //if the request has been reject then student can't sent more in that semester
+            List<ChangeClass> requests = changeClassRepository.findAllByStudent(user);
+            for (ChangeClass request : requests){
+                if(request.getStatus().equals("process")){
+                    sent = true;
+                } else if(request.getStatus().equals("reject")){
+                    semesterList.add(request.getSemester());
                 }
             }
-            model.addAttribute("oldclass", currentClass);
-            model.addAttribute("classes", classes);
+            Semester currentSemester = semesterRepository.findFirstByOrderByIdDesc();
+            System.out.println("current semester: " + currentSemester.getSemester() + currentSemester.getYear());
+            for (Semester semester : semesterList){
+                if(semester.getId() == currentSemester.getId()){
+                    model.addAttribute("error", "You must sent 1 request per 1 semester!");
+                    return "studentchangeclass";
+                }
+            }
+            if(sent){
+                model.addAttribute("error", "Your request has been sent. Go request history to view result!");
+            } else {
+                //show menu to select new class
+                Class currentClass = user.getStudentclass();
+                Organization classOrganizations = organizationRepository.findOrganizationByaClass(currentClass).get();
+                //get the school code
+                Organization schoolOrganization = organizationRepository.findOrganizationByclassorganization(classOrganizations).get();
+                String schoolCode = schoolOrganization.getSchoolcode();
+                List<Organization> allClass = organizationRepository.findAllByschoolcode(schoolCode);
+                List<Organization> classes = new ArrayList<>();
+                //Get Other Class confirm
+                //Check the amount of student in class (<50 accept ! not show)
+                //not display the old class of student
+                for (Organization aClass : allClass){
+                    if(userRepository.findAllBystudentclass(aClass.getClassorganization().getAClass()).size() < 50
+                            && currentClass.getId() != aClass.getClassorganization().getAClass().getId() && aClass.getClassorganization().getStatus().equals("active")){
+                        classes.add(aClass);
+                    }
+                }
+                model.addAttribute("oldclass", currentClass);
+                model.addAttribute("classes", classes);
+            }
+            return "studentchangeclass";
         }
-        return "studentchangeclass";
     }
 
     @PostMapping(path = "/student/changeclass")
@@ -92,9 +97,14 @@ public class ChangeClassController {
 
     @GetMapping(path = "/student/classchangehistory")
     public String viewHistory(HttpSession session, Model model){
-        Users student = (Users) session.getAttribute("user");
-        List<ChangeClass> requests = changeClassRepository.findTop10ByStudentOrderByIdDesc(student);
-        model.addAttribute("requests", requests);
-        return "studentchangeclasshistory";
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        }
+        else {
+            Users student = (Users) session.getAttribute("user");
+            List<ChangeClass> requests = changeClassRepository.findTop10ByStudentOrderByIdDesc(student);
+            model.addAttribute("requests", requests);
+            return "studentchangeclasshistory";
+        }
     }
 }

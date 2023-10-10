@@ -32,16 +32,21 @@ public class StudentInformation {
 
     @GetMapping(path = "/student/accountsetting")
     public String getStudentInformation(HttpSession session, Model model){
-        Users student = (Users) session.getAttribute("user");
-        List<Gender> genders = genderRepository.findAll();
-        List<Ethnic> ethnics = ethnicRepository.findAll();
-        List<Religion> religions = religionRepository.findAll();
-        System.out.println(student.getGender().getGender());
-        model.addAttribute("genders", genders);
-        model.addAttribute("ethnics", ethnics);
-        model.addAttribute("religions", religions);
-        model.addAttribute("student", student);
-        return "studentinformation";
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        }
+        else {
+            Users student = (Users) session.getAttribute("user");
+            List<Gender> genders = genderRepository.findAll();
+            List<Ethnic> ethnics = ethnicRepository.findAll();
+            List<Religion> religions = religionRepository.findAll();
+            System.out.println(student.getGender().getGender());
+            model.addAttribute("genders", genders);
+            model.addAttribute("ethnics", ethnics);
+            model.addAttribute("religions", religions);
+            model.addAttribute("student", student);
+            return "studentinformation";
+        }
     }
 
     @PostMapping(path = "/student/accountsetting")
