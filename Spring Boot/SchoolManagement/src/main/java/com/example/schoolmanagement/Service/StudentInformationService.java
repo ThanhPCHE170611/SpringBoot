@@ -74,4 +74,49 @@ public class StudentInformationService {
         studentInDb.setPicture(picturePath);
         session.setAttribute("user", studentInDb);
     }
+    @Transactional
+    public void updateStudentWithoutPictureForTeacher(HttpSession session, Users student, String fullname, String newpassword, Long gender, Long ethnic, Long religion, String parrentname, String address, String hometown, String hobbies){
+        Users studentInDb = userRepository.findById(student.getRollNumber()).get();
+        studentInDb.setFullname(fullname);
+        studentInDb.setPassword(passwordEncoder.encode(newpassword));
+        studentInDb.setGender(genderRepository.findById(gender).get());
+        studentInDb.setEthnic(ethnicRepository.findById(ethnic).get());
+        studentInDb.setReligions(religionRepository.findById(religion).get());
+        studentInDb.setParrentName(parrentname);
+        studentInDb.setAddress(address);
+        studentInDb.setHometown(hometown);
+        studentInDb.setHobbies(hobbies);
+        Date date = new Date();
+        studentInDb.setLastchangepassword(date);
+    }
+    @Transactional
+    public void updateStudentWithPictureForTeacher(MultipartFile picture, HttpSession session, Users student, String fullname, String newpassword, Long gender, Long ethnic, Long religion, String parrentname, String address, String hometown, String hobbies) {
+        String picturePath = "";
+        Users studentInDb = userRepository.findById(student.getRollNumber()).get();
+        try {
+            // Get the bytes of the uploaded file
+            byte[] profilePictureBytes = picture.getBytes();
+
+            // Save the bytes to a file in the desired location (e.g., resources/images)
+            String newImagePath = "/images/"+ student.getRollNumber() +".png"; // Adjust the path as needed
+            Files.write(Paths.get("D:/SpringBootGitHub/SpringBoot/Spring Boot/SchoolManagement/src/main/resources/static" + newImagePath), profilePictureBytes);
+
+            // Update the student's profile picture path in the model
+            picturePath = newImagePath;
+        } catch (IOException e) {
+            System.out.println("error: " + e.getMessage());
+        }
+        studentInDb.setFullname(fullname);
+        studentInDb.setPassword(passwordEncoder.encode(newpassword));
+        studentInDb.setGender(genderRepository.findById(gender).get());
+        studentInDb.setEthnic(ethnicRepository.findById(ethnic).get());
+        studentInDb.setReligions(religionRepository.findById(religion).get());
+        studentInDb.setParrentName(parrentname);
+        studentInDb.setAddress(address);
+        studentInDb.setHometown(hometown);
+        studentInDb.setHobbies(hobbies);
+        Date date = new Date();
+        studentInDb.setLastchangepassword(date);
+        studentInDb.setPicture(picturePath);
+    }
 }

@@ -1,4 +1,5 @@
-package com.example.schoolmanagement.Controller.Student;
+package com.example.schoolmanagement.Controller.Teacher;
+
 
 import com.example.schoolmanagement.Model.*;
 import com.example.schoolmanagement.Model.Class;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,28 +18,26 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-
-public class ChangeClassController {
+public class TeacherChangeClassController {
 
     private final ChangeClassRepository changeClassRepository;
     private final OrganizationRepository organizationRepository;
     private final UserRepository userRepository;
-    private final ClassRepository classRepository;
     private final SemesterRepository semesterRepository;
 
-    @GetMapping(path = "/student/changeclass")
-    public String viewPage(HttpSession session, Model model){
+    @GetMapping(path = "/teacher/changestudentclass/{rollnumber}")
+    public String viewPage(@PathVariable String rollnumber, HttpSession session, Model model){
         if(session.getAttribute("user") == null){
             return "redirect:/auth/login";
         }
         else {
-            Users user = (Users) session.getAttribute("user");
+            Users student = userRepository.findById(rollnumber).get();
             boolean sent = false;
             boolean hasReject = false;
             List<Semester> semesterList = new ArrayList<>();
             // check if exist request but not response yet
-            //if the request has been reject then student can't sent more in that semester
-            List<ChangeClass> requests = changeClassRepository.findAllByStudent(user);
+            //if the request has been reject then student can't send more in that semester
+            List<ChangeClass> requests = changeClassRepository.findAllByStudent(student);
             for (ChangeClass request : requests){
                 if(request.getStatus().equals("process")){
                     sent = true;
@@ -50,14 +50,14 @@ public class ChangeClassController {
             for (Semester semester : semesterList){
                 if(semester.getId() == currentSemester.getId()){
                     model.addAttribute("error", "You must sent 1 request per 1 semester!");
-                    return "studentchangeclass";
+                    return "teacherchangestudentclass";
                 }
             }
             if(sent){
                 model.addAttribute("error", "Your request has been sent. Go request history to view result!");
             } else {
                 //show menu to select new class
-                Class currentClass = user.getStudentclass();
+                Class currentClass = student.getStudentclass();
                 Organization classOrganizations = organizationRepository.findOrganizationByaClass(currentClass).get();
                 //get the school code
                 Organization schoolOrganization = organizationRepository.findOrganizationByclassorganization(classOrganizations).get();
@@ -73,38 +73,37 @@ public class ChangeClassController {
                         classes.add(aClass);
                     }
                 }
+                model.addAttribute("rollnumber", rollnumber);
                 model.addAttribute("oldclass", currentClass);
                 model.addAttribute("classes", classes);
             }
-            return "studentchangeclass";
+            return "teacherchangestudentclass";
         }
     }
-
-    @PostMapping(path = "/student/changeclass")
-    public String sendRequest(@RequestParam(required = false) String classname, HttpSession session, Model model){
+    @PostMapping(path = "/teacher/changeclass")
+    public String sendRequest(@RequestParam String rollnumber ,@RequestParam(required = false) String classname, HttpSession session, Model model){
         if(classname != null){
-            Users user = (Users) session.getAttribute("user");
-            Class olcClass = user.getStudentclass();
+            Users student = userRepository.findById(rollnumber).get();
+            Class olcClass = student.getStudentclass();
             Class newClass = organizationRepository.findById(Long.parseLong(classname)).get().getClassorganization().getAClass();
-            ChangeClass newRequest = new ChangeClass(user, olcClass, newClass, semesterRepository.findFirstByOrderByIdDesc());
+            ChangeClass newRequest = new ChangeClass(student, olcClass, newClass, semesterRepository.findFirstByOrderByIdDesc());
             changeClassRepository.save(newRequest);
             model.addAttribute("error", "Your request has been sent. Go request history to view result!");
-            return "studentchangeclass";
+            return "redirect:/teacher/changestudentclass/" + rollnumber;
         } else {
-            return "redirect:/student/changeclass";
+            return viewPage(rollnumber, session, model);
         }
     }
-
-    @GetMapping(path = "/student/classchangehistory")
-    public String viewHistory(HttpSession session, Model model){
+    @GetMapping(path = "/teacher/studentclasschangehistory/{rollnumber}")
+    public String viewHistory(@PathVariable String rollnumber, HttpSession session, Model model){
         if(session.getAttribute("user") == null){
             return "redirect:/auth/login";
         }
         else {
-            Users student = (Users) session.getAttribute("user");
+            Users student = userRepository.findById(rollnumber).get();
             List<ChangeClass> requests = changeClassRepository.findTop10ByStudentOrderByIdDesc(student);
             model.addAttribute("requests", requests);
-            return "studentchangeclasshistory";
+            return "teacherstudentchangeclasshistory";
         }
     }
 }

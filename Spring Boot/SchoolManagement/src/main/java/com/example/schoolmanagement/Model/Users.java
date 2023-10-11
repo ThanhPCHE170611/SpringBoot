@@ -7,10 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Table
 @Entity
@@ -67,6 +64,10 @@ public class Users implements UserDetails {
     private Class studentclass;
 
     private Date lastchangepassword;
+
+    @ManyToMany
+    @JoinColumn(name = "teacher_class_teach")
+    private List<Class> teacherClassTeach;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
