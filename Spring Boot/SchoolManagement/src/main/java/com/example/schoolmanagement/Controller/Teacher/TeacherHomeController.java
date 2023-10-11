@@ -1,7 +1,6 @@
-package com.example.schoolmanagement.Controller.Student;
+package com.example.schoolmanagement.Controller.Teacher;
 
 import com.example.schoolmanagement.Model.Users;
-import com.example.schoolmanagement.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,19 +10,16 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 @AllArgsConstructor
-public class StudentHomeController {
-
-    private final UserRepository userRepository;
-
-    @GetMapping(path = "/student/homepage")
+public class TeacherHomeController {
+    @GetMapping(path = "/teacher/homepage")
     public String viewHomePage(HttpSession session, Model model){
         if(session.getAttribute("user") == null){
             return "redirect:/auth/login";
         }
         else {
-            Users user =(Users) session.getAttribute("user");
-            model.addAttribute("error", "Welcome back, student " + user.getFullname());
-            return "studenthome";
+            Users teacher =(Users) session.getAttribute("user");
+            model.addAttribute("error", "Welcome back, teacher " + teacher.getFullname());
+            return "teacherhome";
         }
     }
 }

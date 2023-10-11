@@ -37,10 +37,11 @@ public class ChangeClass {
     private String status;
     private String reason;
 
-    public ChangeClass(Users user, Class olcClass, Class newClass) {
+    public ChangeClass(Users user, Class olcClass, Class newClass, Semester semester) {
         this.student = user;
         this.oldClass = olcClass;
         this.newClass = newClass;
+        this.semester = semester;
         status = "process";
     }
 

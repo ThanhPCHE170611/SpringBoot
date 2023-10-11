@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.Controller.Student;
+package com.example.schoolmanagement.Controller.Teacher;
 
 import com.example.schoolmanagement.Model.Class;
 import com.example.schoolmanagement.Model.Users;
@@ -13,22 +13,24 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-public class ClassInformation {
+public class ClassManagementController {
 
     private final UserRepository userRepository;
 
-    @GetMapping(path = "/student/classinformation")
-    public String viewInformation(HttpSession session, Model model){
+    @GetMapping(path = "/teacher/classmanagement")
+    public String getAllStudent(Model model, HttpSession session){
         if(session.getAttribute("user") == null){
             return "redirect:/auth/login";
         }
         else {
-            Users user = (Users) session.getAttribute("user");
-            Class aClass = user.getStudentclass();
-            model.addAttribute("class", aClass);
-            List<Users> students = userRepository.findAllBystudentclass(aClass);
+            Users teacher = (Users) session.getAttribute("user");
+            //Get the class that the teacher teach:
+            Class currentClass = teacher.getTeacherclass();
+            //Get List of all student in the class -> information:
+            List<Users> students = userRepository.findAllBystudentclass(currentClass);
             model.addAttribute("students", students);
-            return "classinformation";
+            model.addAttribute("aclass", currentClass);
+            return "classmanagement";
         }
     }
 }
