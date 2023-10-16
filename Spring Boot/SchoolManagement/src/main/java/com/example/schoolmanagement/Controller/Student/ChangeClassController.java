@@ -58,18 +58,15 @@ public class ChangeClassController {
             } else {
                 //show menu to select new class
                 Class currentClass = user.getStudentclass();
-                Organization classOrganizations = organizationRepository.findOrganizationByaClass(currentClass).get();
-                //get the school code
-                Organization schoolOrganization = organizationRepository.findOrganizationByclassorganization(classOrganizations).get();
-                String schoolCode = schoolOrganization.getSchoolcode();
-                List<Organization> allClass = organizationRepository.findAllByschoolcode(schoolCode);
-                List<Organization> classes = new ArrayList<>();
+                Organization schoolOrganization = currentClass.getClassOrganization();
+                List<Class> allClass = classRepository.findAllByclassOrganization(schoolOrganization);
+                List<Class> classes = new ArrayList<>();
                 //Get Other Class confirm
                 //Check the amount of student in class (<50 accept ! not show)
                 //not display the old class of student
-                for (Organization aClass : allClass){
-                    if(userRepository.findAllBystudentclass(aClass.getClassorganization().getAClass()).size() < 50
-                            && currentClass.getId() != aClass.getClassorganization().getAClass().getId() && aClass.getClassorganization().getStatus().equals("active")){
+                for (Class aClass : allClass){
+                    if(userRepository.findAllBystudentclass(aClass).size() < 50
+                            && currentClass.getId() != aClass.getId()){
                         classes.add(aClass);
                     }
                 }
@@ -81,11 +78,11 @@ public class ChangeClassController {
     }
 
     @PostMapping(path = "/student/changeclass")
-    public String sendRequest(@RequestParam(required = false) String classname, HttpSession session, Model model){
+    public String sendRequest(@RequestParam(required = false) Long classname, HttpSession session, Model model){
         if(classname != null){
             Users user = (Users) session.getAttribute("user");
             Class olcClass = user.getStudentclass();
-            Class newClass = organizationRepository.findById(Long.parseLong(classname)).get().getClassorganization().getAClass();
+            Class newClass = classRepository.findById(classname).get();
             ChangeClass newRequest = new ChangeClass(user, olcClass, newClass, semesterRepository.findFirstByOrderByIdDesc());
             changeClassRepository.save(newRequest);
             model.addAttribute("error", "Your request has been sent. Go request history to view result!");

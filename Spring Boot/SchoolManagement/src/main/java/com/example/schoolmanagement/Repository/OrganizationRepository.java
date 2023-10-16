@@ -12,8 +12,8 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
-    Optional<Organization> findOrganizationByaClass(Class aclass);
+//    Optional<Organization> findOrganizationByaClass(Class aclass);
 
-    Optional<Organization> findOrganizationByclassorganization(Organization classorganization);
+    Optional<Organization> findOrganizationByclassOrganization(Organization classorganization);
     List<Organization> findAllByschoolcode(String schoolCode);
 }

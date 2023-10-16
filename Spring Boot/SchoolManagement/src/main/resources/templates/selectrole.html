@@ -3,13 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <title>Select Role</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<div th:each="role : ${roles}">
-  <a th:if="${role.getAuthority() == 'ROLE_STUDENT'}" href="/student/homepage" th:text="${role}"></a>
-  <a th:if="${role.getAuthority() == 'ROLE_TEACHER'}" href="/teacher/homepage" th:text="${role}"></a>
-  <a th:if="${role.getAuthority() == 'ROLE_ADMIN'}" href="/admin/homepage" th:text="${role}"></a>
-  <a th:if="${role.getAuthority() == 'ROLE_SUPERADMIN'}" href="/superadmin/homepage" th:text="${role}"></a>
+<div class="container">
+  <div class="row justify-content-center align-items-center" style="height: 100vh;">
+    <div class="col-md-4">
+      <h2>Select a Role</h2>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Role</th>
+          <th>Homepage</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="role : ${roles}">
+          <td th:text="${role.getAuthority()}"></td>
+          <td>
+            <a th:if="${role.getAuthority() == 'ROLE_STUDENT'}" href="/student/homepage" class="btn btn-primary">Go to Student Homepage</a>
+            <a th:if="${role.getAuthority() == 'ROLE_TEACHER'}" href="/teacher/homepage" class="btn btn-success">Go to Teacher Homepage</a>
+            <a th:if="${role.getAuthority() == 'ROLE_SCHOOLADMIN'}" href="/schooladmin/homepage" class="btn btn-secondary">Go to School Admin Homepage</a>
+            <a th:if="${role.getAuthority() == 'ROLE_SUPERADMIN'}" href="/superadmin/homepage" class="btn btn-danger">Go to Super Admin Homepage</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 </body>
 </html>
