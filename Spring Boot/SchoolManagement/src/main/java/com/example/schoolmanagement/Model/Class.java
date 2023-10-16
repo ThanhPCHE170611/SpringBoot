@@ -17,9 +17,7 @@ public class Class {
     private Long Id;
 
     private String classname;
+    @OneToMany(mappedBy = "classTeaching")
+    private List<TeacherClassSubject> classTeachers;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="class_subject", joinColumns = @JoinColumn(name ="classid"),
-            inverseJoinColumns = @JoinColumn(name="subjectcode"))
-    private Set<Subject> subjects;
 }

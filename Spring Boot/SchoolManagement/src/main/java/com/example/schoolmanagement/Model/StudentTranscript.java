@@ -32,4 +32,14 @@ public class StudentTranscript {
     @JoinTable(name="transcript_mark", joinColumns = @JoinColumn(name ="transcript_id"),
             inverseJoinColumns = @JoinColumn(name="mark_id"))
     private List<Mark> marks;
+
+    public StudentTranscript(Users student, Semester semester, Subject subject) {
+        this.student = student;
+        this.semester = semester;
+        this.subject = subject;
+    }
+
+    public StudentTranscript() {
+
+    }
 }

@@ -50,11 +50,6 @@ public class Users implements UserDetails {
             inverseJoinColumns = @JoinColumn(name="id"))
     private Set<Role> roles;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="teacher_subject", joinColumns = @JoinColumn(name ="rollnumber"),
-            inverseJoinColumns = @JoinColumn(name="subjectcode"))
-    private Set<Subject> subjects;
-
     @OneToOne
     @JoinColumn(name = "teacher_class")
     private Class teacherclass;
@@ -65,9 +60,8 @@ public class Users implements UserDetails {
 
     private Date lastchangepassword;
 
-    @ManyToMany
-    @JoinColumn(name = "teacher_class_teach")
-    private List<Class> teacherClassTeach;
+    @OneToMany(mappedBy = "teacher")
+    private List<TeacherClassSubject> teacherClassSubjects;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
