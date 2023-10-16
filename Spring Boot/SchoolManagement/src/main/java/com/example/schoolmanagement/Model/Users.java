@@ -63,6 +63,10 @@ public class Users implements UserDetails {
     @OneToMany(mappedBy = "teacher")
     private List<TeacherClassSubject> teacherClassSubjects;
 
+    @OneToOne
+    @JoinColumn(name = "organization")
+    private Organization schoolOrganization;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();

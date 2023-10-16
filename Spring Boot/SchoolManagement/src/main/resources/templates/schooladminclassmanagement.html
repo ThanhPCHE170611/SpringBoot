@@ -38,7 +38,28 @@
     </ul>
   </div>
 </nav>
-<p class="mt-3" th:if="${error != null}" th:text="${error}"></p>
+
+<div class="container mt-5">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Class ID</th>
+      <th>Class Name</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="class  , number : ${classes}">
+      <td th:text="${number.index+1}"></td>
+      <td th:text="${class.getId()}"></td>
+      <td th:text="${class.getClassname()}"></td>
+      <td><a th:href="@{'/schooladmin/classmanagement/updateclass/'+ ${class.getId()}}" class="btn btn-primary">Update</a></td>
+    </tr>
+    </tbody>
+  </table>
+  <a href="/schooladmin/classmanagement/addclass" class="btn btn-primary">Create More Class</a>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

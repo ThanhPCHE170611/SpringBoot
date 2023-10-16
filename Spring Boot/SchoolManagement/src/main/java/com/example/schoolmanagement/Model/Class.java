@@ -23,4 +23,19 @@ public class Class {
     @ManyToOne
     @JoinColumn(name = "class_organization")
     private Organization classOrganization;
+
+    public Class(String classname, Organization schoolOrganization) {
+        this.classname = classname;
+        this.classOrganization = schoolOrganization;
+    }
+
+    public Class() {
+
+    }
+
+    public Class(Long classid, String classname, Organization schoolOrganization) {
+        this.Id = classid;
+        this.classname = classname;
+        this.classOrganization = schoolOrganization;
+    }
 }

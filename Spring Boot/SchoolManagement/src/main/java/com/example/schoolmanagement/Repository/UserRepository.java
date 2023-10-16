@@ -2,6 +2,7 @@ package com.example.schoolmanagement.Repository;
 
 
 import com.example.schoolmanagement.Model.Class;
+import com.example.schoolmanagement.Model.Organization;
 import com.example.schoolmanagement.Model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.User;
@@ -21,4 +22,7 @@ public interface UserRepository extends JpaRepository<Users, String> {
     User findByUsername(String username);
 
     List<Users> findAllBystudentclass(Class studentclass);
+
+    List<Users> findAllByschoolOrganization(Organization schoolOrganization);
+
 }
