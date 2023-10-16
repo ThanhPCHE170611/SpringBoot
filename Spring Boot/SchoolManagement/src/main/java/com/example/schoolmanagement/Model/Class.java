@@ -20,4 +20,7 @@ public class Class {
     @OneToMany(mappedBy = "classTeaching")
     private List<TeacherClassSubject> classTeachers;
 
+    @ManyToOne
+    @JoinColumn(name = "class_organization")
+    private Organization classOrganization;
 }

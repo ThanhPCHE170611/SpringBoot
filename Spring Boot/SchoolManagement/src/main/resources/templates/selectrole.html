@@ -19,11 +19,11 @@
         </thead>
         <tbody>
         <tr th:each="role : ${roles}">
-          <td th:text="${role}"></td>
+          <td th:text="${role.getAuthority()}"></td>
           <td>
             <a th:if="${role.getAuthority() == 'ROLE_STUDENT'}" href="/student/homepage" class="btn btn-primary">Go to Student Homepage</a>
             <a th:if="${role.getAuthority() == 'ROLE_TEACHER'}" href="/teacher/homepage" class="btn btn-success">Go to Teacher Homepage</a>
-            <a th:if="${role.getAuthority() == 'ROLE_ADMIN'}" href="/admin/homepage" class="btn btn-warning">Go to Admin Homepage</a>
+            <a th:if="${role.getAuthority() == 'ROLE_SCHOOLADMIN'}" href="/schooladmin/homepage" class="btn btn-secondary">Go to School Admin Homepage</a>
             <a th:if="${role.getAuthority() == 'ROLE_SUPERADMIN'}" href="/superadmin/homepage" class="btn btn-danger">Go to Super Admin Homepage</a>
           </td>
         </tr>

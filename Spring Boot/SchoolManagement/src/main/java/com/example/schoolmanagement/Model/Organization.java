@@ -34,11 +34,7 @@ public class Organization {
     private String status;
     private Date operatingday;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name = "classorganization")
-    private Organization classorganization;
+    @OneToMany(mappedBy = "classOrganization")
+    private List<Class> classOrganization;
 
-    @OneToOne
-    @JoinColumn(name = "class")
-    private Class aClass;
 }
