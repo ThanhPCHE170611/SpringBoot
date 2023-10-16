@@ -17,4 +17,18 @@ public class Mark {
     private double mark;
 
     private double weight;
+
+    public Mark(double i, double i1) {
+        this.mark = i;
+        this.weight = i1;
+    }
+
+    public Mark() {
+    }
+
+    public Mark(Long id, double mark, double weight) {
+        this.id = id;
+        this.mark = mark;
+        this.weight = weight;
+    }
 }
