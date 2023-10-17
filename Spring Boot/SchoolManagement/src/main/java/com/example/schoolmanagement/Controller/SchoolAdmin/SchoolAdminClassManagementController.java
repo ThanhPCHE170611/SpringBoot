@@ -77,7 +77,7 @@ public class SchoolAdminClassManagementController {
             Class newClass = new Class(classname, schoolOrganization);
             classRepository.save(newClass);
             model.addAttribute("error", "Add New Class Successful!");
-            return viewAllClass(session, model);
+            return "redirect:/schooladmin/classmanagement/";
         }
     }
 
@@ -127,6 +127,12 @@ public class SchoolAdminClassManagementController {
             }
 
         }
+    }
+
+    @GetMapping(path = "/schooladmin/classmanagement/deleteclass/{classid}")
+    public String deleteClass(@PathVariable Long classid, HttpSession session, Model model){
+        schoolAdminClassManagementService.deleteClass(classid);
+        return viewAllClass(session, model);
     }
 
 }
