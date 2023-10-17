@@ -18,9 +18,6 @@ public class ChangeClass {
     @JoinColumn(name = "student")
     private Users student;
 
-    @OneToOne(optional = true)
-    @JoinColumn(name = "teacher")
-    private Users teacher;
 
     @ManyToOne
     @JoinColumn(name = "old_class_id")
