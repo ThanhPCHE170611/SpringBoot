@@ -2,9 +2,40 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Create Class</title>
+  <title>Subject Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .page-item {
+      margin: 0 5px;
+    }
+
+    .page-link {
+      text-decoration: none;
+      color: #007bff;
+      background-color: #fff;
+      border: 1px solid #dee2e6;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .page-link:hover {
+      background-color: #e9ecef;
+    }
+
+    .page-link:active {
+      background-color: #d4d6d8;
+    }
+  </style>
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -48,28 +79,27 @@
 
 
 <div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <form th:action="@{/schooladmin/classmanagement/updateclass}" th:method="post" class="border p-4 bg-white">
-        <div class="form-group">
-          <label for="classid">School Name</label>
-          <input type="text" id="classid" name="classid" class="form-control" th:readonly="readonlly" th:value="${class.getId()}" />
-        </div>
-        <div class="form-group">
-          <label for="classname">Class Name</label>
-          <input type="text" id="classname" name="classname" class="form-control"  th:value="${class.getClassname()}" required/>
-        </div>
-        <div class="form-group">
-          <label for="schoolname">School Name</label>
-          <input type="text" id="schoolname" name="schoolname" class="form-control" th:readonly="readonlly" th:value="${school.getSchoolname()}" />
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </form>
-      <p class="mt-3" th:if="${error != null}" th:text="${error}" style="color:red; font-weight: bold" ></p>
-    </div>
-  </div>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th>Subject Code</th>
+      <th>Subject Name</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="subject, number : ${subjects}">
+      <td th:text="${number.index+1}"></td>
+      <td th:text="${subject.getSubjectcode()}"></td>
+      <td th:text="${subject.getSubjectname()}"></td>
+      <td th:text="${subject.getStatus()}"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
+<a href="/schooladmin/subjectmanagement/addsubject" class="btn btn-primary">Create More Subject</a>
+<p class="mt-3" th:if="${error != null}" th:text="${error}" style="color:red; font-weight: bold" ></p>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
