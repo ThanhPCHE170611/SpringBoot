@@ -22,6 +22,9 @@
         <a class="nav-link" href="/schooladmin/classmanagement">Class Management</a>
       </li>
       <li class="nav-item active">
+        <a class="nav-link" href="/schooladmin/requestmanagement">Request Management</a>
+      </li>
+      <li class="nav-item active">
         <a class="nav-link" href="/schooladmin/usermanagement">User Management</a>
       </li>
     </ul>
@@ -47,21 +50,47 @@
       <th>Class ID</th>
       <th>Class Name</th>
       <th>Action</th>
+      <th>Delete</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="class  , number : ${classes}">
+    <tr th:each="class, number : ${classes}">
       <td th:text="${number.index+1}"></td>
       <td th:text="${class.getId()}"></td>
       <td th:text="${class.getClassname()}"></td>
-      <td><a th:href="@{'/schooladmin/classmanagement/updateclass/'+ ${class.getId()}}" class="btn btn-primary">Update</a></td>
+      <td><a th:href="@{'/schooladmin/classmanagement/updateclass/' + ${class.getId()}}" class="btn btn-primary">Update</a></td>
+      <td><button th:onclick="'javascript:confirmDelete(\'' + ${class.getId()} + '\');'" class="btn btn-danger">Delete</button></td>
     </tr>
     </tbody>
   </table>
   <a href="/schooladmin/classmanagement/addclass" class="btn btn-primary">Create More Class</a>
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  function confirmDelete(classId) {
+    if (confirm("Are you sure you want to delete this class?")) {
+      // Send an AJAX request to delete the class
+      $.ajax({
+        type: "GET",
+        url: "/schooladmin/classmanagement/deleteclass/" + classId, // Adjust the URL
+        success: function (data) {
+          // Handle the success response here
+          alert("Class with ID " + classId + " deleted.");
+          setTimeout(function() {
+            window.location.reload();
+          }, 1000);
+        },
+        error: function (error) {
+          // Handle the error response here
+          alert("Error deleting class: " + error);
+        }
+      });
+    }
+  }
+</script>
 </body>
 </html>

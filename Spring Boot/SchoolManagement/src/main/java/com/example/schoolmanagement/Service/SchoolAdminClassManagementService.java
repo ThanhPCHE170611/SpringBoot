@@ -18,4 +18,9 @@ public class SchoolAdminClassManagementService {
         classInDB.setClassname(aClass.getClassname());
         classInDB.setClassOrganization(aClass.getClassOrganization());
     }
+
+    @Transactional
+    public void deleteClass(Long classid) {
+        classRepository.deleteById(classid);
+    }
 }
