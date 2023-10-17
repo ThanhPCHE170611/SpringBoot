@@ -41,7 +41,7 @@ public class ChangeClassController {
             for (ChangeClass request : requests){
                 if(request.getStatus().equals("process")){
                     sent = true;
-                } else if(request.getStatus().equals("reject")){
+                } else if(request.getStatus().equals("reject") || request.getStatus().equals("accept")){
                     semesterList.add(request.getSemester());
                 }
             }
