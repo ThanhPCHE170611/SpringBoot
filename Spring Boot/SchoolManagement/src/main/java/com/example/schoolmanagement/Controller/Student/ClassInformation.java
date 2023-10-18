@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,7 +27,12 @@ public class ClassInformation {
             Users user = (Users) session.getAttribute("user");
             Class aClass = user.getStudentclass();
             model.addAttribute("class", aClass);
-            List<Users> students = userRepository.findAllBystudentclass(aClass);
+            List<Users> allStudent = userRepository.findAllBystudentclass(aClass);
+            List<Users> students =  new ArrayList<>();
+            for (Users student : allStudent){
+                if(student.getStatus().equals("active"))
+                    students.add(student);
+            }
             model.addAttribute("students", students);
             return "classinformation";
         }

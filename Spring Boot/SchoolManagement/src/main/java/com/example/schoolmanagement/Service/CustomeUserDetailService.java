@@ -22,7 +22,7 @@ public class CustomeUserDetailService implements UserDetailsService {
         Optional<Users> userOptional = userRepository.findUsersByUsername(username);
 
         // Check if the userOptional has a value
-        if (userOptional.isPresent()) {
+        if (userOptional.isPresent() && userOptional.get().getStatus().equals("active")) {
             Users user = userOptional.get();
             // Create and return UserDetails based on the user data
             return User.builder()
