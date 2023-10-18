@@ -15,8 +15,8 @@ import java.util.*;
 @Setter
 public class Users implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private String rollNumber;
+
     private String fullname;
     private String username;
     private String password;
@@ -66,6 +66,25 @@ public class Users implements UserDetails {
     @OneToOne
     @JoinColumn(name = "organization")
     private Organization schoolOrganization;
+
+    public Users(String rollnumber, String username, String email, String encode, Gender gender, Religion religion, Ethnic ethnic, Set<Role> roleSet, Organization schoolOrganization) {
+        this.rollNumber = rollnumber;
+        this.username = username;
+        this.email = email;
+        this.password = encode;
+        this.gender = gender;
+        this.religions = religion;
+        this.ethnic = ethnic;
+        this.roles = roleSet;
+        this.schoolOrganization = schoolOrganization;
+        this.status = "active";
+        Date date = new Date();
+        this.lastchangepassword = date;
+    }
+
+    public Users() {
+
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

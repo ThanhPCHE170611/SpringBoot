@@ -54,7 +54,7 @@
           <label>New Class</label>
           <div class="form-check" th:each="class : ${classes}">
             <input type="radio" th:id="${class.getId()}" name="classname" th:value="${class.getId()}" class="form-check-input"/>
-            <label th:for="${class.getId()}" class="form-check-label" th:text="${class.getClassorganization().getAClass().getClassname()}"></label>
+            <label th:for="${class.getId()}" class="form-check-label" th:text="${class.getClassname()}"></label>
           </div>
         </div>
         <button type="submit" class="btn btn-primary">Send Request</button>

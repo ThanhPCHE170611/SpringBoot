@@ -102,7 +102,7 @@ public class GradeManagementController {
         }
         model.addAttribute("subjects", subjects);
         // List all Student in the Class
-        List<Users> allStudent = userRepository.findAllBystudentclass(classRepository.findById(classid).get());
+        List<Users> allStudent = userRepository.findAllBystudentclass(classRepository.findById(classid).get().getId(), "active");
         List<Users> students =  new ArrayList<>();
         for (Users student : allStudent){
             if(student.getStatus().equals("active"))

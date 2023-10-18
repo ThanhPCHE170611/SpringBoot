@@ -28,7 +28,7 @@ public class ClassManagementController {
             //Get the class that the teacher teach:
             Class currentClass = teacher.getTeacherclass();
             //Get List of all student in the class -> information:
-            List<Users> allStudent = userRepository.findAllBystudentclass(currentClass);
+            List<Users> allStudent = userRepository.findAllBystudentclass(currentClass.getId(), "active");
             List<Users> students =  new ArrayList<>();
             for (Users student : allStudent){
                 if(student.getStatus().equals("active"))

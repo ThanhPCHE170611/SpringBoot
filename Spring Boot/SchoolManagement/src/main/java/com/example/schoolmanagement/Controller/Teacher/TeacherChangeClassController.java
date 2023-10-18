@@ -42,7 +42,7 @@ public class TeacherChangeClassController {
             for (ChangeClass request : requests){
                 if(request.getStatus().equals("process")){
                     sent = true;
-                } else if(request.getStatus().equals("reject")){
+                } else if(request.getStatus().equals("reject")|| request.getStatus().equals("accept")){
                     semesterList.add(request.getSemester());
                 }
             }
@@ -66,7 +66,7 @@ public class TeacherChangeClassController {
                 //Check the amount of student in class (<50 accept ! not show)
                 //not display the old class of student
                 for (Class aClass : allClass){
-                    if(userRepository.findAllBystudentclass(aClass).size() < 50
+                    if(userRepository.findAllBystudentclass(aClass.getId(), "active").size() < 50
                             && currentClass.getId() != aClass.getId()){
                         classes.add(aClass);
                     }
