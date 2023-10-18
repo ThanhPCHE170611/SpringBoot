@@ -88,6 +88,7 @@
       <th>Role</th>
       <th>Full Name</th>
       <th>Username</th>
+      <th>Status</th>
       <th>Parrent Name</th>
       <th>Gender</th>
       <th>Picture</th>
@@ -109,6 +110,7 @@
       </span></td>
       <td th:text="${user.getFullname()}"></td>
       <td th:text="${user.getUsername()}"></td>
+      <td th:text="${user.getStatus()}"></td>
       <td th:text="${user.getParrentName()}"></td>
       <td th:text="${user.getGender().getGender()}"></td>
       <td><img th:src="${user.getPicture()}" alt="Picture" width="100" height="100"> </td>
@@ -119,7 +121,7 @@
       <td th:text="${user.getHobbies()}"></td>
       <td><a th:href="@{'/schooladmin/usermanagement/update/'+ ${user.getRollNumber()}}" th:text="Update"  class="btn btn-success"></a></td>
       <td>
-        <button th:attr="data-rollnumber=${user.getRollNumber()}" class="btn btn-danger" onclick="confirmDelete(this.getAttribute('data-rollnumber'))">Delete</button>
+        <button th:attr="data-rollnumber=${user.getRollNumber()}" class="btn btn-danger" onclick="confirmDelete(event)">Delete</button>
       </td>
 
     </tr>
@@ -153,7 +155,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-  function confirmDelete(userRollNumber) {
+  function confirmDelete(event) {
+    var userRollNumber = event.target.getAttribute('data-rollnumber');
     if (confirm("Are you sure you want to delete this users?")) {
       // Send an AJAX request to delete the class
       $.ajax({

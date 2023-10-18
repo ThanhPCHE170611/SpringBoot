@@ -28,6 +28,8 @@ public interface UserRepository extends JpaRepository<Users, String> {
 
     List<Users> findAllBystudentclass(Class studentclass);
 
+    List<Users> findAllByteacherclass(Class teacherclass);
+
     List<Users> findAllByschoolOrganization(Organization schoolOrganization);
 
     @Query("SELECT u FROM Users u WHERE u.schoolOrganization.Id = :organizationId")

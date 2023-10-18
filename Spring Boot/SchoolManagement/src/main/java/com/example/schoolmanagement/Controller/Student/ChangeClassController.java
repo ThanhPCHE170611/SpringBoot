@@ -65,7 +65,13 @@ public class ChangeClassController {
                 //Check the amount of student in class (<50 accept ! not show)
                 //not display the old class of student
                 for (Class aClass : allClass){
-                    if(userRepository.findAllBystudentclass(aClass).size() < 50
+                    List<Users> allStudents = userRepository.findAllBystudentclass(aClass);
+                    List<Users> students = new ArrayList<>();
+                    for (Users student : allStudents){
+                        if(student.getStatus().equals("active"))
+                            students.add(student);
+                    }
+                    if(students.size() < 50
                             && currentClass.getId() != aClass.getId()){
                         classes.add(aClass);
                     }

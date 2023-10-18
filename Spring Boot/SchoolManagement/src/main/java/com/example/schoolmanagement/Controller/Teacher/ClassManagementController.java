@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -27,7 +28,12 @@ public class ClassManagementController {
             //Get the class that the teacher teach:
             Class currentClass = teacher.getTeacherclass();
             //Get List of all student in the class -> information:
-            List<Users> students = userRepository.findAllBystudentclass(currentClass);
+            List<Users> allStudent = userRepository.findAllBystudentclass(currentClass);
+            List<Users> students =  new ArrayList<>();
+            for (Users student : allStudent){
+                if(student.getStatus().equals("active"))
+                    students.add(student);
+            }
             model.addAttribute("students", students);
             model.addAttribute("aclass", currentClass);
             return "classmanagement";

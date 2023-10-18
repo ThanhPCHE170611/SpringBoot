@@ -32,7 +32,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
   cache:
-    cache-names: genderCache, ethnicCache,religionCache
+    cache-names: genderCache, ethnicCache,religionCache, roleCache
     ehcache:
       config: classpath:ehcacheConfig.xml
 logging:
