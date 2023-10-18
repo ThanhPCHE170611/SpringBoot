@@ -26,9 +26,11 @@ public interface UserRepository extends JpaRepository<Users, String> {
 
     User findByUsername(String username);
 
-    List<Users> findAllBystudentclass(Class studentclass);
+    @Query("SELECT u FROM Users u WHERE u.studentclass.Id = :studentclassid and u.status = :status")
+    List<Users> findAllBystudentclass(@Param("studentclassid") Long studentclassid, @Param("status") String status);
 
-    List<Users> findAllByteacherclass(Class teacherclass);
+    @Query("SELECT u FROM Users u WHERE u.teacherclass.Id = :teacherclassid and u.status = :status")
+    List<Users> findAllByteacherclass(@Param("teacherclassid") Long studentclassid, @Param("status") String status);
 
     List<Users> findAllByschoolOrganization(Organization schoolOrganization);
 

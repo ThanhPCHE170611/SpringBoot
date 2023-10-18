@@ -27,7 +27,7 @@ public class ClassInformation {
             Users user = (Users) session.getAttribute("user");
             Class aClass = user.getStudentclass();
             model.addAttribute("class", aClass);
-            List<Users> allStudent = userRepository.findAllBystudentclass(aClass);
+            List<Users> allStudent = userRepository.findAllBystudentclass(aClass.getId(), "active");
             List<Users> students =  new ArrayList<>();
             for (Users student : allStudent){
                 if(student.getStatus().equals("active"))

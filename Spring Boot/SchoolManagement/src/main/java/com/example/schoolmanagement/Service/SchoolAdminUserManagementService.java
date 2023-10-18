@@ -117,4 +117,9 @@ public class SchoolAdminUserManagementService {
             userInDb.setTeacherclass(classRepository.findById(teacherclass).get());
         }
     }
+
+    @Transactional
+    public void addUser(Users newUser) {
+        userRepository.save(newUser);
+    }
 }
