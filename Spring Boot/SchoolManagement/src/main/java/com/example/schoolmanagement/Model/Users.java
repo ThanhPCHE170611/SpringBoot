@@ -59,6 +59,7 @@ public class Users implements UserDetails {
     private Class studentclass;
 
     private Date lastchangepassword;
+    private Date deactivetime;
 
     @OneToMany(mappedBy = "teacher")
     private List<TeacherClassSubject> teacherClassSubjects;

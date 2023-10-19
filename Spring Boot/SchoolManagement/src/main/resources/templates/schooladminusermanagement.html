@@ -61,6 +61,9 @@
       <li class="nav-item active">
         <a class="nav-link" href="/schooladmin/usermanagement">User Management</a>
       </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="/schooladmin/reportmanagement">Report Management</a>
+      </li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown"> <!-- Added dropdown class here -->
@@ -105,9 +108,15 @@
       <td th:text="${number.index+1}"></td>
       <td th:text="${user.getRollNumber()}"></td>
       <td th:text="${user.getEmail()}"></td>
-      <td> <span th:each="userRole : ${user.getRoles()}">
-        <p th:text="${userRole.getRolename()}"></p>
-      </span></td>
+      <td>
+    <span th:each="role, roleIndex : ${user.getRoles()}">
+        <span th:text="${role.getRolename()}"></span>
+        <span th:unless="${roleIndex} == ${#lists.size(user.getRoles()) - 1}">,</span>
+    </span>
+      </td>
+
+
+
       <td th:text="${user.getFullname()}"></td>
       <td th:text="${user.getUsername()}"></td>
       <td th:text="${user.getStatus()}"></td>
@@ -121,8 +130,13 @@
       <td th:text="${user.getHobbies()}"></td>
       <td><a th:href="@{'/schooladmin/usermanagement/update/'+ ${user.getRollNumber()}}" th:text="Update"  class="btn btn-success"></a></td>
       <td>
-        <button th:attr="data-rollnumber=${user.getRollNumber()}" class="btn btn-danger" onclick="confirmDelete(event)">Delete</button>
+        <button th:attr="data-rollnumber=${user.getRollNumber()}" class="btn btn-danger" onclick="confirmDelete(event)">Deactive</button>
       </td>
+      <td th:if="${#sets.contains(user.getRoles(), teacherrole)}">
+        <a th:href="@{'/schooladmin/usermanagement/teachersubject/' + ${user.getRollNumber()}}"
+           class="btn btn-primary">Teacher Subject Management</a>
+      </td>
+
 
     </tr>
     </tbody>
@@ -177,6 +191,5 @@
     }
   }
 </script>
-
 </body>
 </html>
