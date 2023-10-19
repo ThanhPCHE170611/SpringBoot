@@ -19,10 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -37,6 +35,7 @@ public class SchoolAdminUserManagementController {
     private final OrganizationRepository organizationRepository;
     private final ClassRepository classRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SubjectRepository subjectRepository;
 
 
     @GetMapping(path = "/schooladmin/usermanagement")
@@ -48,7 +47,9 @@ public class SchoolAdminUserManagementController {
         else {
             Users schoolAdmin = (Users) session.getAttribute("user");
             Page<Users> users = schoolAdminUserManagementService.getUsers(schoolAdmin, page, pageSize);
-                    model.addAttribute("users", users);
+            Role teacherRole = roleRepository.findById(2L).get();
+            model.addAttribute("teacherrole", teacherRole);
+            model.addAttribute("users", users);
             model.addAttribute("page", page);
             return "schooladminusermanagement";
         }
@@ -58,6 +59,8 @@ public class SchoolAdminUserManagementController {
     public String deleteUser(@PathVariable String rollNumber, HttpSession session, Model model){
         Users user = userRepository.findById(rollNumber).get();
         user.setStatus("deactive");
+        Date todayDate = new Date();
+        user.setDeactivetime(todayDate);
         schoolAdminUserManagementService.deleteUser(user);
         model.addAttribute("error", "Delete Successful!");
         return viewAllUsers(session, model, 0, 25);
@@ -277,5 +280,25 @@ public class SchoolAdminUserManagementController {
         return viewAllUsers(session, model, 0, 25);
     }
 
+    @GetMapping(path = "/schooladmin/usermanagement/teachersubject/{rollNumber}")
+    public String assignTeacher(@PathVariable String rollNumber ,HttpSession session, Model model){
+        Users teacher = userRepository.findById(rollNumber).get();
+        Users schoolAdmin = (Users) session.getAttribute("user");
+        Organization organization = schoolAdmin.getSchoolOrganization();
+        List<Subject> allSubject = subjectRepository.findAllByStatusAndOrOrganizations("active", organization);
+        List<Class> allClass = classRepository.findAllByclassOrganization(organization);
+        List<TeacherClassSubject> subjectAndClassHasTeach = teacher.getTeacherClassSubjects();
+        //remove the subject and class that teacher has teach
+        for (TeacherClassSubject teacherClassSubject : subjectAndClassHasTeach){
+            allSubject.remove(teacherClassSubject.getSubjectTeaching());
+            allClass.remove(teacherClassSubject.getClassTeaching());
+        }
+        //send all subject and class that teacher can teach
+        model.addAttribute("subjects", allSubject);
+        model.addAttribute("classes", allClass);
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("subjectandclass", subjectAndClassHasTeach);
+        return "schooladminusermanagementteachersubject";
+    }
 
 }
