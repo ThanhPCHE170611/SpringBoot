@@ -24,4 +24,10 @@ public class GradeManagementService {
             markinDb.setMark(mark.getMark());
         }
     }
+
+    @Transactional
+    public void addMarkToTranscript(StudentTranscript studentTranscript, List<Mark> allMark){
+        StudentTranscript studentTranscriptInDb = studentTranscriptRepository.findById(studentTranscript.getId()).get();
+        studentTranscriptInDb.setMarks(allMark);
+    }
 }

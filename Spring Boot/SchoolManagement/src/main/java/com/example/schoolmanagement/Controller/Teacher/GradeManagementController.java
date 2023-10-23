@@ -205,15 +205,18 @@ public class GradeManagementController {
             }
         }
         StudentTranscript studentTranscript = studentTranscriptRepository.findByStudentSemesterAndSubject(student, semester, subject);
-        // dont have transcript
+        // dont have transcript -> create new
         if(studentTranscript == null){
             studentTranscript = new StudentTranscript(student, semester, subject);
             studentTranscriptRepository.save(studentTranscript);
+            //Get the neweast student Transcript
+            StudentTranscript studentTranscriptInDb = studentTranscriptRepository.findTop1ByOrderByIdDesc();
             markRepository.saveAll(marks1);
             markRepository.saveAll(marks2);
             markRepository.saveAll(marks3);
             List<Mark> allNewMark = markRepository.findTop6ByOrderByIdDesc();
-            studentTranscript.setMarks(allNewMark);
+            studentTranscriptInDb.setMarks(allNewMark);
+            gradeManagementService.addMarkToTranscript(studentTranscriptInDb, allNewMark);
         }
         // student_transcript exist -> update not create
         else {
@@ -246,9 +249,7 @@ public class GradeManagementController {
     private boolean isDouble(String dbString){
         try{
             double doubleNum = Double.parseDouble(dbString);
-            if(doubleNum >= 0 && doubleNum <=10){
-                return true;
-            } else return false;
+            return doubleNum >= 0 && doubleNum <= 10;
         } catch (Exception e){
             return false;
         }

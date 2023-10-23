@@ -9,8 +9,7 @@ public class GoogleLoginHandle {
     public String getEmailFromOAuth2Authentication(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
             Object principal = authentication.getPrincipal();
-            if (principal instanceof OidcUser) {
-                OidcUser oidcUser = (OidcUser) principal;
+            if (principal instanceof OidcUser oidcUser) {
                 return oidcUser.getAttribute("email");
             }
         }

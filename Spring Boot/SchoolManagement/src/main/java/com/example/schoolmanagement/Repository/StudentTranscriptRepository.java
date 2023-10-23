@@ -25,4 +25,12 @@ public interface StudentTranscriptRepository extends JpaRepository<StudentTransc
                                                       @Param("semester") Semester semester,
                                                       @Param("subject") Subject subject);
 
+    @Query("SELECT st FROM StudentTranscript st " +
+            "WHERE st.student = :student " +
+            "AND st.semester = :semester")
+    List<StudentTranscript> findByStudentSemesterAndStudent(@Param("student") Users student,
+                                                      @Param("semester") Semester semester);
+
+
+    StudentTranscript findTop1ByOrderByIdDesc();
 }
