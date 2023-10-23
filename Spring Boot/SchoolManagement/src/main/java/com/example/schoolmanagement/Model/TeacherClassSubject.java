@@ -26,4 +26,16 @@ public class TeacherClassSubject {
     @JoinColumn(name = "subjectcode") // Relates to the subject
     private Subject subjectTeaching;
 
+    private String status;
+
+    public TeacherClassSubject(Users teacher, Class classTeaching, Subject subjectTeaching) {
+        this.teacher = teacher;
+        this.classTeaching = classTeaching;
+        this.subjectTeaching = subjectTeaching;
+        this.status = "active";
+    }
+
+    public TeacherClassSubject() {
+
+    }
 }

@@ -140,7 +140,7 @@ public class ExcelDownloadController {
         for (Users user : allUsers){
             List<TeacherClassSubject> teacherClassSubjects = user.getTeacherClassSubjects();
             for (TeacherClassSubject teacherClassSubject : teacherClassSubjects){
-                if (teacherClassSubject.getSubjectTeaching().getSubjectcode().equals(subjectcode)){
+                if (teacherClassSubject.getSubjectTeaching().getSubjectcode().equals(subjectcode) && teacherClassSubject.getStatus().equalsIgnoreCase("active")){
                     teachers.add(user);
                 }
             }

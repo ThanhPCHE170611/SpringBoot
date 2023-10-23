@@ -1,9 +1,7 @@
 package com.example.schoolmanagement.Service;
 
-import com.example.schoolmanagement.Model.ChangeClass;
-import com.example.schoolmanagement.Model.Organization;
-import com.example.schoolmanagement.Model.Role;
-import com.example.schoolmanagement.Model.Users;
+import com.example.schoolmanagement.Model.*;
+import com.example.schoolmanagement.Model.Class;
 import com.example.schoolmanagement.Repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +30,8 @@ public class SchoolAdminUserManagementService {
     private final ReligionRepository religionRepository;
     private final RoleRepository roleRepository;
     private final ClassRepository classRepository;
+    private final TeacherClassSubjectRepository teacherClassSubjectRepository;
+    private final SubjectRepository subjectRepository;
     
     public Page<Users> getUsers(Users schoolAdmin, int page, int pageSize) {
         Organization currentOrganization = schoolAdmin.getSchoolOrganization();
@@ -121,5 +121,29 @@ public class SchoolAdminUserManagementService {
     @Transactional
     public void addUser(Users newUser) {
         userRepository.save(newUser);
+    }
+
+    @Transactional
+    public void deleteTeacherClassSubject(Long id) {
+        TeacherClassSubject teacherClassSubjectinDB = teacherClassSubjectRepository.findById(id).get();
+        teacherClassSubjectinDB.setStatus("deactive");
+    }
+
+    @Transactional
+    public void addTeacherClassSubject(String teacherrollnumber, Long teacherclass, String teachersubject) {
+        Users teacher = userRepository.findById(teacherrollnumber).get();
+        Class classTeaching = classRepository.findById(teacherclass).get();
+        Subject subjectTeaching = subjectRepository.findById(teachersubject).get();
+        TeacherClassSubject teacherClassSubject = new TeacherClassSubject(teacher, classTeaching, subjectTeaching);
+        teacherClassSubjectRepository.save(teacherClassSubject);
+    }
+
+    @Transactional
+    public void updateTeacherClassSubject(Long recordid, String teacherrollnumber, Long teacherclass, String teachersubject) {
+        TeacherClassSubject teacherClassSubjectinDB = teacherClassSubjectRepository.findById(recordid).get();
+        Class classTeaching = classRepository.findById(teacherclass).get();
+        Subject subjectTeaching = subjectRepository.findById(teachersubject).get();
+        teacherClassSubjectinDB.setClassTeaching(classTeaching);
+        teacherClassSubjectinDB.setSubjectTeaching(subjectTeaching);
     }
 }
