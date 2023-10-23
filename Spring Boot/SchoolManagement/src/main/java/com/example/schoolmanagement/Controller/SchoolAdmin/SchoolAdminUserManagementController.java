@@ -36,6 +36,7 @@ public class SchoolAdminUserManagementController {
     private final ClassRepository classRepository;
     private final PasswordEncoder passwordEncoder;
     private final SubjectRepository subjectRepository;
+    private final TeacherClassSubjectRepository teacherClassSubjectRepository;
 
 
     @GetMapping(path = "/schooladmin/usermanagement")
@@ -287,7 +288,13 @@ public class SchoolAdminUserManagementController {
         Organization organization = schoolAdmin.getSchoolOrganization();
         List<Subject> allSubject = subjectRepository.findAllByStatusAndOrOrganizations("active", organization);
         List<Class> allClass = classRepository.findAllByclassOrganization(organization);
-        List<TeacherClassSubject> subjectAndClassHasTeach = teacher.getTeacherClassSubjects();
+        List<TeacherClassSubject> allHasTeach = teacher.getTeacherClassSubjects();
+        List<TeacherClassSubject> subjectAndClassHasTeach = new ArrayList<>();
+        for (TeacherClassSubject teacherClassSubject : allHasTeach){
+            if(teacherClassSubject.getStatus().equalsIgnoreCase("active")){
+                subjectAndClassHasTeach.add(teacherClassSubject);
+            }
+        }
         //remove the subject and class that teacher has teach
         for (TeacherClassSubject teacherClassSubject : subjectAndClassHasTeach){
             allSubject.remove(teacherClassSubject.getSubjectTeaching());
@@ -299,6 +306,77 @@ public class SchoolAdminUserManagementController {
         model.addAttribute("teacher", teacher);
         model.addAttribute("subjectandclass", subjectAndClassHasTeach);
         return "schooladminusermanagementteachersubject";
+    }
+
+
+    @GetMapping(path = "/schooladmin/usermanagement/teachersubject/delete/{teacherClassId}")
+    public String deleteTeacherClassSubject(@PathVariable Long teacherClassId, HttpSession session, Model model){
+        TeacherClassSubject teacherClassSubject = teacherClassSubjectRepository.findById(teacherClassId).get();
+        String teacherRollNumber = teacherClassSubject.getTeacher().getRollNumber();
+        schoolAdminUserManagementService.deleteTeacherClassSubject(teacherClassId);
+        model.addAttribute("error", "Delete successful!");
+        return assignTeacher(teacherRollNumber, session, model);
+    }
+
+    @GetMapping(path = "/schooladmin/usermanagement/teachersubject/addnew/{teacherRollNumber}")
+    public String viewFormAddTeacherClassSubject(@PathVariable String teacherRollNumber, HttpSession session, Model model){
+        Users teacher = userRepository.findById(teacherRollNumber).get();
+        Users schoolAdmin = (Users) session.getAttribute("user");
+        Organization organization = schoolAdmin.getSchoolOrganization();
+        List<Subject> allSubject = subjectRepository.findAllByStatusAndOrOrganizations("active", organization);
+        List<Class> allClass = classRepository.findAllByclassOrganization(organization);
+        model.addAttribute("subjects", allSubject);
+        model.addAttribute("classes", allClass);
+        model.addAttribute("teacher", teacher);
+        return "schooladminusermanagementteachersubjectadd";
+    }
+
+    @PostMapping(path = "/schooladmin/usermanagement/teachersubject/addnew")
+    public String addTeacherClassSubject(@RequestParam String teacherrollnumber, @RequestParam Long teacherclass, @RequestParam String teachersubject, HttpSession session, Model model){
+        List<TeacherClassSubject> hasTeacherAlready = teacherClassSubjectRepository.findAllByClassTeachingAndSubjectTeachingAndStatus(teacherclass, teachersubject, "active");
+        //Subject In class has no Teacher teaching
+        if(hasTeacherAlready.isEmpty()){
+            schoolAdminUserManagementService.addTeacherClassSubject(teacherrollnumber, teacherclass, teachersubject);
+            model.addAttribute("error", "Add successful!");
+            return "redirect:/schooladmin/usermanagement/teachersubject/"+teacherrollnumber;
+        } else {
+            model.addAttribute("error", "This class has already have a teacher teach this subject!");
+            return viewFormAddTeacherClassSubject(teacherrollnumber, session, model);
+        }
+    }
+
+    @GetMapping(path = "/schooladmin/usermanagement/teachersubject/update/{teacherSubjectClassId}")
+    public String viewFormUpdateTeacherClassSubject(@PathVariable Long teacherSubjectClassId, HttpSession session, Model model){
+        TeacherClassSubject teacherClassSubject = teacherClassSubjectRepository.findById(teacherSubjectClassId).get();
+        Users teacher = teacherClassSubject.getTeacher();
+        Users schoolAdmin = (Users) session.getAttribute("user");
+        Organization organization = schoolAdmin.getSchoolOrganization();
+        List<Subject> allSubject = subjectRepository.findAllByStatusAndOrOrganizations("active", organization);
+        List<Class> allClass = classRepository.findAllByclassOrganization(organization);
+        model.addAttribute("subjects", allSubject);
+        model.addAttribute("classes", allClass);
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("teacherclasssubject", teacherClassSubject);
+        return "schooladminusermanagementteachersubjectupdate";
+    }
+    @PostMapping(path = "/schooladmin/usermanagement/teachersubject/update")
+    public String updateTeacherClassSubject(@RequestParam Long recordid,@RequestParam String teacherrollnumber, @RequestParam Long teacherclass, @RequestParam String teachersubject, HttpSession session, Model model){
+        TeacherClassSubject oldRecord = teacherClassSubjectRepository.findById(recordid).get();
+        if(oldRecord.getClassTeaching().getId() == teacherclass && oldRecord.getSubjectTeaching().getSubjectcode().equals(teachersubject)){
+            model.addAttribute("error", "Nothing change!");
+            return assignTeacher(teacherrollnumber, session, model);
+        } else {
+            List<TeacherClassSubject> hasTeacherAlready = teacherClassSubjectRepository.findAllByClassTeachingAndSubjectTeachingAndStatus(teacherclass, teachersubject, "active");
+            //Subject In class has no Teacher teaching
+            if(hasTeacherAlready.isEmpty()){
+                schoolAdminUserManagementService.updateTeacherClassSubject(recordid,teacherrollnumber, teacherclass, teachersubject);
+                model.addAttribute("error", "update successful!");
+                return "redirect:/schooladmin/usermanagement/teachersubject/"+teacherrollnumber;
+            } else {
+                model.addAttribute("error", "This class has already have a teacher teach this subject!");
+                return viewFormUpdateTeacherClassSubject(recordid, session, model);
+            }
+        }
     }
 
 }

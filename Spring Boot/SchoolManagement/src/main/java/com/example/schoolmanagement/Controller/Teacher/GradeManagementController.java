@@ -40,7 +40,7 @@ public class GradeManagementController {
         } else {
             Users teacher = (Users) session.getAttribute("user");
             // List all the class that teacher teach
-            List<TeacherClassSubject> teacherClassSubjects = teacherClassSubjectRepository.findAllByTeacher_RollNumber(teacher.getRollNumber());
+            List<TeacherClassSubject> teacherClassSubjects = teacherClassSubjectRepository.findAllByTeacher_RollNumberAndStatus(teacher.getRollNumber(), "active");
             List<Class> classes = new ArrayList<>();
             HashSet<Long> set = new HashSet<>();
             //remove duplicate class:
@@ -58,7 +58,7 @@ public class GradeManagementController {
     public String getAllSubjectInClass(@PathVariable Long classid, HttpSession session, Model model){
         Users teacher = (Users) session.getAttribute("user");
         // List all the class that teacher teach
-        List<TeacherClassSubject> teacherClassSubjects = teacherClassSubjectRepository.findAllByTeacher_RollNumber(teacher.getRollNumber());
+        List<TeacherClassSubject> teacherClassSubjects = teacherClassSubjectRepository.findAllByTeacher_RollNumberAndStatus(teacher.getRollNumber(), "active");
         List<Class> classes = new ArrayList<>();
         HashSet<Long> set = new HashSet<>();
         //remove duplicate class:
@@ -83,7 +83,7 @@ public class GradeManagementController {
     public String getAllStudentInClass(@PathVariable Long classid, @PathVariable String subjectcode, HttpSession session, Model model){
         Users teacher = (Users) session.getAttribute("user");
         // List all the class that teacher teach
-        List<TeacherClassSubject> teacherClassSubjects = teacherClassSubjectRepository.findAllByTeacher_RollNumber(teacher.getRollNumber());
+        List<TeacherClassSubject> teacherClassSubjects = teacherClassSubjectRepository.findAllByTeacher_RollNumberAndStatus(teacher.getRollNumber(), "active");
         List<Class> classes = new ArrayList<>();
         HashSet<Long> set = new HashSet<>();
         //remove duplicate class:
