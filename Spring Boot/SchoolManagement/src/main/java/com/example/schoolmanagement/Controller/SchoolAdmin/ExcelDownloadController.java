@@ -225,6 +225,7 @@ public class ExcelDownloadController {
                 System.out.println("TotalMark:" + totalMark);
             }
             if(totalMark >= 5){
+                user.setMarkAverage(totalMark);
                 students.add(user);
             }
         }
@@ -237,7 +238,7 @@ public class ExcelDownloadController {
         headerRow.createCell(3).setCellValue("Picture");
         headerRow.createCell(4).setCellValue("Gender");
         headerRow.createCell(5).setCellValue("Address");
-
+        headerRow.createCell(6).setCellValue("Average Mark");
         int rowIdx = 1;
         for (Users student : students) {
             Row row = sheet.createRow(rowIdx++);
@@ -266,6 +267,7 @@ public class ExcelDownloadController {
             }
             row.createCell(4).setCellValue(student.getGender().getGender());
             row.createCell(5).setCellValue(student.getAddress());
+            row.createCell(6).setCellValue(student.getMarkAverage());
         }
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=UpclassStudent.xlsx");
