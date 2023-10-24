@@ -1,5 +1,6 @@
 package com.example.schoolmanagement.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ public class TeacherClassSubject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "rollnumber") // Relates to the teacher
     private Users teacher;

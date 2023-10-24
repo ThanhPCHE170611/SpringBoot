@@ -8,7 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,4 +28,11 @@ public class SuperAdminUserManagementService {
         return userRepository.findAll(spec, pageable);
     }
 
+    @Transactional
+    public void deleteUser(String rollnumber) {
+        Users userInDb = userRepository.findById(rollnumber).get();
+        userInDb.setStatus("deactive");
+        Date todayDate = new Date();
+        userInDb.setDeactivetime(todayDate);
+    }
 }
