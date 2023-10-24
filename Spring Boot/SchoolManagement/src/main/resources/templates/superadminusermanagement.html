@@ -2,73 +2,39 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>User Management</title>
+  <title>Super Admin User Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .page-item {
-      margin: 0 5px;
-    }
-
-    .page-link {
-      text-decoration: none;
-      color: #007bff;
-      background-color: #fff;
-      border: 1px solid #dee2e6;
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-
-    .page-link:hover {
-      background-color: #e9ecef;
-    }
-
-    .page-link:active {
-      background-color: #d4d6d8;
-    }
-  </style>
 </head>
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/schooladmin/homepage">School Admin Home</a>
+  <a class="navbar-brand" href="/superadmin/homepage">Super Admin Home</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="/schooladmin/homepage">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/superadmin/homepage">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/schooladmin/classmanagement">Class Management</a>
+        <a class="nav-link" href="/superadmin/usermanagement">User Management</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/schooladmin/subjectmanagement">Subject Management</a>
+        <a class="nav-link" href="/superadmin/subjectmanagement">Subject Management</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/schooladmin/requestmanagement">Request Management</a>
+        <a class="nav-link" href="/superadmin/semestertmanagement">Semester Management</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="/schooladmin/usermanagement">User Management</a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="/schooladmin/reportmanagement">Report Management</a>
+        <a class="nav-link" href="/superadmin/Organizationmanagement">Organization Management</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown"> <!-- Added dropdown class here -->
         <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          School Admin Account
+          Super Admin Account
         </a>
         <div class="dropdown-menu" aria-labelledby="accountDropdown">
           <a class="dropdown-item" href="/logout">Logout</a>
@@ -78,9 +44,68 @@
   </div>
 </nav>
 
-
-
 <div class="container-fluid">
+<!--  Filter Bar-->
+  <div class="filter-bar">
+    <form method="GET" action="/superadmin/usermanagement">
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <input type="text" class="form-control" name="filterUsername" placeholder="Username" th:value="${filterUsername}">
+        </div>
+        <div class="form-group col-md-3">
+          <input type="text" class="form-control" name="filterEmail" placeholder="Email" th:value="${filterEmail}">
+        </div>
+        <div class="form-group col-md-3">
+          <input type="text" class="form-control" name="filterFullName" placeholder="FullName" th:value="${filterFullname}">
+        </div>
+        <div class="form-group col-md-3">
+          <select class="form-control" name="filterRole">
+            <option value="0">Filter For Role</option>
+            <th:block th:each="role : ${roles}" >
+              <option th:value="${role.getId()}" th:text="${role.getRolename()}" th:selected="${filterRole == role.getId()}"></option>
+            </th:block>
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <select class="form-control" name="filterGender">
+            <option value="0">Filter For Gender</option>
+            <th:block th:each="gender : ${genders}" >
+              <option th:value="${gender.getId()}" th:text="${gender.getGender()}" th:selected="${filterGender == gender.getId()}" ></option>
+            </th:block>
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <select class="form-control" name="filterEthnic">
+            <option value="0">Filter For Ethnic</option>
+            <th:block th:each="ethnic : ${ethnics}" >
+              <option th:value="${ethnic.getId()}" th:text="${ethnic.getEthnic()}" th:selected="${filterEthnic == ethnic.getId()}" ></option>
+            </th:block>
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <select class="form-control" name="filterReligion">
+            <option value="0">Filter For Religion</option>
+            <th:block th:each="religion : ${religions}" >
+              <option th:value="${religion.getId()}" th:text="${religion.getReligion()}" th:selected="${filterReligion == religion.getId()}"></option>
+            </th:block>
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <select class="form-control" name="filterOrganization">
+            <option value="0">Filter For Organization</option>
+            <th:block th:each="organization : ${organizations}" >
+              <option th:value="${organization.getId()}" th:text="${organization.getSchoolname()}" th:selected="${filterOrganization == organization.getId()}" ></option>
+            </th:block>
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+<!--  Table-->
   <table class="table table-striped">
     <thead>
     <tr>
@@ -127,16 +152,10 @@
       <td th:text="${user.getAddress()}"></td>
       <td th:text="${user.getHometown()}"></td>
       <td th:text="${user.getHobbies()}"></td>
-      <td><a th:href="@{'/schooladmin/usermanagement/update/'+ ${user.getRollNumber()}}" th:text="Update"  class="btn btn-success"></a></td>
+      <td><a th:href="@{'/superadmin/usermanagement/update/'+ ${user.getRollNumber()}}" th:text="Update"  class="btn btn-success"></a></td>
       <td>
-        <button th:attr="data-rollnumber=${user.getRollNumber()}" class="btn btn-danger" onclick="confirmDelete(event)">Deactive</button>
+        <button th:attr="data-rollnumber=${user.getRollNumber()}" class="btn btn-danger" onclick="confirmDelete(event)" th:if="${user.getStatus().equalsIgnoreCase('active')}">Deactive</button>
       </td>
-      <td th:if="${#sets.contains(user.getRoles(), teacherrole)}">
-        <a th:href="@{'/schooladmin/usermanagement/teachersubject/' + ${user.getRollNumber()}}"
-           class="btn btn-primary">Teacher Subject Management</a>
-      </td>
-
-
     </tr>
     </tbody>
   </table>
@@ -145,7 +164,7 @@
 <p class="mt-3" th:if="${error != null}" th:text="${error}" style="color:red; font-weight: bold" ></p>
 <nav aria-label="Page navigation example">
   <div th:fragment="pagination">
-    <ul class="pagination">
+    <ul class="pagination text-center">
       <li th:if="${users.hasPrevious()}" class="page-item">
         <a th:attr="href=@{${'?page=' + (page - 1)}}"
            class="page-link">Previous</a>
@@ -163,18 +182,18 @@
 </nav>
 
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
   function confirmDelete(event) {
     var userRollNumber = event.target.getAttribute('data-rollnumber');
     if (confirm("Are you sure you want to delete this users?")) {
-      // Send an AJAX request to delete the class
+      // Send an AJAX request to delete the user
       $.ajax({
         type: "GET",
-        url: "/schooladmin/usermanagement/deleteuser/" + userRollNumber, // Adjust the URL
+        url: "/superadmin/usermanagement/deleteuser/" + userRollNumber, // Adjust the URL
         success: function (data) {
           // Handle the success response here
           alert("User with RollNumber " + userRollNumber + " deleted.");
@@ -190,5 +209,6 @@
     }
   }
 </script>
+
 </body>
 </html>

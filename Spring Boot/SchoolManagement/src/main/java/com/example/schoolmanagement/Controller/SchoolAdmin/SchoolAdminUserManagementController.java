@@ -95,7 +95,6 @@ public class SchoolAdminUserManagementController {
                 model.addAttribute("isschooladmin", true);
             }
         }
-
         //split student class and teacher class:
         //each teacher just responsibility for one class
         //each class just have 50 students max
