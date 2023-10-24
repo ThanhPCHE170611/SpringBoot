@@ -5,6 +5,7 @@ import com.example.schoolmanagement.Model.*;
 import com.example.schoolmanagement.Model.Class;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,4 +41,8 @@ public interface UserRepository extends JpaRepository<Users, String> {
 
     @Query("SELECT u FROM Users u WHERE u.schoolOrganization.Id = :organizationId AND u.status = :status")
     List<Users> findAllByschoolOrganizationAndStatus(@Param("organizationId") Long organizationId, @Param("status") String status);
+
+
+    Page<Users> findAll(Specification<Users> spec, Pageable pageable);
+    Page<Users> findAll(Pageable pageable);
 }
