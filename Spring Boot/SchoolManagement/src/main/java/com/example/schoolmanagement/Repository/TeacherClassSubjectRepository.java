@@ -16,4 +16,7 @@ public interface TeacherClassSubjectRepository extends JpaRepository<TeacherClas
 
     @Query(value = "select tcs from TeacherClassSubject tcs where tcs.classTeaching.Id = :classid and tcs.subjectTeaching.subjectcode = :subjectcode and tcs.status = :status")
     List<TeacherClassSubject> findAllByClassTeachingAndSubjectTeachingAndStatus(@Param("classid") Long classid ,@Param("subjectcode") String subjectcode,@Param("status") String status);
+
+    @Query("Select tcs from TeacherClassSubject tcs where tcs.subjectTeaching.subjectcode = :subjectcode")
+    List<TeacherClassSubject> findAllBySubject_subjectcode( @Param("subjectcode") String subjectcode);
 }
