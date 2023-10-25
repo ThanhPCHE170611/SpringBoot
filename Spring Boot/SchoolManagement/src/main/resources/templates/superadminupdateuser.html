@@ -5,6 +5,13 @@
     <title>Super Admin Update User</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Define a CSS class for the shadow effect */
+        .shadow-div {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Customize the shadow as needed */
+            padding: 15px; /* Add padding to create space for the shadow */
+        }
+    </style>
 </head>
 <body>
 <!-- Navigation Bar -->
@@ -52,32 +59,34 @@
         <div class="col-md-6">
             <form th:action="@{/superadmin/usermanagement/update}" th:method="post" enctype="multipart/form-data"
                   class="border p-4 bg-white">
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="rollnumber">RollNumber</label>
                     <input type="text" id="rollnumber" name="rollnumber" class="form-control" th:readonly="readonly"
                            th:value="${user.getRollNumber()}"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="email">Email</label>
                     <input type="text" id="email" name="email" class="form-control" th:value="${user.getEmail()}"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="picture">Picture</label>
                     <img id="currentProfilePicture" th:src="${user.getPicture()}" alt="Current Picture" width="100"
                          height="100"/>
                     <input type="file" id="picture" name="picture" class="form-control-file" accept="image/*"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="fullname">Full Name</label>
                     <input type="text" id="fullname" name="fullname" class="form-control" th:required="required"
                            th:value="${user.getFullname()}"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="status">Status</label>
                     <input type="text" id="status" name="status" class="form-control" th:required="required"
                            th:value="${user.getStatus()}">
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
+                    <label> Organization Block</label>
+                    <br>
                     <label for="citySelect">City</label>
                     <select id="citySelect" class="form-control">
                         <th:block th:each="city : ${cities}">
@@ -100,13 +109,14 @@
                     </select>
 
                     <label for="organizationSelect">Organization</label>
-                    <select id="organizationSelect" class="form-control">
+                    <select id="organizationSelect" class="form-control" name="organization">
                         <th:block th:each="organization : ${organizations}">
                             <option th:value="${organization.getId()}" th:text="${organization.getSchoolname()}" th:selected="${organization.getId() == user.getSchoolOrganization().getId()}"></option>
                         </th:block>
                     </select>
+                    <p style="color: red; font-weight: bold" > If you change user organization, you must update twice, first time for organization and second for Class and Role </p>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label>Roles</label>
                     <div class="row">
                         <div class="col-md-2">
@@ -129,14 +139,14 @@
                     <div class="row">
                         <div class="col-md-2">
                             <input type="checkbox" id="3" name="roles" class="form-control" value="2"
-                                   th:checked="${isschooladmin}" disabled="disabled">
+                                   th:checked="${isschooladmin}">
                         </div>
                         <div class="col-md-2">
                             <label th:for="3">school admin</label>
                         </div>
                     </div>
                 </div>
-                <div class="form-group" th:if="${isttudent}">
+                <div class="form-group shadow-div sclassSelection" th:if="${isttudent}">
                     <label>Student Class</label>
                     <select class="form-control" name="studentclass">
                         <th:block th:each="class : ${studentclass}">
@@ -145,7 +155,7 @@
                         </th:block>
                     </select>
                 </div>
-                <div class="form-group" th:if="${isteacher}">
+                <div class="form-group shadow-div tclassSelection" th:if="${isteacher}">
                     <label>Teacher Class</label>
                     <select class="form-control" name="teacherclass">
                         <th:block th:each="class : ${teacherclass}">
@@ -154,12 +164,12 @@
                         </th:block>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="password">New Password</label>
                     <input type="password" id="password" name="password" class="form-control" th:required="required"
                            th:value="${password}">
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label>Gender</label>
                     <select class="form-control" name="gender">
                         <th:block th:each="gender : ${genders}">
@@ -168,7 +178,7 @@
                         </th:block>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label>Ethnic</label>
                     <select class="form-control" name="ethnic">
                         <th:block th:each="ethnic : ${ethnics}">
@@ -177,7 +187,7 @@
                         </th:block>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label>Religion</label>
                     <select class="form-control" name="religion">
                         <th:block th:each="religion : ${religions}">
@@ -186,22 +196,22 @@
                         </th:block>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="parrentname">Parrent Name</label>
                     <input type="text" id="parrentname" name="parrentname" class="form-control" th:required="required"
                            th:value="${user.getParrentName()}">
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="address">Address</label>
                     <input type="text" id="address" name="address" class="form-control" th:required="required"
                            th:value="${user.getAddress()}">
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="hometown">Home Town</label>
                     <input type="text" id="hometown" name="hometown" class="form-control" th:required="required"
                            th:value="${user.getHometown()}">
                 </div>
-                <div class="form-group">
+                <div class="form-group shadow-div">
                     <label for="hobbies">Hobbies</label>
                     <input type="text" id="hobbies" name="hobbies" class="form-control" th:required="false"
                            th:value="${user.getHobbies()}">
@@ -240,7 +250,7 @@
                     });
                 },
                 error: function (data) {
-                    window.location.reload();
+                    console.log(data.responseText);
                 }
             });
         });
@@ -265,7 +275,7 @@
                     });
                 },
                 error: function (data) {
-                    window.location.reload();
+                    console.log(data.responseText);
                 }
             });
         });
@@ -287,9 +297,16 @@
                     });
                 },
                 error: function (data) {
-                    window.location.reload();
+                    console.log(data.responseText);
                 }
             });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#citySelect, #districtSelect, #wardSelect, #organizationSelect").change(function () {
+            // Hide all div elements with the class "sclassSelection" and "tclassSelection" when the selects change
+            $(".sclassSelection, .tclassSelection").empty() ;
         });
     });
 </script>

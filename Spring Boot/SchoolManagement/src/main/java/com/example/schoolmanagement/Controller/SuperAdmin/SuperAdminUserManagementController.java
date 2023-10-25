@@ -12,18 +12,17 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping(path = "/superadmin/usermanagement")
 public class SuperAdminUserManagementController {
 
     private final SuperAdminUserManagementService superAdminUserManagementService;
@@ -41,7 +40,7 @@ public class SuperAdminUserManagementController {
     private final DistrictRepository districtRepository;
     private final WardRepository wardRepository;
 
-    @GetMapping()
+    @GetMapping(path = "/superadmin/usermanagement")
     public String viewUserManagementPage(HttpSession session, Model model,
                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                          @RequestParam(value = "size", defaultValue = "25") int pageSize,
@@ -125,7 +124,7 @@ public class SuperAdminUserManagementController {
         }
     }
 
-    @GetMapping("/deleteuser/{rollnumber}")
+    @GetMapping("/superadmin/usermanagement/deleteuser/{rollnumber}")
     public String deleteUser(@PathVariable String rollnumber, HttpSession session, Model model){
         if(session.getAttribute("user") == null){
             return "redirect:/auth/login";
@@ -135,8 +134,8 @@ public class SuperAdminUserManagementController {
         }
     }
 
-    @GetMapping("/update/{rollnumber}")
-    public String viewFormUpdateUser(@PathVariable String rollnumber, HttpSession session, Model model){
+    @GetMapping("/superadmin/usermanagement/update/{rollnumber}")
+    public String ViewFormUpdateUser(@PathVariable String rollnumber, HttpSession session, Model model){
         Users users = userRepository.findById(rollnumber).get();
         List<Gender> genders = genderRepository.findAll();
         List<Ethnic> ethnics = ethnicRepository.findAll();
@@ -145,7 +144,7 @@ public class SuperAdminUserManagementController {
         List<City> cities = cityRepository.findAll("active");
         List<District> districts = districtRepository.findAll("active");
         List<Ward> wards = wardRepository.findAll("active");
-        List<Organization> organizations = organizationRepository.findAllByWardAndStatus(users.getSchoolOrganization().getWardorganization().getWard().getId(), "active");
+        List<Organization> organizations = organizationRepository.findAllByWardAndStatus(users.getSchoolOrganization().getWardorganization().getId(), "active");
         List<Role> roles = new ArrayList<>();
         for (Role role : allRoles){
             if(!role.getRolename().equals("superadmin")){
@@ -193,4 +192,190 @@ public class SuperAdminUserManagementController {
         return "superadminupdateuser";
     }
 
+    @PostMapping(path = "/superadmin/usermanagement/update")
+    public String updateUser(@RequestParam String rollnumber, @RequestParam String email,
+                             @RequestParam(name = "picture", required = false) MultipartFile picture,
+                             @RequestParam("fullname") String fullname, @RequestParam String status,
+                             @RequestParam(name="organization", required = false) Long organization,
+                             @RequestParam List<Long> roles, @RequestParam(name="studentclass", required = false) Long studentclass,
+                             @RequestParam(name="teacherclass", required = false) Long teacherclass,
+                             @RequestParam("password") String newpassword, @RequestParam(name="gender") Long gender, @RequestParam("ethnic") Long ethnic, @RequestParam("religion") Long religion,
+                             @RequestParam("parrentname") String parrentname, @RequestParam("address") String address, @RequestParam("hometown") String hometown,
+                             @RequestParam(name = "hobbies", required = false) String hobbies, HttpSession session, Model model){
+        //check if student want to update profile picture:
+        //get the current information:
+        boolean canUpdate = true;
+        Users users = userRepository.findById(rollnumber).get();
+        if(!isFullNameValid(fullname)){
+            canUpdate = false;
+            model.addAttribute("error", "Wrong fullname format!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(!isEmailValid(email)){
+            canUpdate = false;
+            model.addAttribute("error", "Wrong email format!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(userRepository.findUsersByEmail(email).isPresent() && !userRepository.findUsersByEmail(email).get().getEmail().equals(email)){
+            canUpdate = false;
+            model.addAttribute("error", "Email is exist!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(!status.equals("active") && !status.equals("deactive")){
+            canUpdate = false;
+            model.addAttribute("error", "Status must be active or deactive!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(organization == null ){
+            canUpdate = false;
+            model.addAttribute("error", "You must select the organization of user!" );
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(!isPasswordValid(newpassword)){
+            canUpdate = false;
+            model.addAttribute("error", "Wrong new password format!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(!isFullNameValid(parrentname)){
+            canUpdate = false;
+            model.addAttribute("error", "Wrong parrent name format!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(!isAddressValid(address)){
+            canUpdate = false;
+            model.addAttribute("error", "Wrong address format!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(!isAddressValid(hometown)){
+            canUpdate = false;
+            model.addAttribute("error", "Wrong home town format!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        if(roles.isEmpty()){
+            canUpdate = false;
+            model.addAttribute("error", "Please select at least one roles!");
+            return ViewFormUpdateUser(rollnumber, session, model);
+        }
+        //Update without picture
+        if(canUpdate && picture.isEmpty()){
+            superAdminUserManagementService.updateUserWithoutPicture(session,users ,fullname, newpassword, gender, ethnic, religion, parrentname, address, hometown, hobbies, status, roles, studentclass, teacherclass, email, organization);
+            model.addAttribute("error", "Update information successfully!");
+            return viewUserManagementPage(session, model, 0, 25, null, null, null, null, null, null, null, null);
+        }// update avatar
+        else if(canUpdate && !picture.isEmpty()){
+            superAdminUserManagementService.updateStudentWithPicture(picture, session,users ,fullname, newpassword, gender, ethnic, religion, parrentname, address, hometown, hobbies, status, roles, studentclass, teacherclass, email, organization);
+            model.addAttribute("error", "Update information successfully!");
+            return viewUserManagementPage(session, model, 0, 25, null, null, null, null, null, null, null, null);
+
+        }
+        return viewUserManagementPage(session, model, 0, 25, null, null, null, null, null, null, null, null);
+
+    }
+    private boolean isFullNameValid(String fullName) {
+        return fullName.matches("^[\\p{L}\\s]+$");
+    }
+    private boolean isPasswordValid(String password){
+        return password.matches("^[^\\p{L}\\s]*$");
+    }
+    private boolean isAddressValid(String address){
+        return address.matches("^[\\p{L}\\d\\s,./-]+$");
+    }
+
+    private boolean isEmailValid(String email){
+        return email.matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+    }
+    private boolean isRollNumberValid(String rollNumber){
+        return rollNumber.matches("^(ha|se|he)[a-zA-Z0-9_]{4}$");
+    }
+
+    @GetMapping("/superadmin/usermanagement/adduser")
+    public String viewFormAddUser(HttpSession session, Model model){
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        } else {
+            List<Gender> genders = genderRepository.findAll();
+            List<Ethnic> ethnics = ethnicRepository.findAll();
+            List<Religion> religions = religionRepository.findAll();
+            List<Role> allRoles = roleRepository.findAll();
+            List<City> cities = cityRepository.findAll("active");
+            List<District> districts = districtRepository.findAll("active");
+            List<Ward> wards = wardRepository.findAll("active");
+            List<Organization> organizations = organizationRepository.findAll("active");
+            List<Role> roles = new ArrayList<>();
+            for (Role role : allRoles){
+                if(!role.getRolename().equals("superadmin")){
+                    roles.add(role);
+                }
+            }
+            model.addAttribute("genders", genders);
+            model.addAttribute("ethnics", ethnics);
+            model.addAttribute("religions", religions);
+            model.addAttribute("roles", roles);
+            model.addAttribute("cities", cities);
+            model.addAttribute("districts", districts);
+            model.addAttribute("wards", wards);
+            model.addAttribute("organizations", organizations);
+            return "superadminadduser";
+        }
+    }
+
+    @PostMapping(path = "/superadmin/usermanagement/adduser")
+    public String createUser(@RequestParam String rollnumber, @RequestParam String email,
+                             @RequestParam String username, @RequestParam String password,
+                             @RequestParam Long organization, @RequestParam List<Long> roles,
+                             @RequestParam(name="gender") Long gender, @RequestParam("ethnic") Long ethnic, @RequestParam("religion") Long religion,
+                             HttpSession session, Model model){
+        boolean canAdd = true;
+        if(!isRollNumberValid(rollnumber)){
+            canAdd = false;
+            model.addAttribute("error", "RollNumber is invalid!\nThe format is ha|se|he and 4 number\nExample:ha0000");
+            return viewFormAddUser(session, model);
+        }
+        if(userRepository.findById(rollnumber).isPresent()){
+            canAdd = false;
+            model.addAttribute("error", "RollNumber is dupplicate!");
+            return viewFormAddUser(session, model);
+        }
+        if(!username.matches("^[a-zA-Z][a-zA-Z0-9_]{2,14}$")){
+            canAdd = false;
+            model.addAttribute("error", "Username is invalid!");
+            return viewFormAddUser(session, model);
+        }
+        if(userRepository.findUsersByUsername(username).isPresent()){
+            canAdd = false;
+            model.addAttribute("error", "Username is dupplicate!");
+            return viewFormAddUser(session, model);
+        }
+        if(!isEmailValid(email)){
+            canAdd = false;
+            model.addAttribute("error", "Email is invalid!");
+            return viewFormAddUser(session, model);
+        }
+        if(userRepository.findUsersByEmail(email).isPresent()){
+            canAdd = false;
+            model.addAttribute("error", "Email is dupplicate!");
+            return viewFormAddUser(session, model);
+        }
+        if(organization == null){
+            canAdd = false;
+            model.addAttribute("error", "Please select the organization, If dont see the organization, create more in Organization Management!");
+            return viewFormAddUser(session, model);
+        }
+        if(roles == null){
+            canAdd = false;
+            model.addAttribute("error", "Please select at least one role!");
+            return viewFormAddUser(session, model);
+        }
+        if(canAdd){
+            Set<Role> roleSet = new HashSet<>();
+            for (Long role : roles){
+                roleSet.add(roleRepository.findById(role).get());
+            }
+            Users newUser = new Users(rollnumber, username, email, passwordEncoder.encode(password), genderRepository.findById(gender).get(), religionRepository.findById(religion).get(), ethnicRepository.findById(ethnic).get(), roleSet, organizationRepository.findById(organization).get());
+            superAdminUserManagementService.addUser(newUser);
+            model.addAttribute("error", "Add user success, please update user information soon!");
+            return viewUserManagementPage(session, model, 0, 25, null, null, null, null, null, null, null, null);
+        }
+        return viewUserManagementPage(session, model, 0, 25, null, null, null, null, null, null, null, null);
+    }
 }

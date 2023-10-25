@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @AllArgsConstructor
@@ -30,16 +32,11 @@ public class StudentTranscriptController {
         else {
             Users student = (Users) session.getAttribute("user");
             //get all the semester of database
-            List<Semester> semesters = new ArrayList<>();
+            Set<Semester> semesters = new HashSet<>();
             //check if the student have transcript of that semester or not
             List<StudentTranscript> studentTranscripts = studentTranscriptRepository.findAllByStudent(student);
             for (StudentTranscript studentTranscript : studentTranscripts){
                 semesters.add(studentTranscript.getSemester());
-            }
-            for (int i = 0; i< semesters.size() - 1; i++){
-                if(semesters.get(i).getId() == semesters.get(i+1).getId()){
-                    semesters.remove(i);
-                }
             }
             model.addAttribute("semesters", semesters);
             return "studenttranscript";
@@ -49,16 +46,11 @@ public class StudentTranscriptController {
     @GetMapping("/student/studenttranscript/{semesterId}")
     public String showStudentSubjectList(@PathVariable Long semesterId, Model model, HttpSession session) {
         Users student =(Users) session.getAttribute("user");
-        List<Semester> semesters = new ArrayList<>();
+        Set<Semester> semesters = new HashSet<>();
         //check if the student have transcript of that semester or not
         List<StudentTranscript> studentTranscripts = studentTranscriptRepository.findAllByStudent(student);
         for (StudentTranscript studentTranscript : studentTranscripts){
             semesters.add(studentTranscript.getSemester());
-        }
-        for (int i = 0; i< semesters.size() - 1; i++){
-            if(semesters.get(i).getId() == semesters.get(i+1).getId()){
-                semesters.remove(i);
-            }
         }
         model.addAttribute("semesters", semesters);
         List<Subject> subjects = new ArrayList<>();
@@ -74,16 +66,11 @@ public class StudentTranscriptController {
     @GetMapping("/student/studenttranscript/{semesterId}/{subjectId}")
     public String getStudentTranscript(@PathVariable Long semesterId, @PathVariable String subjectId , Model model, HttpSession session) {
         Users student =(Users) session.getAttribute("user");
-        List<Semester> semesters = new ArrayList<>();
+        Set<Semester> semesters = new HashSet<>();
         //check if the student have transcript of that semester or not
         List<StudentTranscript> studentTranscripts = studentTranscriptRepository.findAllByStudent(student);
         for (StudentTranscript studentTranscript : studentTranscripts){
             semesters.add(studentTranscript.getSemester());
-        }
-        for (int i = 0; i< semesters.size() - 1; i++){
-            if(semesters.get(i).getId() == semesters.get(i+1).getId()){
-                semesters.remove(i);
-            }
         }
         model.addAttribute("semesters", semesters);
         List<Subject> subjects = new ArrayList<>();

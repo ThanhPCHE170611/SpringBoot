@@ -2,6 +2,7 @@ package com.example.schoolmanagement.Repository;
 
 import com.example.schoolmanagement.Model.Class;
 import com.example.schoolmanagement.Model.Organization;
+import com.example.schoolmanagement.Model.Ward;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,6 +23,9 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
     @Query("SELECT o FROM Organization o WHERE o.status = :status and o.schoolcode != null")
     List<Organization> findAll(String status);
 
-    @Query("SELECT o FROM Organization o WHERE o.wardorganization.ward.id = :id and o.status = :status")
+    @Query("SELECT o FROM Organization o WHERE o.wardorganization.Id = :id and o.status = :status")
     List<Organization> findAllByWardAndStatus(@Param("id") Long id, @Param("status") String status);
+
+    @Query("SELECT o FROM Organization o WHERE o.ward = :ward and o.status = :status")
+    Organization findOrganizationByWardorganization(@Param("ward") Ward ward,@Param("status") String status);
 }
