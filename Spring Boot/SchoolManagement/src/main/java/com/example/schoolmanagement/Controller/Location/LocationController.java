@@ -53,7 +53,8 @@ public class LocationController {
     public List<Organization> getOrganizationsByWard(@RequestParam("ward") String wardId) {
         Ward ward = wardRepository.findById(Long.parseLong(wardId)).orElse(null);
         if (ward != null) {
-            return organizationRepository.findAllByWardAndStatus(ward.getId(), "active");
+            Organization wardOrganization = organizationRepository.findOrganizationByWardorganization(ward, "active");
+            return organizationRepository.findAllByWardAndStatus(wardOrganization.getId(), "active");
         } else {
             return Collections.emptyList();
         }
