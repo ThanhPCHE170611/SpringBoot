@@ -18,4 +18,7 @@ public interface SemesterRepository extends JpaRepository<Semester, Long> {
 
     @Query("SELECT s FROM Semester s WHERE s.Year = :year")
     List<Semester> findAllByyear(@Param("year") String year);
+
+    @Query("SELECT s FROM Semester s WHERE s.Year = :year AND s.id != :semesterid")
+    Semester findByyear(String year, Long semesterid);
 }
