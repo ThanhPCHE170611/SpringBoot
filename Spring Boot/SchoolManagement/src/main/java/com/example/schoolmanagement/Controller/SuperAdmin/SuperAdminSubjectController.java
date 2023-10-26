@@ -121,6 +121,47 @@ public class SuperAdminSubjectController {
         }
     }
     private boolean isValidSubjectName(String subjectname){
-        return subjectname.matches("^[\\p{L}\\s]+$");
+        return subjectname.matches("^[\\p{L}\\s0-9]+$");
+    }
+    @GetMapping("/addsubject")
+    public String viewFormAddSubject(HttpSession session, Model model){
+        //validate session
+        if (session.getAttribute("user")== null) {
+            return "redirect:/auth/login";
+        } else {
+            return "superadminaddsubject";
+        }
+    }
+    private boolean isValidSubjectCode(String subjectcode){
+        return subjectcode.matches("^[a-zA-Z0-9]+$");
+    }
+    @PostMapping("/addsubject")
+    public String addSubject(@RequestParam String subjectcode, @RequestParam String subjectname, HttpSession session, Model model){
+        boolean canAdd = true;
+        if(!isValidSubjectCode(subjectcode)){
+            model.addAttribute("error", "Subject code is invalid, Subject code just contain Alphabet, Digit and No Space!");
+            canAdd = false;
+            return viewFormAddSubject(session, model);
+        }
+        if(subjectRepository.findById(subjectcode).isPresent()){
+            model.addAttribute("error", "Subject code is existed");
+            canAdd = false;
+            return viewFormAddSubject(session, model);
+        }
+        if(!isValidSubjectName(subjectname)){
+            model.addAttribute("error", "Subject name is invalid");
+            canAdd = false;
+            return viewFormAddSubject(session, model);
+        }
+        if(canAdd){
+            Subject subject = new Subject(subjectcode, subjectname);
+            superAdminSubjectManagementService.addSubject(subject);
+            model.addAttribute("error", "Add subject successfully");
+            return viewPage(session, model, 0, 25, null, null);
+        }
+        else {
+            model.addAttribute("error", "Add subject failed");
+            return viewFormAddSubject(session, model);
+        }
     }
 }

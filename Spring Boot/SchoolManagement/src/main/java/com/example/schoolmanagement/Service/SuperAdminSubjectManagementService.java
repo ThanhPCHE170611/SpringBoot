@@ -51,10 +51,16 @@ public class SuperAdminSubjectManagementService {
         //all the teacher class subject -> teacher in use teach the subject
         List<TeacherClassSubject> teacherClassSubjectList = teacherClassSubjectRepository.findAllBySubject_subjectcode(subjectInDb.getSubjectcode());
 
+        //disable teacher class subject that have organization not in organizationSet
         for (TeacherClassSubject teacherClassSubject : teacherClassSubjectList){
             if(teacherClassSubject.getSubjectTeaching().getSubjectcode().equalsIgnoreCase(subject.getSubjectcode()) && !organizationSet.contains(teacherClassSubject.getTeacher().getSchoolOrganization()) &&!organizationSet.contains(teacherClassSubject.getClassTeaching().getClassOrganization())){
                 teacherClassSubject.setStatus("deactive");
             }
         }
+    }
+
+    @Transactional
+    public void addSubject(Subject subject) {
+        subjectRepository.save(subject);
     }
 }
