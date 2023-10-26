@@ -26,6 +26,7 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
     @Query("SELECT o FROM Organization o WHERE o.wardorganization.Id = :id and o.status = :status")
     List<Organization> findAllByWardAndStatus(@Param("id") Long id, @Param("status") String status);
 
-    @Query("SELECT o FROM Organization o WHERE o.ward = :ward and o.status = :status")
-    Organization findOrganizationByWardorganization(@Param("ward") Ward ward,@Param("status") String status);
+    @Query(value = "Select * from organization o where o.WArd = :wardid and o.status = :status", nativeQuery = true)
+    Organization findOrganizationByWardorganization(@Param("wardid") Long wardid ,@Param("status") String status);
+
 }
