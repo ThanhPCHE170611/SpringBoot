@@ -37,6 +37,11 @@ public class Subject {
     }
 
     public Subject() {
+    }
 
+    public Subject(String subjectcode, String subjectname) {
+        this.subjectcode = subjectcode;
+        this.subjectname = subjectname;
+        this.status = "active";
     }
 }
