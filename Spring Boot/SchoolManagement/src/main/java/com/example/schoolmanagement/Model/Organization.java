@@ -40,4 +40,14 @@ public class Organization {
     @OneToMany(mappedBy = "classOrganization")
     private List<Class> classOrganization;
 
+    public Organization(Ward newWard) {
+        this.ward = newWard;
+        this.status = "active";
+        Date currentDay = new Date();
+        this.operatingday = currentDay;
+    }
+
+    public Organization() {
+
+    }
 }
