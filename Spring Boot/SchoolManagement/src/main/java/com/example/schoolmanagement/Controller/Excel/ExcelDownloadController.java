@@ -1,4 +1,4 @@
-package com.example.schoolmanagement.Controller.SchoolAdmin;
+package com.example.schoolmanagement.Controller.Excel;
 
 import com.example.schoolmanagement.Model.*;
 import com.example.schoolmanagement.Repository.MarkRepository;
