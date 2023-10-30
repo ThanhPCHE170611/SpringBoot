@@ -168,6 +168,55 @@ public class SuperAdminOrganizationController {
         return schoolname.matches("^[\\p{L}\\s]+$");
     }
 
+    @GetMapping("/addorganization/{wardid}")
+    public String viewFormAddSchool(@PathVariable long wardid, HttpSession session, Model model){
+        //validate session
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        } else {
+            Ward ward = wardRepository.findById(wardid).get();
+            model.addAttribute("ward", ward);
+            return "superadminorganizationaddschool";
+        }
+    }
 
+    @PostMapping("/addorganization")
+    public String addOrganization(@RequestParam("ward") String wardid, @RequestParam String schoolcode, @RequestParam String schoolname,
+                                  HttpSession session, Model model){
+        Long ward = Long.parseLong(wardid);
+        if(!isValidSchoolName(schoolname)){
+            model.addAttribute("error", "School name is invalid!");
+            return viewFormAddSchool(ward, session, model);
+        }
+        if(!isValidSchoolCode(schoolcode)){
+            model.addAttribute("error", "School code is invalid!");
+            return viewFormAddSchool(ward, session, model);
+        }
+        if(organizationRepository.findAllByschoolcode(schoolcode) != null && organizationRepository.findAllByschoolcode(schoolcode).size() > 0){
+            model.addAttribute("error", "School code is already exist!");
+            return viewFormAddSchool(ward, session, model);
+        }
+        Organization wardOrganization = organizationRepository.findOrganizationByWardorganization(ward, "active");
+        //check if the wardOrganization is not exist
+        if(wardOrganization == null){
+            Ward newWard = wardRepository.findById(ward).get();
+            Organization newWardOrganization = new Organization(newWard);
+            superAdminOrganizationManagementService.createOrganization(newWardOrganization);
+            Organization newSchool = new Organization(schoolcode, schoolname, newWardOrganization);
+            superAdminOrganizationManagementService.createSchoolOrganization(newSchool);
+            model.addAttribute("error", "Add successfully!");
+            return viewPage(session, model, newWard.getDistrict().getCity().getId(), newWard.getDistrict().getId(), ward, 0, 10);
+        } else {
+            Organization newSchool = new Organization(schoolcode, schoolname, wardOrganization);
+            Ward selectWard = wardRepository.findById(ward).get();
+            superAdminOrganizationManagementService.createSchoolOrganization(newSchool);
+            model.addAttribute("error", "Add successfully!");
+            return viewPage(session, model, selectWard.getDistrict().getCity().getId(), selectWard.getDistrict().getId(), ward, 0, 10);
+        }
+    }
+
+    private boolean isValidSchoolCode(String schoolcode) {
+        return schoolcode.matches("^[A-Za-z0-9]+$");
+    }
 
 }

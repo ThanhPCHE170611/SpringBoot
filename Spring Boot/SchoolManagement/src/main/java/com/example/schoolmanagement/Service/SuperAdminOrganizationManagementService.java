@@ -26,4 +26,8 @@ public class SuperAdminOrganizationManagementService {
         schoolOrganization.setStatus(organization.getStatus());
         schoolOrganization.setOperatingday(organization.getOperatingday());
     }
+
+    public void createSchoolOrganization(Organization newSchool) {
+        organizationRepository.save(newSchool);
+    }
 }
