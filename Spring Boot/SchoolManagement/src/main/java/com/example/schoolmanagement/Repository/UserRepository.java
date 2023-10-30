@@ -42,7 +42,15 @@ public interface UserRepository extends JpaRepository<Users, String> {
     @Query("SELECT u FROM Users u WHERE u.schoolOrganization.Id = :organizationId AND u.status = :status")
     List<Users> findAllByschoolOrganizationAndStatus(@Param("organizationId") Long organizationId, @Param("status") String status);
 
+    @Query("SELECT u FROM Users u WHERE u.status = :status")
+    List<Users> findAllByStatus(@Param("status") String status);
+
+    @Query("SELECT u FROM Users u WHERE u.status = :status AND EXTRACT(YEAR FROM u.deactivetime) = EXTRACT(YEAR FROM CURRENT_DATE)")
+    List<Users> findAllByStatusAndDeactiveTime( @Param("status") String status);
 
     Page<Users> findAll(Specification<Users> spec, Pageable pageable);
     Page<Users> findAll(Pageable pageable);
+
+    @Query("Select u from Users u where u.status = :status and u.ethnic.Id = :ethnicId")
+    List<Users> findAllByStatusAndEthnic(@Param("status") String status, @Param("ethnicId") Long ethnicId);
 }

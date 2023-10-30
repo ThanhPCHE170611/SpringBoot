@@ -24,5 +24,8 @@ public interface SubjectRepository extends JpaRepository<Subject, String> {
     @Query("Select s from Subject s where s.status = :status And :schoolOrganization member of s.organizations")
     List<Subject> findAllByStatusAndOrOrganizations(@Param("status") String status,@Param("schoolOrganization") Organization schoolOrganization);
 
+    @Query("Select s from Subject s where s.status = :status")
+    List<Subject> findAllByStatus(@Param("status") String status);
+
     Page<Subject> findAll(Specification<Subject> spec, Pageable page);
 }
