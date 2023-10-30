@@ -47,6 +47,15 @@ public class Organization {
         this.operatingday = currentDay;
     }
 
+    public Organization(String schoolcode, String schoolname, Organization newWardOrganization) {
+        this.schoolcode = schoolcode;
+        this.schoolname = schoolname;
+        this.wardorganization = newWardOrganization;
+        this.status = "active";
+        Date currentDay = new Date();
+        this.operatingday = currentDay;
+    }
+
     public Organization() {
 
     }

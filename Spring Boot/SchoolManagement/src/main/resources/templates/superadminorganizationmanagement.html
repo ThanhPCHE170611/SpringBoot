@@ -110,7 +110,7 @@
   </div>
 
 </div>
-<a href="/superadmin/Organizationmanagement/addorganization" class="btn btn-primary" th:if="${wardselect != null}">Create More Organization for this ward</a>
+<a th:href="@{'/superadmin/Organizationmanagement/addorganization/' + ${wardselect}}" class="btn btn-primary" th:if="${wardselect != null}">Create More Organization for this ward</a>
 <p class="mt-3" th:if="${error != null}" th:text="${error}" style="color:red; font-weight: bold"></p>
 <!-- Add pagination links -->
 <!-- Add pagination links -->

@@ -18,7 +18,8 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
 //    Optional<Organization> findOrganizationByaClass(Class aclass);
 
     Optional<Organization> findOrganizationByclassOrganization(Organization classorganization);
-    List<Organization> findAllByschoolcode(String schoolCode);
+    @Query("Select o from Organization o where o.schoolcode = :schoolcode and o.status = 'active'")
+    List<Organization> findAllByschoolcode(@Param("schoolcode") String schoolCode);
 
     @Query("SELECT o FROM Organization o WHERE o.status = :status and o.schoolcode != null")
     List<Organization> findAll(String status);
