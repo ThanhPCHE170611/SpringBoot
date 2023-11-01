@@ -65,7 +65,7 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Teacher Class</label>
+          <label>Teacher Subject</label>
           <select class="form-control" name="teachersubject" required>
             <th:block th:each="subject : ${subjects}" >
               <option th:value="${subject.getSubjectcode()}" th:text="${subject.getSubjectname()}"></option>
