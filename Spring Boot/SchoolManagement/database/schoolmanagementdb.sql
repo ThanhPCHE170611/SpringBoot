@@ -1885,7 +1885,7 @@ COPY public.users (roll_number, address, email, hobbies, hometown, lastchangepas
 ha0001	Hà Nội	thanhpche170611@fpt.edu.vn	nothing	Thái Bình	2023-10-18 14:25:45.067	7.966666666666667	Phạm Công Trường	$2a$12$XjEi50pGwMFpZCjkKR0GouQknEqkl6duKL34Y48uLEGXSnqRoDz36	/images/ha0001.png	active	thanh318	2	1	2	1	ha0001	2	Phạm Công Thành	2	\N
 ha0006	Hà Nội	gvacc@gmail.com	\N	\N	2023-10-18 16:35:31.745	0	\N	$2a$12$58bjg0yZ8JaYCFULxYG5leYA8/ldKOLhR.1XQg5FB6v5ao4.5uIpm	/images/ha0006.png\n	deactive	thanh999	7	1	2	\N	\N	\N	Student Test	2	2023-10-24 14:48:22.991
 ha0003	HN	gvtest@gmail.com	nothing	Thái bình	2023-10-25 09:55:30.952	0	Phạm Công Trường	$2a$12$UnDlh3JE2zIgn3pptCqRtu6L2jyQ6TBkN73UeJVSLREvzHmkwCu4O	/images/ha0003.png	active	thanh234	2	1	2	\N	\N	\N	GV test	3	\N
-ha3372	\N	123@gmail.com	\N	\N	2023-10-25 13:57:09.343	0	\N	$2a$12$ChF7YsICqYlL8D9GicKcv.EVJEB1WB37gzL3ZcQfe2vUGMnnYOH2a	\N	active	thanh111	7	1	1	\N	\N	\N	\N	5	\N
+ha3372	\N	123@gmail.com	\N	\N	2023-10-25 13:57:09.343	0	\N	$2a$12$ChF7YsICqYlL8D9GicKcv.EVJEB1WB37gzL3ZcQfe2vUGMnnYOH2a	\N	deactive	thanh111	7	1	1	\N	\N	\N	\N	5	\N
 ha0002	Hà Nội	tpc23072003@gmail.com	game	Thái Bình	2023-10-30 14:18:35.782	7.7	Phạm Công Trường	$2a$12$Y7uZQ25pszPLThxD/V7kG.cfo0Qv89PJnVCTCTdU/QxUGX1ncZgQC	/images/ha0002.png\n	active	thanh123	2	1	2	2	ha0001	\N	Phạm Công Thành	2	\N
 he1706	Hà Nội	acctest@gmail.com	\N	\N	2023-10-18 16:29:38.74	0	\N	$2a$12$Q44KP/sjrshtdpab4dsD3ueibamS9IhVb...zokOdHFMR7gStLc4y	/images/he1706.png\n	active	thanh333	7	1	2	\N	\N	\N	Student Test	2	2023-10-19 11:05:24
 ha0022	Hà Nội	acctest1@gmail.com	\N	\N	2023-10-18 16:47:30.683	0	\N	$2a$12$pbJqhA5oTVVusT.GbmxuVuTQASUoi.PgehBiKj1seHE8dla.Y1BUm	/images/ha0022.png\n	active	thanh888	7	1	1	\N	\N	\N	Student Test	2	2023-10-19 11:05:28
