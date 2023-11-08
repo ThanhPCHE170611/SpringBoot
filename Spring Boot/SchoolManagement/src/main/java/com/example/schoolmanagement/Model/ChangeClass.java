@@ -23,7 +23,7 @@ public class ChangeClass {
     @JoinColumn(name = "old_class_id")
     private Class oldClass;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "new_class_id")
     private Class newClass;
 
@@ -31,6 +31,7 @@ public class ChangeClass {
     @JoinColumn(name = "semester")
     private Semester semester;
 
+    //
     private String status;
     private String reason;
 
