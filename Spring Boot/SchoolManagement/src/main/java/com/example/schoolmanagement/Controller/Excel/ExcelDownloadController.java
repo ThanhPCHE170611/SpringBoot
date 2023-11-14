@@ -72,5 +72,10 @@ public class ExcelDownloadController {
         excelDownLoadService.downloadSAEthnicStudentReport(ethnicid, response);
     }
 
+    @GetMapping("/generateusertemplate")
+    public void generateUserTemplate(HttpServletResponse response) throws IOException{
+        excelDownLoadService.generateUserTemplate(response);
+    }
+
 
 }
