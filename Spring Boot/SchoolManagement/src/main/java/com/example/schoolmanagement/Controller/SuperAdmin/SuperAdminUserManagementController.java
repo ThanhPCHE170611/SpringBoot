@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @AllArgsConstructor
@@ -33,8 +30,7 @@ public class SuperAdminUserManagementController {
     private final OrganizationRepository organizationRepository;
     private final ClassRepository classRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SubjectRepository subjectRepository;
-    private final TeacherClassSubjectRepository teacherClassSubjectRepository;
+    private final ImportUserHistoryRepository importUserHistoryRepository;
     private final UserRepository userRepository;
     private final CityRepository cityRepository;
     private final DistrictRepository districtRepository;
@@ -377,5 +373,17 @@ public class SuperAdminUserManagementController {
             return viewUserManagementPage(session, model, 0, 25, null, null, null, null, null, null, null, null);
         }
         return viewUserManagementPage(session, model, 0, 25, null, null, null, null, null, null, null, null);
+    }
+
+    @GetMapping("/superadmin/usermanagement/adduserbyexcel")
+    public String viewImportByExcelPage(HttpSession session, Model model){
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        } else {
+            Date date = new Date();
+            List<ImportUserHistory> historyList = importUserHistoryRepository.findImportUserHistoriesByDate(date);
+            model.addAttribute("historyList", historyList);
+            return "superadminimportuserbyexcel";
+        }
     }
 }

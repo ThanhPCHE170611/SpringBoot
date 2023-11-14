@@ -125,7 +125,6 @@ public class SchoolAdminClassManagementController {
                 model.addAttribute("error", "Update Successful!");
                 return viewAllClass(session, model);
             }
-
         }
     }
 
