@@ -6,9 +6,11 @@ import io.jsonwebtoken.io.IOException;
 import lombok.AllArgsConstructor;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.DataValidationConstraint.ValidationType;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -603,19 +605,33 @@ public class ExcelDownloadService {
         }
         organizationSheet.protectSheet("admin");
         Row headerRow = inputdataSheet.createRow(0);
-        headerRow.createCell(0).setCellValue("City");
-        headerRow.createCell(1).setCellValue("District");
-        headerRow.createCell(2).setCellValue("Ward");
-        headerRow.createCell(3).setCellValue("Organization");
-        headerRow.createCell(4).setCellValue("RollNumber");
-        headerRow.createCell(5).setCellValue("Email");
-        headerRow.createCell(6).setCellValue("Gender");
-        headerRow.createCell(7).setCellValue("Ethnic");
-        headerRow.createCell(8).setCellValue("Religion");
-        headerRow.createCell(9).setCellValue("Error");
-        CellStyle hiddenLockedCellStyle = workbook.createCellStyle();
-        hiddenLockedCellStyle.setLocked(true);
-        hiddenLockedCellStyle.setHidden(true);
+//        headerRow.createCell(0).setCellValue("City");
+        headerRow.createCell(0).setCellValue("RollNumber");
+        headerRow.createCell(1).setCellValue("Email");
+        headerRow.createCell(2).setCellValue("CCCD");
+        headerRow.createCell(3).setCellValue("DayOfBirth(dd/mm/yyyy)");
+        headerRow.createCell(4).setCellValue("City");
+        headerRow.createCell(5).setCellValue("District");
+        headerRow.createCell(6).setCellValue("Ward");
+        headerRow.createCell(7).setCellValue("Organization");
+        headerRow.createCell(8).setCellValue("Gender");
+        headerRow.createCell(9).setCellValue("Ethnic");
+        headerRow.createCell(10).setCellValue("Religion");
+        headerRow.createCell(11).setCellValue("Error");
+        CellStyle redFontColor = workbook.createCellStyle();
+        Font redFont = workbook.createFont();
+        redFont.setColor(IndexedColors.RED.getIndex());
+        redFontColor.setFont(redFont);
+
+        CellStyle textStyle = workbook.createCellStyle();
+        DataFormat dataFormat = workbook.createDataFormat();
+        textStyle.setDataFormat(dataFormat.getFormat("@"));
+        // change color of required cell and text format for cccd cell
+        for (int i = 0; i<=11 ; i++){
+            if(i < 2 || (i>=3 && i<=7)){
+                headerRow.getCell(i).setCellStyle(redFontColor);
+            }
+        }
         DataValidationHelper dvHelper = inputdataSheet.getDataValidationHelper();
         String formulaCity = "CitySheet!$B$2:$B$65";
         String formulaGender = "GenderSheet!$B$2:$B$4";
@@ -625,10 +641,10 @@ public class ExcelDownloadService {
         DataValidationConstraint constraintGender = dvHelper.createFormulaListConstraint(formulaGender);
         DataValidationConstraint constraintEthnic = dvHelper.createFormulaListConstraint(formulaEthnic);
         DataValidationConstraint constraintReligion = dvHelper.createFormulaListConstraint(formulaReligion);
-        CellRangeAddressList addressListCity = new CellRangeAddressList(1, 199, 0, 0);
-        CellRangeAddressList addressListGender = new CellRangeAddressList(1, 199, 6, 6);
-        CellRangeAddressList addressListEthnic = new CellRangeAddressList(1, 199, 7, 7);
-        CellRangeAddressList addressListReligion = new CellRangeAddressList(1, 199, 8, 8);
+        CellRangeAddressList addressListCity = new CellRangeAddressList(1, 199, 4, 4);
+        CellRangeAddressList addressListGender = new CellRangeAddressList(1, 199, 8, 8);
+        CellRangeAddressList addressListEthnic = new CellRangeAddressList(1, 199, 9, 9);
+        CellRangeAddressList addressListReligion = new CellRangeAddressList(1, 199, 10, 10);
         DataValidation cityValidation = dvHelper.createValidation(constraintCity, addressListCity);
         DataValidation genderValidation = dvHelper.createValidation(constraintGender, addressListGender);
         DataValidation ethnicValidation = dvHelper.createValidation(constraintEthnic, addressListEthnic);
@@ -640,25 +656,30 @@ public class ExcelDownloadService {
         for (int i = 1; i<=200; i++){
             //index of row = 1
             Row row = inputdataSheet.createRow(i);
-            String formulaDistrict = "OFFSET(DistrictSheet!$B$2, MATCH($A$"+ (i+1)+",DistrictSheet!$C$2:$C$707, 0) - 1, 0, COUNTIF(DistrictSheet!$C$2:$C$707, $A$"+(i+1)+"))";
-            String formulaWard = "OFFSET(WardSheet!$B$2, MATCH($B$"+(i+1)+", WardSheet!$C$2:$C$10601, 0) - 1, 0, COUNTIF(WardSheet!$C$2:$C$10601, $B$"+(i+1)+"))";
-            String formulaOrganization = "OFFSET(OrganizationSheet!$D$2, MATCH($C$"+(i+1)+",OrganizationSheet!$H$2:$H$10601, 0) - 1, 0, COUNTIF(OrganizationSheet!$H$2:$H$10601, $C$"+(i+1)+"))";
+            String formulaDistrict = "OFFSET(DistrictSheet!$B$2, MATCH($E$"+ (i+1)+",DistrictSheet!$C$2:$C$707, 0) - 1, 0, COUNTIF(DistrictSheet!$C$2:$C$707, $E$"+(i+1)+"))";
+            String formulaWard = "OFFSET(WardSheet!$B$2, MATCH($F$"+(i+1)+", WardSheet!$C$2:$C$10601, 0) - 1, 0, COUNTIF(WardSheet!$C$2:$C$10601, $F$"+(i+1)+"))";
+            String formulaOrganization = "OFFSET(OrganizationSheet!$D$2, MATCH($G$"+(i+1)+",OrganizationSheet!$H$2:$H$10601, 0) - 1, 0, COUNTIF(OrganizationSheet!$H$2:$H$10601, $G$"+(i+1)+"))";
             DataValidationConstraint constraintDistrict = dvHelper.createFormulaListConstraint(formulaDistrict);
-            CellRangeAddressList addressListDistrict = new CellRangeAddressList(i, i, 1, 1);
+            CellRangeAddressList addressListDistrict = new CellRangeAddressList(i, i, 5, 5);
             DataValidation districtValidation = dvHelper.createValidation(constraintDistrict, addressListDistrict);
             DataValidationConstraint constraintWard = dvHelper.createFormulaListConstraint(formulaWard);
-            CellRangeAddressList addressListWard = new CellRangeAddressList(i, i, 2, 2);
+            CellRangeAddressList addressListWard = new CellRangeAddressList(i, i, 6, 6);
             DataValidation wardValidation = dvHelper.createValidation(constraintWard, addressListWard);
             DataValidationConstraint constraintOrganization = dvHelper.createFormulaListConstraint(formulaOrganization);
-            CellRangeAddressList addressListOrganization = new CellRangeAddressList(i, i, 3, 3);
+            CellRangeAddressList addressListOrganization = new CellRangeAddressList(i, i, 7, 7);
             DataValidation organizationValidation = dvHelper.createValidation(constraintOrganization, addressListOrganization);
             inputdataSheet.addValidationData(districtValidation);
             inputdataSheet.addValidationData(wardValidation);
             inputdataSheet.addValidationData(organizationValidation);
+            row.createCell(2).setCellStyle(textStyle);
         }
         inputdataSheet.setDefaultColumnWidth(17);
+        for (int i = 1; i < workbook.getNumberOfSheets(); i++){
+            workbook.setSheetHidden(i, true);
+        }
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=ImportStudent.xlsx");
         workbook.write(response.getOutputStream());
+        workbook.close();
     }
 }

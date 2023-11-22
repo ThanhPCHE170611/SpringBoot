@@ -1,9 +1,12 @@
 package com.example.schoolmanagement.Service;
 
+import com.example.schoolmanagement.Model.Error;
+import com.example.schoolmanagement.Model.ImportUserHistory;
 import com.example.schoolmanagement.Model.Role;
 import com.example.schoolmanagement.Model.Users;
 import com.example.schoolmanagement.Repository.*;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -33,9 +38,9 @@ public class SuperAdminUserManagementService {
     private final ReligionRepository religionRepository;
     private final RoleRepository roleRepository;
     private final ClassRepository classRepository;
-    private final TeacherClassSubjectRepository teacherClassSubjectRepository;
-    private final SubjectRepository subjectRepository;
+    private final ImportUserHistoryRepository importUserHistoryRepository;
     private final OrganizationRepository organizationRepository;
+    private final ErrorRepository errorRepository;
 
     public Page<Users> getUsers(int page, int pageSize) {
         Pageable pageable =  PageRequest.of(page, pageSize);
@@ -136,5 +141,61 @@ public class SuperAdminUserManagementService {
     @Transactional
     public void addUser(Users newUser) {
         userRepository.save(newUser);
+    }
+
+    @Transactional
+    public void updateImportUserHistory(ImportUserHistory importUserHistory, List<Error> errorTotal) {
+        errorRepository.saveAll(errorTotal);
+        ImportUserHistory importUserHistoryInDb = importUserHistoryRepository.findById(importUserHistory.getId()).get();
+        importUserHistoryInDb.setErrors(errorTotal);
+    }
+
+    @Transactional
+    public ImportUserHistory createNewInportUserHistory(Users author, java.sql.Date currentDate, List<Error> errorTotal) {
+        ImportUserHistory newImportUserHistory = null;
+        int id = importUserHistoryRepository.findAll().size() + 1;
+        if(!errorTotal.isEmpty()){
+            errorRepository.saveAll(errorTotal);
+
+            newImportUserHistory = new ImportUserHistory(author, currentDate, errorTotal, id);
+        }
+        else {
+            newImportUserHistory = new ImportUserHistory(author, currentDate, id);
+        }
+        importUserHistoryRepository.save(newImportUserHistory);
+        return newImportUserHistory;
+    }
+
+    public void writeExcelFile(Workbook workbook, String path) {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            workbook.write(outputStream);
+            byte[] excelData = outputStream.toByteArray();
+            Files.write(Paths.get(path), excelData);
+            // Save the byte array to the database (assuming you have a method for that)
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Transactional
+    public void saveAllUser(List<Users> newUserList, ImportUserHistory newImportUserHistory) {
+        //save all student in db, set new student to history student list
+        userRepository.saveAll(newUserList);
+        ImportUserHistory importUserHistoryInDb = importUserHistoryRepository.findById(newImportUserHistory.getId()).get();
+        importUserHistoryInDb.setStudents(newUserList);
+    }
+
+    public void downloadTempFile(String path, HttpServletResponse response) {
+        try {
+            byte[] fileContent = Files.readAllBytes(Paths.get(path));
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-disposition", "attachment; filename="+ path.substring(97));
+            response.setContentLength(fileContent.length);
+            response.getOutputStream().write(fileContent);
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
