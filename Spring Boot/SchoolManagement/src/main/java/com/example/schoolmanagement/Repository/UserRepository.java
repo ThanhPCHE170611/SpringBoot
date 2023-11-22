@@ -23,6 +23,8 @@ public interface UserRepository extends JpaRepository<Users, String> {
 
     Optional<Users> findUsersByUsername(String username);
 
+    Optional<Users> findUsersByCccd(String cccd);
+
 
     @Query("SELECT u FROM Users u WHERE u.studentclass.Id = :studentclassid and u.status = :status")
     List<Users> findAllBystudentclass(@Param("studentclassid") Long studentclassid, @Param("status") String status);

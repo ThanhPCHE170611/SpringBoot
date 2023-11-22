@@ -3,11 +3,15 @@ package com.example.schoolmanagement.Controller.SuperAdmin;
 
 import com.example.schoolmanagement.Model.*;
 import com.example.schoolmanagement.Model.Class;
+import com.example.schoolmanagement.Model.Error;
 import com.example.schoolmanagement.Repository.*;
 import com.example.schoolmanagement.Service.SuperAdminUserManagementService;
 import lombok.AllArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -15,7 +19,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.Date;
 import java.util.*;
 
 @Controller
@@ -376,14 +383,297 @@ public class SuperAdminUserManagementController {
     }
 
     @GetMapping("/superadmin/usermanagement/adduserbyexcel")
-    public String viewImportByExcelPage(HttpSession session, Model model){
+    public String viewImportByExcelPage(HttpSession session, Model model,  @RequestParam(value = "page", defaultValue = "0") int page,
+                                        @RequestParam(value = "size", defaultValue = "5") int size){
         if(session.getAttribute("user") == null){
             return "redirect:/auth/login";
         } else {
-            Date date = new Date();
-            List<ImportUserHistory> historyList = importUserHistoryRepository.findImportUserHistoriesByDate(date);
+            Users author =(Users) session.getAttribute("user");
+            Pageable pageable = PageRequest.of(page, size);
+            Page<ImportUserHistory> historyList = importUserHistoryRepository.findImportUserHistoriesByAuthor(author, pageable);
             model.addAttribute("historyList", historyList);
+            model.addAttribute("page", page);
+            model.addAttribute("size", size);
             return "superadminimportuserbyexcel";
         }
     }
+
+    @PostMapping("/superadmin/exceldownload/uploaduser")
+    public String testFile(@RequestParam("file") MultipartFile file, HttpServletResponse response, HttpSession session, Model model) throws io.jsonwebtoken.io.IOException {
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())){
+            List<Users> newUserList = new ArrayList<>();
+            List<String> emailList = new ArrayList<>();
+            List<String> CCCDList = new ArrayList<>();
+            List<String> rollNumberList = new ArrayList<>();
+            Sheet inputDataSheet = workbook.getSheetAt(0);
+
+            int lastDataRow = 200;
+            // Get require data from file to validate dupplicate in file
+            for (int i = 1; i<= inputDataSheet.getLastRowNum(); i++){
+                if (inputDataSheet.getRow(i).getCell(0) == null) {
+                    if (inputDataSheet.getRow(i).getCell(1) == null) {
+                        if (inputDataSheet.getRow(i).getCell(2).getStringCellValue().equals("")) {
+                            if (inputDataSheet.getRow(i).getCell(3) == null) {
+                                if (inputDataSheet.getRow(i).getCell(4)==null) {
+                                    if (inputDataSheet.getRow(i).getCell(5)==null) {
+                                        if (inputDataSheet.getRow(i).getCell(6)==null) {
+                                            if (inputDataSheet.getRow(i).getCell(7)==null) {
+                                                if (inputDataSheet.getRow(i).getCell(8)==null) {
+                                                    if (inputDataSheet.getRow(i).getCell(9)==null) {
+                                                        if (inputDataSheet.getRow(i).getCell(10)==null) {
+                                                            lastDataRow = i;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 1; i< lastDataRow; i++){
+                if(inputDataSheet.getRow(i).getCell(0) != null){
+                    Cell rollNumber = inputDataSheet.getRow(i).getCell(0);
+                    rollNumberList.add(rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()));
+                }
+                if (inputDataSheet.getRow(i).getCell(1) != null){
+                    Cell email = inputDataSheet.getRow(i).getCell(1);
+                    emailList.add(email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue()));
+                }
+                if(inputDataSheet.getRow(i).getCell(2) != null){
+                    Cell cccd = inputDataSheet.getRow(i).getCell(2);
+                    CCCDList.add(cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue()));
+                }
+            }
+            List<com.example.schoolmanagement.Model.Error> errorTotal = new ArrayList<>();
+            for (int i = 1; i < lastDataRow; i++) {
+                StringBuilder errorInRow = new StringBuilder("");
+                Row row = inputDataSheet.getRow(i);
+                // Perform validation for each row and update the "Error" column
+                Users newStudent =  validateAndHandleErrors(row, errorInRow, rollNumberList, emailList, CCCDList);
+                if(!errorInRow.toString().equals("")){
+                    errorTotal.add(new Error(errorInRow.toString(), (i+1)));
+                }
+                if(newStudent != null){
+                    newUserList.add(newStudent);
+                }
+            }
+            //  have error in file import, accepted for download one more time with old data!
+            Users author = (Users) session.getAttribute("user");
+            Date currentDate = new Date(System.currentTimeMillis());
+            ImportUserHistory newImportUserHistory = null;
+            if(!errorTotal.isEmpty()){
+                System.out.println("failed");
+                //find history by author and date -> if have one and status = fail (update history) -> rewrite file in resources by path,
+                newImportUserHistory = superAdminUserManagementService.createNewInportUserHistory(author, currentDate, errorTotal);
+                    //temp file of history will be store in db by path
+                    //write temp file to resources
+                String path = "D:/SpringBootGitHub/SpringBoot/Spring Boot/SchoolManagement/src/main/resources/static/excelfiles/" + author.getRollNumber() + "_" + currentDate + "_" + newImportUserHistory.getId()+".xlsx";
+                superAdminUserManagementService.writeExcelFile(workbook, path);
+                return "redirect:/superadmin/usermanagement/adduserbyexcel";
+                //if user click in name of history, it will download file
+            } else {
+                System.out.println("success");
+                newImportUserHistory = superAdminUserManagementService.createNewInportUserHistory(author, currentDate, errorTotal);
+                // not have any error in file
+                String path = "D:/SpringBootGitHub/SpringBoot/Spring Boot/SchoolManagement/src/main/resources/static/excelfiles/" + author.getRollNumber() + "_" + currentDate + "_" + newImportUserHistory.getId()+".xlsx";
+                superAdminUserManagementService.writeExcelFile(workbook, path);
+                superAdminUserManagementService.saveAllUser(newUserList, newImportUserHistory);
+                System.out.println("save success");
+                // update status = success, remove error log
+                // save all student in db, set new student to history student list
+            }
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+        return viewImportByExcelPage(session, model, 0 , 5);
+    }
+    private Users validateAndHandleErrors(Row row, StringBuilder errorInRow, List<String> rollNumberList, List<String> emailList, List<String> CCCDList) throws io.jsonwebtoken.io.IOException {
+        Users newUser = null;
+        boolean check = true;
+        //Get Data
+        Cell cccd = row.getCell(2);
+        Cell dayOfBirth = row.getCell(3); //required
+        Cell rollNumber = row.getCell(0); //required
+        Cell organization = row.getCell(7); //required
+        Cell email = row.getCell(1); //required
+        Cell gender = row.getCell(8);
+        Cell ethnic = row.getCell(9);
+        Cell religion = row.getCell(10);
+        //Validate:
+        //check all require field is not null
+        if(organization == null || rollNumber== null || dayOfBirth== null ||
+                email == null){
+            errorInRow.append("All required(red) cell must not be empty.\n");
+            row.createCell(11).setCellValue(errorInRow.toString());
+            check = false;
+        }
+        if(organization != null){
+            if(!organizationRepository.findOrganizationBySchoolname(organization.getCellType() == CellType.STRING ? organization.getStringCellValue() : String.valueOf(organization.getNumericCellValue())).isPresent()){
+                errorInRow.append("Organization is not exist.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        // validate for rollnumber: in correct format, not dupplicate in file and in db
+        if(rollNumber != null){
+            if(!isRollNumberValid(rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()))){
+                errorInRow.append("RollNumber is invalid.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+            else if(isRollNumberDupplicateInFile(rollNumberList, rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()))){
+                errorInRow.append("RollNumber is dupplicate in file.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+            else if(userRepository.findById(rollNumber.getStringCellValue()).isPresent()){
+                errorInRow.append("RollNumber is dupplicate with student in Database.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        // validate for email: in correct format, not dupplicate in file and in db
+        if(email != null ){
+            if(!isEmailValid((email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue())))){
+                errorInRow.append("Email is invalid.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+            else if(isEmailDupplicateInFile(emailList, (email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue())))){
+                errorInRow.append("Email is dupplicate in file.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+            else if(userRepository.findUsersByEmail((email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue()))).isPresent()){
+                errorInRow.append("Email is dupplicate with student in Database.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        // validate for cccd: in correct format, not dupplicate in file and in db
+        if(cccd != null){
+            if(!isCCCDValid((cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue())))){
+                errorInRow.append("CCCD is invalid.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+            else if(isCCCDDupplicateInFile(CCCDList, (cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue())))){
+                errorInRow.append("CCCD is dupplicate in file.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+            else if(userRepository.findUsersByCccd((cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue()))).isPresent()){
+                errorInRow.append("CCCD is dupplicate with student in Database.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        // validate format of dayOfBirth: dd/mm/yyyy
+        if(dayOfBirth != null){
+            if(!isValidDayOfBirth((dayOfBirth.getCellType() == CellType.STRING ? dayOfBirth.getStringCellValue() : String.valueOf(dayOfBirth.getNumericCellValue())))){
+                errorInRow.append("Day of birth is invalid.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        if(gender != null){
+            if(!genderRepository.findGenderByGender((gender.getCellType() == CellType.STRING ? gender.getStringCellValue() : String.valueOf(gender.getNumericCellValue()))).isPresent()){
+                errorInRow.append("Gender is not exist.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        if(ethnic != null){
+            if(!ethnicRepository.findEthnicByEthnic((ethnic.getCellType() == CellType.STRING ? ethnic.getStringCellValue() : String.valueOf(ethnic.getNumericCellValue()))).isPresent()){
+                errorInRow.append("Ethnic is not exist.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        if(religion != null){
+            if(!religionRepository.findReligionByReligion((religion.getCellType() == CellType.STRING ? religion.getStringCellValue() : String.valueOf(religion.getNumericCellValue()))).isPresent()){
+                errorInRow.append("Religion is not exist.\n");
+                row.createCell(11).setCellValue(errorInRow.toString());
+                check = false;
+            }
+        }
+        if(check){
+            //get data
+            Organization schoolOrganization = organizationRepository.findOrganizationBySchoolname(organization.getCellType() == CellType.STRING ? organization.getStringCellValue() : String.valueOf(organization.getNumericCellValue())).get();
+            String rollNumberStr = (rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()));
+            String emailStr = (email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue()));
+            String cccdStr = (cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue()));
+            String dobStr = (dayOfBirth.getCellType() == CellType.STRING ? dayOfBirth.getStringCellValue() : String.valueOf(dayOfBirth.getNumericCellValue()));
+            Gender genderObj = genderRepository.findGenderByGender((gender.getCellType() == CellType.STRING ? gender.getStringCellValue() : String.valueOf(gender.getNumericCellValue()))).get();
+            Ethnic ethnicObj = ethnicRepository.findEthnicByEthnic((ethnic.getCellType() == CellType.STRING ? ethnic.getStringCellValue() : String.valueOf(ethnic.getNumericCellValue()))).get();
+            Religion religionObj = religionRepository.findReligionByReligion((religion.getCellType() == CellType.STRING ? religion.getStringCellValue() : String.valueOf(religion.getNumericCellValue()))).get();
+            // auto generate username and password
+            String username = rollNumberStr + cccdStr.substring(cccdStr.length()-6); ;
+            String password = passwordEncoder.encode("1234@");
+            Role role = roleRepository.findById((long) 1).get();
+            newUser = new Users(rollNumberStr, emailStr, cccdStr, dobStr, genderObj, ethnicObj, religionObj, username, password, schoolOrganization, role);
+        }
+        return newUser;
+    }
+
+    private boolean isValidDayOfBirth(String s) {
+        return s.matches("^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[- /.](19|20)\\d\\d$");
+    }
+
+    private boolean isCCCDDupplicateInFile(List<String> cccdList, String s) {
+        long count = cccdList.stream()
+                .filter(cccd -> cccd.equalsIgnoreCase(s))
+                .count();
+        return count > 1;
+    }
+
+    private boolean isCCCDValid(String s) {
+        return s.matches("^[0-9_]{12}$");
+    }
+
+    private boolean isEmailDupplicateInFile(List<String> emailList, String s) {
+        for (String email : emailList){
+            System.out.println(email);
+        }
+        System.out.println(s);
+        long count = emailList.stream()
+                .filter(email -> email.equalsIgnoreCase(s))
+                .count();
+        return count > 1;
+    }
+
+    private boolean isRollNumberDupplicateInFile(List<String> rollNumberList, String s) {
+        long count = rollNumberList.stream()
+                .filter(rollNumber -> rollNumber.equalsIgnoreCase(s))
+                .count();
+        return count > 1;
+    }
+
+    @GetMapping("/superadmin/usermanagement/historydetail/{id}")
+    public String excelUploadUserHistoryDetails(@PathVariable Long id, HttpSession session, Model model){
+        if(session.getAttribute("user") == null){
+            return "redirect:/auth/login";
+        } else {
+            ImportUserHistory history = importUserHistoryRepository.findById(id).get();
+            model.addAttribute("history", history);
+            return "superadminimportuserbyexceldetail";
+        }
+    }
+
+    @GetMapping("/superadmin/usermanagement/historydetail/downloadtempfile/{id}")
+    public void downloadTempFile(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        ImportUserHistory history = importUserHistoryRepository.findById(id).get();
+        String path = "D:/SpringBootGitHub/SpringBoot/Spring Boot/SchoolManagement/src/main/resources/static" + history.getPath();
+        superAdminUserManagementService.downloadTempFile(path, response);
+    }
+
+
 }

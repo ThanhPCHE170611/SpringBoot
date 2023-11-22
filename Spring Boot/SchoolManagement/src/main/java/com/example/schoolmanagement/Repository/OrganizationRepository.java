@@ -30,4 +30,6 @@ public interface OrganizationRepository extends JpaRepository<Organization, Long
     @Query(value = "Select * from organization o where o.WArd = :wardid and o.status = :status", nativeQuery = true)
     Organization findOrganizationByWardorganization(@Param("wardid") Long wardid ,@Param("status") String status);
 
+    Optional<Organization> findOrganizationBySchoolname(String schoolname);
+
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -14,4 +15,6 @@ public interface GenderRepository extends JpaRepository<Gender, Long> {
 
     @Cacheable(value = "genderCache")
     List<Gender> findAll();
+
+    Optional<Gender> findGenderByGender(String gender);
 }

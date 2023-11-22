@@ -10,7 +10,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.*;
 
-@Table
+@Table(indexes = {
+        @Index(name = "idx_username", columnList = "username"),
+        @Index(name = "idx_email", columnList = "email")
+})
 @Entity
 @Getter
 @Setter
@@ -22,7 +25,8 @@ public class Users implements UserDetails {
     private String username;
     private String password;
     private String email;
-
+    private String dayOfBirth;
+    private String cccd;
     //Orgarnizaion
     @ManyToOne
     @JoinColumn(name = "gender")
@@ -83,6 +87,23 @@ public class Users implements UserDetails {
         this.status = "active";
         Date date = new Date();
         this.lastchangepassword = date;
+    }
+
+    public Users(String rollNumberStr, String emailStr, String cccdStr, String dobStr, Gender genderObj, Ethnic ethnicObj, Religion religionObj, String username, String password, Organization schoolOrganization, Role role) {
+        this.rollNumber = rollNumberStr;
+        this.email = emailStr;
+        this.cccd = cccdStr;
+        this.dayOfBirth = dobStr;
+        this.gender = genderObj;
+        this.ethnic = ethnicObj;
+        this.religions = religionObj;
+        this.schoolOrganization = schoolOrganization;
+        this.status = "active";
+        this.username = username;
+        this.password = password;
+        this.lastchangepassword = new Date();
+        this.roles = new HashSet<>();
+        this.roles.add(role);
     }
 
     public Users() {
