@@ -65,11 +65,8 @@ public class SuperAdminOrganizationController {
             }
             else if(ward != null && ward > 0){
                 Ward selectWard = wardRepository.findById(ward).get();
-                System.out.println("ward :" + selectWard.getWardname());
-                System.out.println("ward id :" + selectWard.getId());
                 Organization wardOrganization = organizationRepository.findOrganizationByWardorganization(selectWard.getId(), "active");
                 if(wardOrganization != null){
-                    System.out.println("Get ward Organization successfully!");
                     List<Organization> schoolOrganization = organizationRepository.findAllByWardAndStatus(wardOrganization.getId(), "active");
                     for (Organization eachSchool : schoolOrganization) {
                         schoolSet.add(eachSchool);
@@ -86,11 +83,12 @@ public class SuperAdminOrganizationController {
                 model.addAttribute("organizations", organizations);
             }
             model.addAttribute("cities", cities);
-            model.addAttribute("districts", districts);
-            model.addAttribute("wards", wards);
             model.addAttribute("cityselect", city);
             model.addAttribute("districtselect", district);
             model.addAttribute("wardselect", ward);
+            if(ward != null){
+                model.addAttribute("wardObj", wardRepository.findById(ward).get());
+            }
             model.addAttribute("pageSizeParam", pageSize);
             return "superadminorganizationmanagement";
         }
