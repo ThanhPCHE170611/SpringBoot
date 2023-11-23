@@ -408,33 +408,14 @@ public class SuperAdminUserManagementController {
             Sheet inputDataSheet = workbook.getSheetAt(0);
 
             int lastDataRow = 200;
-            // Get require data from file to validate dupplicate in file
-            for (int i = 1; i<= inputDataSheet.getLastRowNum(); i++){
-                if (inputDataSheet.getRow(i).getCell(0) == null) {
-                    if (inputDataSheet.getRow(i).getCell(1) == null) {
-                        if (inputDataSheet.getRow(i).getCell(2).getStringCellValue().equals("")) {
-                            if (inputDataSheet.getRow(i).getCell(3) == null) {
-                                if (inputDataSheet.getRow(i).getCell(4)==null) {
-                                    if (inputDataSheet.getRow(i).getCell(5)==null) {
-                                        if (inputDataSheet.getRow(i).getCell(6)==null) {
-                                            if (inputDataSheet.getRow(i).getCell(7)==null) {
-                                                if (inputDataSheet.getRow(i).getCell(8)==null) {
-                                                    if (inputDataSheet.getRow(i).getCell(9)==null) {
-                                                        if (inputDataSheet.getRow(i).getCell(10)==null) {
-                                                            lastDataRow = i;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+            // get the last row of data
+            for (int i = 1; i <= inputDataSheet.getLastRowNum(); i++) {
+                if (isRowEmpty(inputDataSheet.getRow(i))) {
+                    lastDataRow = i;
+                    break;
                 }
             }
+            //get data in excel file for validation
             for (int i = 1; i< lastDataRow; i++){
                 if(inputDataSheet.getRow(i).getCell(0) != null){
                     Cell rollNumber = inputDataSheet.getRow(i).getCell(0);
@@ -450,6 +431,7 @@ public class SuperAdminUserManagementController {
                 }
             }
             List<com.example.schoolmanagement.Model.Error> errorTotal = new ArrayList<>();
+            // Loop through each row of the worksheet and update error column
             for (int i = 1; i < lastDataRow; i++) {
                 StringBuilder errorInRow = new StringBuilder("");
                 Row row = inputDataSheet.getRow(i);
@@ -497,129 +479,135 @@ public class SuperAdminUserManagementController {
     }
     private Users validateAndHandleErrors(Row row, StringBuilder errorInRow, List<String> rollNumberList, List<String> emailList, List<String> CCCDList) throws io.jsonwebtoken.io.IOException {
         Users newUser = null;
-        boolean check = true;
-        //Get Data
-        Cell cccd = row.getCell(2);
-        Cell dayOfBirth = row.getCell(3); //required
         Cell rollNumber = row.getCell(0); //required
-        Cell organization = row.getCell(7); //required
-        Cell email = row.getCell(1); //required
-        Cell gender = row.getCell(8);
-        Cell ethnic = row.getCell(9);
-        Cell religion = row.getCell(10);
-        //Validate:
-        //check all require field is not null
-        if(organization == null || rollNumber== null || dayOfBirth== null ||
-                email == null){
-            errorInRow.append("All required(red) cell must not be empty.\n");
-            row.createCell(11).setCellValue(errorInRow.toString());
-            check = false;
-        }
-        if(organization != null){
-            if(!organizationRepository.findOrganizationBySchoolname(organization.getCellType() == CellType.STRING ? organization.getStringCellValue() : String.valueOf(organization.getNumericCellValue())).isPresent()){
-                errorInRow.append("Organization is not exist.\n");
+        if(rollNumber == null){
+            errorInRow.append("RollNumber is Key column, must be not null.\n");
+            return newUser;
+        } else {
+            boolean check = true;
+            //Get Data
+            Cell cccd = row.getCell(2);
+            Cell dayOfBirth = row.getCell(3); //required
+            Cell organization = row.getCell(7); //required
+            Cell email = row.getCell(1); //required
+            Cell gender = row.getCell(8);
+            Cell ethnic = row.getCell(9);
+            Cell religion = row.getCell(10);
+            //Validate:
+            //check all require field is not null
+            if(organization == null || dayOfBirth== null ||
+                    email == null){
+                errorInRow.append("All required(red) cell must not be empty.\n");
                 row.createCell(11).setCellValue(errorInRow.toString());
                 check = false;
             }
-        }
-        // validate for rollnumber: in correct format, not dupplicate in file and in db
-        if(rollNumber != null){
-            if(!isRollNumberValid(rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()))){
-                errorInRow.append("RollNumber is invalid.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            if(organization != null){
+                if(!organizationRepository.findOrganizationBySchoolname(organization.getCellType() == CellType.STRING ? organization.getStringCellValue() : String.valueOf(organization.getNumericCellValue())).isPresent()){
+                    errorInRow.append("Organization is not exist.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-            else if(isRollNumberDupplicateInFile(rollNumberList, rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()))){
-                errorInRow.append("RollNumber is dupplicate in file.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            // validate for rollnumber: in correct format, not dupplicate in file and in db
+            if(rollNumber != null){
+                if(!isRollNumberValid(rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()))){
+                    errorInRow.append("RollNumber is invalid.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
+                else if(isRollNumberDupplicateInFile(rollNumberList, rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()))){
+                    errorInRow.append("RollNumber is dupplicate in file.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
+                else if(userRepository.findById(rollNumber.getStringCellValue()).isPresent()){
+                    errorInRow.append("RollNumber is dupplicate with student in Database.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-            else if(userRepository.findById(rollNumber.getStringCellValue()).isPresent()){
-                errorInRow.append("RollNumber is dupplicate with student in Database.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            // validate for email: in correct format, not dupplicate in file and in db
+            if(email != null ){
+                if(!isEmailValid((email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue())))){
+                    errorInRow.append("Email is invalid.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
+                else if(isEmailDupplicateInFile(emailList, (email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue())))){
+                    errorInRow.append("Email is dupplicate in file.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
+                else if(userRepository.findUsersByEmail((email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue()))).isPresent()){
+                    errorInRow.append("Email is dupplicate with student in Database.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-        }
-        // validate for email: in correct format, not dupplicate in file and in db
-        if(email != null ){
-            if(!isEmailValid((email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue())))){
-                errorInRow.append("Email is invalid.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            // validate for cccd: in correct format, not dupplicate in file and in db
+            if(cccd != null){
+                if(!isCCCDValid((cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue())))){
+                    errorInRow.append("CCCD is invalid.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
+                else if(isCCCDDupplicateInFile(CCCDList, (cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue())))){
+                    errorInRow.append("CCCD is dupplicate in file.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
+                else if(userRepository.findUsersByCccd((cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue()))).isPresent()){
+                    errorInRow.append("CCCD is dupplicate with student in Database.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-            else if(isEmailDupplicateInFile(emailList, (email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue())))){
-                errorInRow.append("Email is dupplicate in file.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            // validate format of dayOfBirth: dd/mm/yyyy
+            if(dayOfBirth != null){
+                if(!isValidDayOfBirth((dayOfBirth.getCellType() == CellType.STRING ? dayOfBirth.getStringCellValue() : String.valueOf(dayOfBirth.getNumericCellValue())))){
+                    errorInRow.append("Day of birth is invalid.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-            else if(userRepository.findUsersByEmail((email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue()))).isPresent()){
-                errorInRow.append("Email is dupplicate with student in Database.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            if(gender != null){
+                if(!genderRepository.findGenderByGender((gender.getCellType() == CellType.STRING ? gender.getStringCellValue() : String.valueOf(gender.getNumericCellValue()))).isPresent()){
+                    errorInRow.append("Gender is not exist.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-        }
-        // validate for cccd: in correct format, not dupplicate in file and in db
-        if(cccd != null){
-            if(!isCCCDValid((cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue())))){
-                errorInRow.append("CCCD is invalid.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            if(ethnic != null){
+                if(!ethnicRepository.findEthnicByEthnic((ethnic.getCellType() == CellType.STRING ? ethnic.getStringCellValue() : String.valueOf(ethnic.getNumericCellValue()))).isPresent()){
+                    errorInRow.append("Ethnic is not exist.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-            else if(isCCCDDupplicateInFile(CCCDList, (cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue())))){
-                errorInRow.append("CCCD is dupplicate in file.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            if(religion != null){
+                if(!religionRepository.findReligionByReligion((religion.getCellType() == CellType.STRING ? religion.getStringCellValue() : String.valueOf(religion.getNumericCellValue()))).isPresent()){
+                    errorInRow.append("Religion is not exist.\n");
+                    row.createCell(11).setCellValue(errorInRow.toString());
+                    check = false;
+                }
             }
-            else if(userRepository.findUsersByCccd((cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue()))).isPresent()){
-                errorInRow.append("CCCD is dupplicate with student in Database.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
+            if(check){
+                //get data
+                Organization schoolOrganization = organizationRepository.findOrganizationBySchoolname(organization.getCellType() == CellType.STRING ? organization.getStringCellValue() : String.valueOf(organization.getNumericCellValue())).get();
+                String rollNumberStr = (rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()));
+                String emailStr = (email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue()));
+                String cccdStr = (cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue()));
+                String dobStr = (dayOfBirth.getCellType() == CellType.STRING ? dayOfBirth.getStringCellValue() : String.valueOf(dayOfBirth.getNumericCellValue()));
+                Gender genderObj = genderRepository.findGenderByGender((gender.getCellType() == CellType.STRING ? gender.getStringCellValue() : String.valueOf(gender.getNumericCellValue()))).get();
+                Ethnic ethnicObj = ethnicRepository.findEthnicByEthnic((ethnic.getCellType() == CellType.STRING ? ethnic.getStringCellValue() : String.valueOf(ethnic.getNumericCellValue()))).get();
+                Religion religionObj = religionRepository.findReligionByReligion((religion.getCellType() == CellType.STRING ? religion.getStringCellValue() : String.valueOf(religion.getNumericCellValue()))).get();
+                // auto generate username and password
+                String username = rollNumberStr + cccdStr.substring(cccdStr.length()-6); ;
+                String password = passwordEncoder.encode("1234@");
+                Role role = roleRepository.findById((long) 1).get();
+                newUser = new Users(rollNumberStr, emailStr, cccdStr, dobStr, genderObj, ethnicObj, religionObj, username, password, schoolOrganization, role);
+                return newUser;
             }
-        }
-        // validate format of dayOfBirth: dd/mm/yyyy
-        if(dayOfBirth != null){
-            if(!isValidDayOfBirth((dayOfBirth.getCellType() == CellType.STRING ? dayOfBirth.getStringCellValue() : String.valueOf(dayOfBirth.getNumericCellValue())))){
-                errorInRow.append("Day of birth is invalid.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
-            }
-        }
-        if(gender != null){
-            if(!genderRepository.findGenderByGender((gender.getCellType() == CellType.STRING ? gender.getStringCellValue() : String.valueOf(gender.getNumericCellValue()))).isPresent()){
-                errorInRow.append("Gender is not exist.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
-            }
-        }
-        if(ethnic != null){
-            if(!ethnicRepository.findEthnicByEthnic((ethnic.getCellType() == CellType.STRING ? ethnic.getStringCellValue() : String.valueOf(ethnic.getNumericCellValue()))).isPresent()){
-                errorInRow.append("Ethnic is not exist.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
-            }
-        }
-        if(religion != null){
-            if(!religionRepository.findReligionByReligion((religion.getCellType() == CellType.STRING ? religion.getStringCellValue() : String.valueOf(religion.getNumericCellValue()))).isPresent()){
-                errorInRow.append("Religion is not exist.\n");
-                row.createCell(11).setCellValue(errorInRow.toString());
-                check = false;
-            }
-        }
-        if(check){
-            //get data
-            Organization schoolOrganization = organizationRepository.findOrganizationBySchoolname(organization.getCellType() == CellType.STRING ? organization.getStringCellValue() : String.valueOf(organization.getNumericCellValue())).get();
-            String rollNumberStr = (rollNumber.getCellType() == CellType.STRING ? rollNumber.getStringCellValue() : String.valueOf(rollNumber.getNumericCellValue()));
-            String emailStr = (email.getCellType() == CellType.STRING ? email.getStringCellValue() : String.valueOf(email.getNumericCellValue()));
-            String cccdStr = (cccd.getCellType() == CellType.STRING ? cccd.getStringCellValue() : String.valueOf(cccd.getNumericCellValue()));
-            String dobStr = (dayOfBirth.getCellType() == CellType.STRING ? dayOfBirth.getStringCellValue() : String.valueOf(dayOfBirth.getNumericCellValue()));
-            Gender genderObj = genderRepository.findGenderByGender((gender.getCellType() == CellType.STRING ? gender.getStringCellValue() : String.valueOf(gender.getNumericCellValue()))).get();
-            Ethnic ethnicObj = ethnicRepository.findEthnicByEthnic((ethnic.getCellType() == CellType.STRING ? ethnic.getStringCellValue() : String.valueOf(ethnic.getNumericCellValue()))).get();
-            Religion religionObj = religionRepository.findReligionByReligion((religion.getCellType() == CellType.STRING ? religion.getStringCellValue() : String.valueOf(religion.getNumericCellValue()))).get();
-            // auto generate username and password
-            String username = rollNumberStr + cccdStr.substring(cccdStr.length()-6); ;
-            String password = passwordEncoder.encode("1234@");
-            Role role = roleRepository.findById((long) 1).get();
-            newUser = new Users(rollNumberStr, emailStr, cccdStr, dobStr, genderObj, ethnicObj, religionObj, username, password, schoolOrganization, role);
         }
         return newUser;
     }
@@ -673,6 +661,18 @@ public class SuperAdminUserManagementController {
         ImportUserHistory history = importUserHistoryRepository.findById(id).get();
         String path = "D:/SpringBootGitHub/SpringBoot/Spring Boot/SchoolManagement/src/main/resources/static" + history.getPath();
         superAdminUserManagementService.downloadTempFile(path, response);
+    }
+    private boolean isRowEmpty(Row row) {
+        if (row == null) {
+            return true;
+        }
+        for (int i = 0; i < 11; i++) {
+            Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+            if (cell != null && cell.getCellType() != CellType.BLANK) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
