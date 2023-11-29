@@ -8,9 +8,9 @@ server:
 
 spring:
   datasource:
-    password: 12345678
-    url: jdbc:postgresql://localhost:5432/schoolmanagement
-    username: sa
+    password: 2gCDGdgeec*f5d*geDgffeaF*Cc534f2
+    url: jdbc:postgresql://viaduct.proxy.rlwy.net:53917/railway
+    username: postgres
   jpa:
     hibernate:
       ddl-auto: update
