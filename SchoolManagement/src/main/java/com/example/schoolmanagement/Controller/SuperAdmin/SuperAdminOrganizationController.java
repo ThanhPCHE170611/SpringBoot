@@ -46,10 +46,7 @@ public class SuperAdminOrganizationController {
             return "redirect:/auth/login";
         } else {
             Set<Organization> schoolSet = new HashSet();
-            Specification<Users> spec = Specification.where(null);
             List<City> cities = cityRepository.findAll("active");
-            List<District> districts = districtRepository.findAll("active");
-            List<Ward> wards = wardRepository.findAll("active");
             if((district != null && district > 0 && ward == null)){
                 District selectDistrict= districtRepository.findById(district).get();
                 List<Ward> wardInDistrict = wardRepository.findByDistrict(selectDistrict, "active");
