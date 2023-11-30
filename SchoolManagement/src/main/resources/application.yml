@@ -22,8 +22,6 @@ spring:
         jdbc:
           batch_size: 5
           order_inserts: true
-          order_updates: true
-          order_deletes: true
     show-sql: true
   security:
     oauth2:
