@@ -7,6 +7,17 @@ server:
       timeout: 450 # Set the session timeout to 3600 seconds (60 minutes)
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tpc2302003@gmail.com
+    password: phamthanh1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   datasource:
     password: 12345678
     url: jdbc:postgresql://localhost:5432/schoolmanagement
