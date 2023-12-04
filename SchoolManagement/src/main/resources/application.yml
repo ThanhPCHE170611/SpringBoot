@@ -7,6 +7,17 @@ server:
       timeout: 450 # Set the session timeout to 3600 seconds (60 minutes)
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tpc2302003@gmail.com
+    password: phamthanh1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   datasource:
     password: 2gCDGdgeec*f5d*geDgffeaF*Cc534f2
     url: jdbc:postgresql://viaduct.proxy.rlwy.net:53917/railway
