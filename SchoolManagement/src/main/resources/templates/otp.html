@@ -131,10 +131,9 @@
             $.ajax({
                 type: "GET",
                 url: "/otpvalidate/validate",
-                data: data,
+                data: {otp: otp},
                 dataType: 'text',
                 cache: false,
-                timeout: 600000,
                 success: function (response) {
                     alert(response);
                 },
@@ -148,6 +147,18 @@
             event.preventDefault();
             // Add logic to send a request to the server to resend OTP to the user's email
             resetCountdown(); // Reset
+            $.ajax({
+                type: "GET",
+                url: "/otpvalidate/resend",
+                dataType: 'text',
+                cache: false,
+                success: function (response) {
+                    alert(response);
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);
+                }
+            });
         });
         $(".otp-input").keyup(function (event) {
             var maxLength = parseInt($(this).attr("maxlength"), 10);
