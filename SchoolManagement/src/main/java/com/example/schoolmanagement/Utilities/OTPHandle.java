@@ -26,45 +26,53 @@ public class OTPHandle {
     private final AuthService authService;
     @GetMapping("")
     public String sendOTPAndLoadPage(Authentication authentication, HttpSession session, Model model){
-        String usernameCheckLogin = authentication.getName();
-        String email = userRepository.findEmailByUsername(usernameCheckLogin);
-        // generate OTP
-        int otp = otpService.generateOTP(usernameCheckLogin);
-        // send OTP to email
-        sendEmailService.sendEmail(email, "OTP - School Management System", "Your OTP is: " + otp + ". Please do not share this OTP with anyone!");
-        // load page
-        model.addAttribute("email", email);
-        // create an count number:
-        if(session.getAttribute("count") == null){
-            session.setAttribute("count", 0);
+        if(authentication == null){
+            return "redirect:/auth/login";
+        } else {
+            String usernameCheckLogin = authentication.getName();
+            String email = userRepository.findEmailByUsername(usernameCheckLogin);
+            // generate OTP
+            int otp = otpService.generateOTP(usernameCheckLogin);
+            // send OTP to email
+            sendEmailService.sendEmail(email, "OTP - School Management System", "Your OTP is: " + otp + ". Please do not share this OTP with anyone!");
+            // load page
+            model.addAttribute("email", email);
+            // create an count number:
+            if(session.getAttribute("count") == null){
+                session.setAttribute("count", 0);
+            }
+            return "otp";
         }
-        return "otp";
     }
 
     @GetMapping("/validate")
     public @ResponseBody String validateOTP(@RequestParam("otp") String otp, Authentication authentication, HttpSession session, Model model){
-        String usernameCheckLogin = authentication.getName();
-        int cacheOTP = otpService.getOTP(usernameCheckLogin);
-        int count = (int) session.getAttribute("count");
-        String cacheOTPStr = String.valueOf(cacheOTP);
-        System.out.println("Count Number:" + count);
-        if(count < 5) {
-            if (otp.equalsIgnoreCase(cacheOTPStr)) {
-                otpService.clearOTP(usernameCheckLogin);
-                session.setAttribute("count", 0);
-                return ("VALID");
-            } else if (!otp.equalsIgnoreCase(cacheOTPStr)) {
-                count++;
-                session.setAttribute("count", count);
-                return ("INVALID");
-            }
+        if(authentication == null){
+            return "redirect:/auth/login";
         } else {
-            // update user status to block
-            authService.updateUserStatus(usernameCheckLogin);
-            session.invalidate();
-            return "You have entered wrong OTP too many times, your account will be block for secure! Contact with your admin to unlock your account!";
+            String usernameCheckLogin = authentication.getName();
+            int cacheOTP = otpService.getOTP(usernameCheckLogin);
+            int count = (int) session.getAttribute("count");
+            String cacheOTPStr = String.valueOf(cacheOTP);
+            System.out.println("Count Number:" + count);
+            if(count < 5) {
+                if (otp.equalsIgnoreCase(cacheOTPStr)) {
+                    otpService.clearOTP(usernameCheckLogin);
+                    session.setAttribute("count", 0);
+                    return ("VALID");
+                } else if (!otp.equalsIgnoreCase(cacheOTPStr)) {
+                    count++;
+                    session.setAttribute("count", count);
+                    return ("INVALID");
+                }
+            } else {
+                // update user status to block
+                authService.updateUserStatus(usernameCheckLogin);
+                session.invalidate();
+                return "You have entered wrong OTP too many times, your account will be block for secure! Contact with your admin to unlock your account!";
+            }
+            return "";
         }
-        return "";
     }
 
     @GetMapping("/resend")
