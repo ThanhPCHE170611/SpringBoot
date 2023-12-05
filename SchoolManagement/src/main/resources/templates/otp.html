@@ -116,7 +116,6 @@
 
         $("#validateOtp").submit(function (event) {
             event.preventDefault();
-
             var otp =
                 $("#digit1").val() +
                 $("#digit2").val() +
@@ -124,9 +123,6 @@
                 $("#digit4").val() +
                 $("#digit5").val() +
                 $("#digit6").val();
-
-            alert(otp);
-
             // The rest of your AJAX logic
             $.ajax({
                 type: "GET",
@@ -135,7 +131,14 @@
                 dataType: 'text',
                 cache: false,
                 success: function (response) {
-                    alert(response);
+                    if (response === "VALID"){
+                        window.location.href="/user/welcome"
+                    } else if(response === "INVALID") {
+                        alert("Invalid OTP. Please try again!");
+                    } else {
+                        alert(response);
+                        window.location.href="/auth/login";
+                    }
                 },
                 error: function (xhr, status, error) {
                     alert(xhr.responseText);
@@ -153,7 +156,7 @@
                 dataType: 'text',
                 cache: false,
                 success: function (response) {
-                    alert(response);
+                    alert(response)
                 },
                 error: function (xhr, status, error) {
                     alert(xhr.responseText);

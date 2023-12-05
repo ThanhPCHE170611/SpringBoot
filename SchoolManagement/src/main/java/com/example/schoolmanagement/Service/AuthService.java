@@ -19,4 +19,11 @@ public class AuthService {
         userInDb.setLastchangepassword(user.getLastchangepassword());
         userInDb.setPassword(user.getPassword());
     }
+
+
+    @Transactional
+    public void updateUserStatus(String usernameCheckLogin) {
+        Users userInDb = userRepository.findUsersByUsername(usernameCheckLogin).get();
+        userInDb.setStatus("deactive");
+    }
 }
