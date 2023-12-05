@@ -1,10 +1,14 @@
 package com.example.schoolmanagement.Utilities;
 
+import com.example.schoolmanagement.Model.Users;
+import com.example.schoolmanagement.Repository.UserRepository;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 public class OTPService {
     private static final Integer EXPIRATION = 3;
     private LoadingCache<String, Integer> otpCache;
-
     public OTPService(){
         super();
         otpCache = CacheBuilder.newBuilder()
