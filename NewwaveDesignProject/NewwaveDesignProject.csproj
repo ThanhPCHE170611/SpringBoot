@@ -1,0 +1,312 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Services\**" />
+    <Page Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Feartures\Header\ViewModels\HeaderViewModel.cs" />
+    <Compile Remove="Feartures\Navigations\Commands\MenuItemCommand.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="UI\Images\accounts.png" />
+    <None Remove="UI\Images\Accounts\apple.png" />
+    <None Remove="UI\Images\Accounts\bell.png" />
+    <None Remove="UI\Images\Accounts\bluerectangle.png" />
+    <None Remove="UI\Images\Accounts\Group.png" />
+    <None Remove="UI\Images\Accounts\medical.png" />
+    <None Remove="UI\Images\Accounts\moneytag.png" />
+    <None Remove="UI\Images\Accounts\pinkrectangle.png" />
+    <None Remove="UI\Images\Accounts\playstation.png" />
+    <None Remove="UI\Images\Accounts\saving.png" />
+    <None Remove="UI\Images\Accounts\settings.png" />
+    <None Remove="UI\Images\Accounts\user1.png" />
+    <None Remove="UI\Images\Accounts\user2.png" />
+    <None Remove="UI\Images\Accounts\Vector.png" />
+    <None Remove="UI\Images\BalanceHistory.png" />
+    <None Remove="UI\Images\BankServices\CheckingAccounts.png" />
+    <None Remove="UI\Images\BankServices\DebitAndCredit.png" />
+    <None Remove="UI\Images\BankServices\LifeInsurance.png" />
+    <None Remove="UI\Images\BankServices\Loan.png" />
+    <None Remove="UI\Images\BankServices\SavingAccounts.png" />
+    <None Remove="UI\Images\CardExpense\Cricle.png" />
+    <None Remove="UI\Images\CardList\CreditCardBlue.png" />
+    <None Remove="UI\Images\CardList\CreditCardGold.png" />
+    <None Remove="UI\Images\CardList\CreditCardPink.png" />
+    <None Remove="UI\Images\CardSetting\AppleIcon.png" />
+    <None Remove="UI\Images\CardSetting\BlockCard.png" />
+    <None Remove="UI\Images\CardSetting\ChangePinCode.png" />
+    <None Remove="UI\Images\CardSetting\Gooogle.png" />
+    <None Remove="UI\Images\creditcard.png" />
+    <None Remove="UI\Images\dashboard.png" />
+    <None Remove="UI\Images\DownArrow.png" />
+    <None Remove="UI\Images\ExpenseStatistic.png" />
+    <None Remove="UI\Images\Eye.png" />
+    <None Remove="UI\Images\EyeOpen.png" />
+    <None Remove="UI\Images\findIcon.png" />
+    <None Remove="UI\Images\Icons\Header\belling.png" />
+    <None Remove="UI\Images\Icons\Header\Logo.png" />
+    <None Remove="UI\Images\Icons\Header\search.png" />
+    <None Remove="UI\Images\Icons\Header\settings.png" />
+    <None Remove="UI\Images\Icons\Header\user.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\coins.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\credit-card.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\credit_Cards_beforeFocus.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\econometrics.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\economic-investment.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\home.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\service.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\settings_solid.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\transactions.png" />
+    <None Remove="UI\Images\Icons\Navigation_Left_Icon\user.png" />
+    <None Remove="UI\Images\ImageLoan\Statistical\Bag.png" />
+    <None Remove="UI\Images\ImageLoan\Statistical\Setting.png" />
+    <None Remove="UI\Images\ImageLoan\Statistical\Support.png" />
+    <None Remove="UI\Images\ImageLoan\Statistical\User.png" />
+    <None Remove="UI\Images\investments.png" />
+    <None Remove="UI\Images\Investments\apple.png" />
+    <None Remove="UI\Images\Investments\google.png" />
+    <None Remove="UI\Images\Investments\moneybag.png" />
+    <None Remove="UI\Images\Investments\piechart.png" />
+    <None Remove="UI\Images\Investments\repeat.png" />
+    <None Remove="UI\Images\Investments\tesla.png" />
+    <None Remove="UI\Images\LeftSideBar\accountschange.png" />
+    <None Remove="UI\Images\LeftSideBar\AccountsDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\creditcardschange.png" />
+    <None Remove="UI\Images\LeftSideBar\CreditCardsDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\Dashboardchange.png" />
+    <None Remove="UI\Images\LeftSideBar\DashboardDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\investmentschange.png" />
+    <None Remove="UI\Images\LeftSideBar\InvestmentsDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\loanschange.png" />
+    <None Remove="UI\Images\LeftSideBar\LoansDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\MyPrivilegesDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\serviceschange.png" />
+    <None Remove="UI\Images\LeftSideBar\ServicesDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\settingchange.png" />
+    <None Remove="UI\Images\LeftSideBar\SettingDefault.png" />
+    <None Remove="UI\Images\LeftSideBar\TransactionsChange.png" />
+    <None Remove="UI\Images\LeftSideBar\TransactionsDefault.png" />
+    <None Remove="UI\Images\LifeInsurance.png" />
+    <None Remove="UI\Images\LifeInsuranceServices.png" />
+    <None Remove="UI\Images\loan.png" />
+    <None Remove="UI\Images\logo.png" />
+    <None Remove="UI\Images\MyCardDashBoard\ChipCardBlack.png" />
+    <None Remove="UI\Images\MyCardDashBoard\ChipCardWhite.png" />
+    <None Remove="UI\Images\MyCardDashBoard\Master.png" />
+    <None Remove="UI\Images\MyCardDashBoard\Master1.png" />
+    <None Remove="UI\Images\MyCard\ChipCard.png" />
+    <None Remove="UI\Images\MyCard\ChipCardGray.png" />
+    <None Remove="UI\Images\MyCard\Ellipse.png" />
+    <None Remove="UI\Images\MyCard\EllipseGray.png" />
+    <None Remove="UI\Images\MyExpense\MyExpense.png" />
+    <None Remove="UI\Images\notification.png" />
+    <None Remove="UI\Images\PaginationBar\LeftArrow.png" />
+    <None Remove="UI\Images\PaginationBar\RightArrow.png" />
+    <None Remove="UI\Images\pencil.png" />
+    <None Remove="UI\Images\privileges.png" />
+    <None Remove="UI\Images\QuickTransfer\Livia.png" />
+    <None Remove="UI\Images\QuickTransfer\Next.png" />
+    <None Remove="UI\Images\QuickTransfer\Randy.png" />
+    <None Remove="UI\Images\QuickTransfer\Sent.png" />
+    <None Remove="UI\Images\QuickTransfer\Workman.png" />
+    <None Remove="UI\Images\RecentTransaction\Card.png" />
+    <None Remove="UI\Images\RecentTransaction\DownArrow.png" />
+    <None Remove="UI\Images\RecentTransaction\Finance.png" />
+    <None Remove="UI\Images\RecentTransaction\Paypal.png" />
+    <None Remove="UI\Images\RecentTransaction\UpArrow.png" />
+    <None Remove="UI\Images\Safety.png" />
+    <None Remove="UI\Images\SafetyServices.png" />
+    <None Remove="UI\Images\service.png" />
+    <None Remove="UI\Images\setting.png" />
+    <None Remove="UI\Images\Shopping.png" />
+    <None Remove="UI\Images\ShoppingServices.png" />
+    <None Remove="UI\Images\transactions.png" />
+    <None Remove="UI\Images\userAvatar.png" />
+    <None Remove="UI\Images\WeeklyActivity.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Feartures\Header\ViewModels\" />
+    <Folder Include="Feartures\Services\ViewModels\" />
+    <Folder Include="Feartures\DashBoard\ViewModels\" />
+    <Folder Include="Feartures\Setting\ViewModels\" />
+    <Folder Include="UI\Fonts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpGuidelinesAnalyzer" Version="3.8.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="DryIoc.dll" Version="5.4.3" />
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="UI\Images\accounts.png" />
+    <Resource Include="UI\Images\Accounts\apple.png" />
+    <Resource Include="UI\Images\Accounts\bell.png" />
+    <Resource Include="UI\Images\Accounts\bluerectangle.png" />
+    <Resource Include="UI\Images\Accounts\Group.png" />
+    <Resource Include="UI\Images\Accounts\medical.png" />
+    <Resource Include="UI\Images\Accounts\moneytag.png" />
+    <Resource Include="UI\Images\Accounts\pinkrectangle.png" />
+    <Resource Include="UI\Images\Accounts\playstation.png" />
+    <Resource Include="UI\Images\Accounts\saving.png" />
+    <Resource Include="UI\Images\Accounts\settings.png" />
+    <Resource Include="UI\Images\Accounts\user1.png" />
+    <Resource Include="UI\Images\Accounts\user2.png" />
+    <Resource Include="UI\Images\Accounts\Vector.png" />
+    <Resource Include="UI\Images\BalanceHistory.png" />
+    <Resource Include="UI\Images\BankServices\LifeInsuranceServices.png" />
+    <Resource Include="UI\Images\BankServices\SafetyServices.png" />
+    <Resource Include="UI\Images\BankServices\ShoppingServices.png" />
+    <Resource Include="UI\Images\BankServices\CheckingAccounts.png" />
+    <Resource Include="UI\Images\BankServices\DebitAndCredit.png" />
+    <Resource Include="UI\Images\BankServices\LifeInsurance.png" />
+    <Resource Include="UI\Images\BankServices\Loan.png" />
+    <Resource Include="UI\Images\BankServices\SavingAccounts.png" />
+    <Resource Include="UI\Images\CardExpense\Cricle.png" />
+    <Resource Include="UI\Images\CardList\CreditCardBlue.png" />
+    <Resource Include="UI\Images\CardList\CreditCardGold.png" />
+    <Resource Include="UI\Images\CardList\CreditCardPink.png" />
+    <Resource Include="UI\Images\CardSetting\AppleIcon.png" />
+    <Resource Include="UI\Images\CardSetting\BlockCard.png" />
+    <Resource Include="UI\Images\CardSetting\ChangePinCode.png" />
+    <Resource Include="UI\Images\CardSetting\Gooogle.png" />
+    <Resource Include="UI\Images\creditcard.png" />
+    <Resource Include="UI\Images\dashboard.png" />
+    <Resource Include="UI\Images\DownArrow.png" />
+    <Resource Include="UI\Images\ExpenseStatistic.png" />
+    <Resource Include="UI\Images\Eye.png" />
+    <Resource Include="UI\Images\EyeOpen.png" />
+    <Resource Include="UI\Images\findIcon.png" />
+    <Resource Include="UI\Images\Icons\Header\belling.png" />
+    <Resource Include="UI\Images\Icons\Header\Logo.png" />
+    <Resource Include="UI\Images\Icons\Header\search.png" />
+    <Resource Include="UI\Images\Icons\Header\settings.png" />
+    <Resource Include="UI\Images\Icons\Header\user.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\coins.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\credit-card.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\credit_Cards_beforeFocus.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\econometrics.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\economic-investment.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\home.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\service.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\settings_solid.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\transactions.png" />
+    <Resource Include="UI\Images\Icons\Navigation_Left_Icon\user.png" />
+    <Resource Include="UI\Images\ImageLoan\Statistical\Bag.png" />
+    <Resource Include="UI\Images\ImageLoan\Statistical\Setting.png" />
+    <Resource Include="UI\Images\ImageLoan\Statistical\Support.png" />
+    <Resource Include="UI\Images\ImageLoan\Statistical\User.png" />
+    <Resource Include="UI\Images\investments.png" />
+    <Resource Include="UI\Images\Investments\apple.png" />
+    <Resource Include="UI\Images\Investments\google.png" />
+    <Resource Include="UI\Images\Investments\moneybag.png" />
+    <Resource Include="UI\Images\Investments\piechart.png" />
+    <Resource Include="UI\Images\Investments\repeat.png" />
+    <Resource Include="UI\Images\Investments\tesla.png" />
+    <Resource Include="UI\Images\LeftSideBar\AccountsDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\accountschange.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\LeftSideBar\CreditCardsDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\CreditCardsChange.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\LeftSideBar\Dashboardchange.png" />
+    <Resource Include="UI\Images\LeftSideBar\DashboardDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\InvestmentsDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\investmentschange.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\LeftSideBar\LoansDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\loanschange.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\LeftSideBar\MyPrivilegesDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\ServicesDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\serviceschange.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\LeftSideBar\SettingDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\settingchange.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="UI\Images\LeftSideBar\TransactionsDefault.png" />
+    <Resource Include="UI\Images\LeftSideBar\TransactionsChange.png" />
+    <Resource Include="UI\Images\LifeInsurance.png" />
+    <Resource Include="UI\Images\LifeInsuranceServices.png" />
+    <Resource Include="UI\Images\loan.png" />
+    <Resource Include="UI\Images\logo.png" />
+    <Resource Include="UI\Images\MyCardDashBoard\ChipCardBlack.png" />
+    <Resource Include="UI\Images\MyCardDashBoard\ChipCardWhite.png" />
+    <Resource Include="UI\Images\MyCardDashBoard\Master.png" />
+    <Resource Include="UI\Images\MyCardDashBoard\Master1.png" />
+    <Resource Include="UI\Images\MyCard\ChipCard.png" />
+    <Resource Include="UI\Images\MyCard\ChipCardGray.png" />
+    <Resource Include="UI\Images\MyCard\Ellipse.png" />
+    <Resource Include="UI\Images\MyCard\EllipseGray.png" />
+    <Resource Include="UI\Images\MyExpense\MyExpense.png" />
+    <Resource Include="UI\Images\notification.png" />
+    <Resource Include="UI\Images\PaginationBar\LeftArrow.png" />
+    <Resource Include="UI\Images\PaginationBar\RightArrow.png" />
+    <Resource Include="UI\Images\pencil.png" />
+    <Resource Include="UI\Images\privileges.png" />
+    <Resource Include="UI\Images\QuickTransfer\Livia.png" />
+    <Resource Include="UI\Images\QuickTransfer\Next.png" />
+    <Resource Include="UI\Images\QuickTransfer\Randy.png" />
+    <Resource Include="UI\Images\QuickTransfer\Sent.png" />
+    <Resource Include="UI\Images\QuickTransfer\Workman.png" />
+    <Resource Include="UI\Images\RecentTransaction\Card.png" />
+    <Resource Include="UI\Images\RecentTransaction\DownArrow.png" />
+    <Resource Include="UI\Images\RecentTransaction\Finance.png" />
+    <Resource Include="UI\Images\RecentTransaction\Paypal.png" />
+    <Resource Include="UI\Images\RecentTransaction\UpArrow.png" />
+    <Resource Include="UI\Images\Safety.png" />
+    <Resource Include="UI\Images\SafetyServices.png" />
+    <Resource Include="UI\Images\service.png" />
+    <Resource Include="UI\Images\setting.png" />
+    <Resource Include="UI\Images\Shopping.png" />
+    <Resource Include="UI\Images\ShoppingServices.png" />
+    <Resource Include="UI\Images\transactions.png" />
+    <Resource Include="UI\Images\userAvatar.png" />
+    <Resource Include="UI\Images\WeeklyActivity.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Cores\Converters\AmountColorConverter.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Cores\Converters\GridColumnWithConverter.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+</Project>

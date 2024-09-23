@@ -1,0 +1,36 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:m="clr-namespace:NewwaveDesignProject.Feartures.Accounts.Models"
+    xmlns:n="clr-namespace:NewwaveDesignProject.Feartures.Investments.Models">
+
+
+
+    <x:Array x:Key="HardcodedStock" Type="{x:Type n:StockDTO}">
+        <n:StockDTO
+            Name="Trivago"
+            NumbericalOrder="01"
+            Price="520"
+            ReturnValue="+5%" />
+        <n:StockDTO
+            Name="Canon"
+            NumbericalOrder="02"
+            Price="480"
+            ReturnValue="+10%" />
+        <n:StockDTO
+            Name="Uber Food"
+            NumbericalOrder="03"
+            Price="350"
+            ReturnValue="-3%" />
+        <n:StockDTO
+            Name="Nokia"
+            NumbericalOrder="04"
+            Price="940"
+            ReturnValue="+2%" />
+        <n:StockDTO
+            Name="Tiktok"
+            NumbericalOrder="05"
+            Price="670"
+            ReturnValue="-12%" />
+    </x:Array>
+</ResourceDictionary>

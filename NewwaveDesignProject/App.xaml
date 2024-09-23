@@ -1,0 +1,56 @@
+﻿<Application
+    x:Class="NewwaveDesignProject.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:NewwaveDesignProject"
+    StartupUri="/Feartures/Navigations/Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--  nghia  -->
+                <ResourceDictionary Source="/UI/Styles/MenuItemTemplate.xaml" />
+                <ResourceDictionary Source="/UI/Styles/ServicesListViewItemTemplate.xaml" />
+                <ResourceDictionary Source="/UI/Styles/RoundedTextBoxTemplate.xaml" />
+                <ResourceDictionary Source="/UI/Styles/RoundedTextbox.xaml" />
+                <ResourceDictionary Source="/UI/Styles/RoundButtonTemplate.xaml" />
+                <ResourceDictionary Source="/UI/Styles/RoundButtonStyle.xaml" />
+                <ResourceDictionary Source="/UI/Styles/SecondButtonStyle.xaml" />
+                <ResourceDictionary Source="/UI/Styles/ColorStyle.xaml" />
+                <ResourceDictionary Source="/UI/Styles/TabControlStyle.xaml" />
+                <ResourceDictionary Source="/UI/Styles/CustomToggleStyle.xaml" />
+
+                <!--  Resource Dien  -->
+                <ResourceDictionary Source="UI/Styles/Navigation_Left_Menu_Item.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/TextBlockStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/CardListTemplate.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/FiledTextInput.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/ButtonTemplate.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/CardSettingTemplate.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/LoanStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/ButtonStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/ColorStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/PlaceholderStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/PositionStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/ImageStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Content/TextBoxStyle.xaml" />
+
+
+                <!--  Resource Hieu  -->
+                <ResourceDictionary Source="UI/Styles/DataGridStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/FakeDataResource.xaml" />
+                <ResourceDictionary Source="UI/Styles/HorizontalStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/IconStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/PositionAlignmentStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/RadiusBorderStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/Templates.xaml" />
+                <ResourceDictionary Source="UI/Styles/TitleStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/VerticleStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/MenuItemStyle.xaml" />
+                <ResourceDictionary Source="UI/Styles/ButtonStyle.xaml" />
+                <!--  Resources Thanh  -->
+                <ResourceDictionary Source="UI/Styles/ListViewControlTemplate.xaml" />
+                <ResourceDictionary Source="UI/Styles/FrameButtonStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

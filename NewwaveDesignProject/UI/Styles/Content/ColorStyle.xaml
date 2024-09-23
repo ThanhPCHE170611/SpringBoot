@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  Constant color  -->
+    <SolidColorBrush x:Key="ColorSkyBlue" Color="#4C78FF" />
+    <SolidColorBrush x:Key="ColorRoyalBlue" Color="#2D60FF" />
+    <SolidColorBrush x:Key="ColorLightBlue" Color="#539BFF" />
+    <SolidColorBrush x:Key="ColorDeepBlue" Color="#4C49ED" />
+    <SolidColorBrush x:Key="ColorBlueViolet" Color="#1814F3" />
+    <SolidColorBrush x:Key="ColorDarkSlateBlue" Color="#333B69" />
+    <SolidColorBrush x:Key="ColorCoolBlue" Color="#8BA3CB" />
+    <SolidColorBrush x:Key="ColorSteelBlue" Color="#718EBF" />
+    <SolidColorBrush x:Key="ColorAliceBlue" Color="#DFEAF2" />
+    <SolidColorBrush x:Key="ColorMidnightBlue" Color="#343C6A" />
+    <SolidColorBrush x:Key="ColorBabyBlue" Color="#E6EFF5" />
+    <SolidColorBrush x:Key="ColorPinkRose" Color="#FF82AC" />
+    <SolidColorBrush x:Key="ColorPinkLight" Color="#FFE0EB" />
+    <SolidColorBrush x:Key="ColorCoralRed" Color="#FE5C73" />
+    <SolidColorBrush x:Key="ColorGoldenOrange" Color="#FFBB38" />
+    <SolidColorBrush x:Key="ColorGoldenLight" Color="#FFF5D9" />
+    <SolidColorBrush x:Key="ColorPaleBlue" Color="#E7EDFF" />
+
+    <SolidColorBrush x:Key="ColorGhostWhite" Color="#f5f7fa" />
+    <SolidColorBrush x:Key="ColorWhite" Color="#FFFF" />
+    <SolidColorBrush x:Key="ColorAquaCyan" Color="#16DBCC" />
+    <SolidColorBrush x:Key="ColorAquaLight" Color="#DCFAF8" />
+    <SolidColorBrush x:Key="ColorDarGray" Color="#232323" />
+</ResourceDictionary>

@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="TitleStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="LineHeight" Value="26.63" />
+        <Setter Property="FontWeight" Value="DemiBold" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Foreground" Value="{DynamicResource ColorDarkSlateBlue}" />
+    </Style>
+
+    <Style x:Key="CurrentNamePage" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="28" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{DynamicResource ColorMidnightBlue}" />
+    </Style>
+
+
+    <Style x:Key="NameBankCardExpense" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="LineHeight" Value="18.15 " />
+        <Setter Property="Margin" Value="12,0,0,0" />
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="Foreground" Value="{DynamicResource ColorSteelBlue}" />
+    </Style>
+
+
+</ResourceDictionary>

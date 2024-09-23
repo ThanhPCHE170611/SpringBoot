@@ -1,0 +1,88 @@
+﻿<UserControl
+    x:Class="NewwaveDesignProject.UI.UserControls.CardexpenseUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="310"
+    d:DesignWidth="350"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Border Background="{DynamicResource ColorWhite}" CornerRadius="25">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Image
+                    Grid.Row="0"
+                    Width="188.03"
+                    Height="186.11"
+                    Margin="0,30,0,0"
+                    VerticalAlignment="Top"
+                    Source="pack://application:,,,/NewwaveDesignProject;component/UI/Images/CardExpense/Cricle.png" />
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="50,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Ellipse
+                            Width="15"
+                            Height="15"
+                            Fill="{DynamicResource ColorSkyBlue}" />
+                        <TextBlock Style="{DynamicResource NameBankCardExpense}" Text="DBL Bank" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="50,0,0,0"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Ellipse
+                            Width="15"
+                            Height="15"
+                            Fill="{DynamicResource ColorAquaCyan}" />
+                        <TextBlock Style="{DynamicResource NameBankCardExpense}" Text="ABM Bank" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="25,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <Ellipse
+                            Width="15"
+                            Height="15"
+                            Fill="{DynamicResource ColorPinkRose}" />
+                        <TextBlock Style="{DynamicResource NameBankCardExpense}" Text="BRC Bank" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="25,0,0,0"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Ellipse
+                            Width="15"
+                            Height="15"
+                            Fill="{DynamicResource ColorGoldenOrange}" />
+                        <TextBlock Style="{DynamicResource NameBankCardExpense}" Text="MCP Bank" />
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

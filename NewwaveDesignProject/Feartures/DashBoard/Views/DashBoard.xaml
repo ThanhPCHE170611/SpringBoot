@@ -1,0 +1,183 @@
+﻿<UserControl
+    x:Class="NewwaveDesignProject.Feartures.DashBoard.Views.DashBoard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NewwaveDesignProject.Feartures.DashBoard.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:uc="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    d:DesignHeight="924"
+    d:DesignWidth="1190"
+    mc:Ignorable="d">
+    <ScrollViewer>
+        <Grid Background="{StaticResource ColorWhiteSmoke}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.24*" />
+                    <RowDefinition Height="0.32*" />
+                    <RowDefinition Height="0.28*" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="350" MaxWidth="400" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition MinWidth="350" MaxWidth="400" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition MinWidth="350" MaxWidth="400" />
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.2*" />
+                            <RowDefinition Height="0.8*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            FontSize="22"
+                            FontWeight="Medium"
+                            Foreground="{StaticResource ColorDeepOcean}"
+                            Text="My Cards" />
+                        <uc:MasterCardUC
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Balance="{Binding masterCard.Balance}"
+                            CardColorBorder="{Binding masterCard.CardColorBorder}"
+                            CardHolder="{Binding masterCard.CardHolder}"
+                            CardNumber="{Binding masterCard.CardNumber}"
+                            ChipSource="{Binding masterCard.ChipSource}"
+                            ContentColor="{Binding masterCard.ContentColor}"
+                            DataContext="{Binding myCardViewModel}"
+                            EndBColor="{Binding masterCard.EndBColor}"
+                            LaberColor="{Binding masterCard.LaberColor}"
+                            MasterCardLogo="{Binding masterCard.MasterCardLogo}"
+                            StartBColor="{Binding masterCard.StartBColor}"
+                            ValidThru="{Binding masterCard.ValidThru}" />
+                    </Grid>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.2*" />
+                            <RowDefinition Height="0.8*" />
+                        </Grid.RowDefinitions>
+                        <Button
+                            Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            Command="{Binding SeeAllCards}"
+                            Content="See all"
+                            FontSize="17"
+                            FontWeight="Medium"
+                            Foreground="{StaticResource ColorDeepOcean}"
+                            Template="{StaticResource ButtonDashboardTemplate}" />
+                        <uc:MasterCardUC
+                            Grid.Row="1"
+                            Balance="{Binding masterCard2.Balance}"
+                            CardColorBorder="{Binding masterCard2.CardColorBorder}"
+                            CardHolder="{Binding masterCard2.CardHolder}"
+                            CardNumber="{Binding masterCard2.CardNumber}"
+                            ChipSource="{Binding masterCard2.ChipSource}"
+                            ContentColor="{Binding masterCard2.ContentColor}"
+                            DataContext="{Binding myCardViewModel}"
+                            EndBColor="{Binding masterCard2.EndBColor}"
+                            LaberColor="{Binding masterCard2.LaberColor}"
+                            MasterCardLogo="{Binding masterCard2.MasterCardLogo}"
+                            StartBColor="{Binding masterCard2.StartBColor}"
+                            ValidThru="{Binding masterCard2.ValidThru}" />
+                    </Grid>
+                    <Grid Grid.Column="4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.2*" />
+                            <RowDefinition Height="0.8*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            FontSize="22"
+                            FontWeight="Medium"
+                            Foreground="#343C6A"
+                            Text="Recent Transaction" />
+                        <uc:RecentTransactionUC
+                            Grid.Row="1"
+                            DataContext="{Binding recentTransactionViewModel}"
+                            TransactionList="{Binding recentTransactions}" />
+                    </Grid>
+
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="0.9*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="350" MaxWidth="400" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition MinWidth="350" MaxWidth="400" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition MinWidth="350" MaxWidth="400" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        FontSize="22"
+                        FontWeight="Medium"
+                        Foreground="{StaticResource ColorDeepOcean}"
+                        Style="{StaticResource TopLeftAlignmentStyle}"
+                        Text="Weekly Activity" />
+                    <Border
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        BorderBrush="{StaticResource ColorWhite}"
+                        BorderThickness="1"
+                        CornerRadius="25">
+                        <Image Source="/UI/Images/WeeklyActivity.png" Stretch="Fill" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="4"
+                        FontSize="22"
+                        FontWeight="Medium"
+                        Foreground="{StaticResource ColorDeepOcean}"
+                        Text="Expense Statistics" />
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="4"
+                        Background="{StaticResource ColorWhite}"
+                        BorderBrush="{StaticResource ColorWhite}"
+                        BorderThickness="1"
+                        CornerRadius="25">
+                        <Image Source="/UI/Images/ExpenseStatistic.png" Stretch="Fill" />
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.1*" />
+                        <RowDefinition Height="0.9*" MinHeight="300" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="400" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="600" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Content="Quick Transfer"
+                        FontSize="22"
+                        FontWeight="Medium"
+                        Foreground="{StaticResource ColorDeepOcean}" />
+                    <uc:QuickTransferUC
+                        Grid.Row="1"
+                        DataContext="{Binding quickTransferViewModel}"
+                        QuickTransfers="{Binding quickTransfers}" />
+                    <Label
+                        Grid.Column="2"
+                        Margin="50,0,0,0"
+                        Content="Balance History"
+                        FontSize="22"
+                        FontWeight="Medium"
+                        Foreground="{StaticResource ColorDeepOcean}" />
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        VerticalAlignment="Top"
+                        BorderBrush="{StaticResource ColorWhite}"
+                        BorderThickness="1"
+                        CornerRadius="25">
+                        <Image Source="/UI/Images/BalanceHistory.png" Stretch="UniformToFill" />
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+
+</UserControl>

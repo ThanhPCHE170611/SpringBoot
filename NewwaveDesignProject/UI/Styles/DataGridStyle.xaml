@@ -1,0 +1,52 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="ListViewItemTransactionTemplate" TargetType="ListViewItem">
+        <Setter Property="Template" Value="{DynamicResource TransactionTemplate}" />
+    </Style>
+    <Style x:Key="ListViewItemCardList" TargetType="ListViewItem">
+        <Setter Property="Template" Value="{DynamicResource CardList}" />
+    </Style>
+    <Style x:Key="listMyCardItems" TargetType="ListViewItem">
+        <Setter Property="Template" Value="{DynamicResource MyCardTEmplate}" />
+    </Style>
+    <Style x:Key="ListViewItemCardSetting" TargetType="ListViewItem">
+        <Setter Property="Template" Value="{DynamicResource CardSetting}" />
+    </Style>
+    <Style x:Key="ListViewItemInvestmentTemplate" TargetType="ListViewItem">
+        <Setter Property="Template" Value="{DynamicResource InvestmentTemplate}" />
+    </Style>
+    <Style x:Key="ListViewItemInvoiceSentTemplate" TargetType="ListViewItem">
+        <Setter Property="Template" Value="{DynamicResource InvoiceSentTemplate}" />
+    </Style>
+
+    <Style x:Key="dataGridColumnStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="BorderBrush" Value="{StaticResource ColorTranparent}" />
+        <Setter Property="Background" Value="{StaticResource ColorTranparent}" />
+        <Setter Property="Foreground" Value="{StaticResource ColorLightBlueText}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
+        <Setter Property="BorderBrush" Value="{StaticResource ColorTranparent}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource ColorTranparent}" />
+                <Setter Property="Foreground" Value="{StaticResource ColorBlack}" />
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
+
+    <Style x:Key="RowStyles" TargetType="DataGridRow">
+        <Setter Property="BorderBrush" Value="{StaticResource ColorTranparent}" />
+        <Setter Property="Background" Value="{StaticResource ColorTranparent}" />
+        <Setter Property="Margin" Value="0,13,0,13" />
+
+    </Style>
+</ResourceDictionary>

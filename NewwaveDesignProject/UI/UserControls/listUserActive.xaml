@@ -1,0 +1,149 @@
+﻿<UserControl
+    x:Class="NewwaveDesignProject.UI.UserControls.listUserActive"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Border
+        Padding="30,30,30,30"
+        Background="#FFFF"
+        CornerRadius="25">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+            </Grid.RowDefinitions>
+
+            <DataGrid
+                Grid.Row="0"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderThickness="0"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource HederStyle}"
+                ColumnWidth="120"
+                GridLinesVisibility="None"
+                HeadersVisibility="Column"
+                ItemsSource="{Binding Loans, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                RowHeight="60"
+                RowStyle="{StaticResource RowStyles}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="100"
+                        Binding="{Binding Id}"
+                        Header="SL No" />
+                    <DataGridTextColumn
+                        Width=".5*"
+                        Binding="{Binding Money}"
+                        Header="Loan Money" />
+                    <DataGridTextColumn
+                        Width=".7*"
+                        Binding="{Binding Repay}"
+                        Header="Left to Repay" />
+                    <DataGridTextColumn
+                        Width=".7*"
+                        Binding="{Binding Durations}"
+                        Header="Duration" />
+                    <DataGridTextColumn
+                        Width=".7*"
+                        Binding="{Binding InterestRate}"
+                        Header="Interest rate" />
+                    <DataGridTextColumn
+                        Width=".7*"
+                        Binding="{Binding Installment}"
+                        Header="Installment" />
+                    <DataGridTemplateColumn Width=".7*" Header="Repay">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button
+                                    Margin="5"
+                                    Padding="10,5"
+                                    Background="Transparent"
+                                    BorderThickness="2"
+                                    Command="{Binding DataContext.RepayCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding}"
+                                    Content="{Binding Path=RepayContent}"
+                                    Cursor="Hand"
+                                    FontSize="14"
+                                    Template="{StaticResource RoundedButtonTemplate}">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="BorderBrush" Value="#232323" />
+                                            <Setter Property="Foreground" Value="#232323" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding isCheck}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#1814F3" />
+                                                    <Setter Property="Foreground" Value="#1814F3" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!--  Footer DataGrid  -->
+            <Grid
+                Grid.Row="1"
+                Background="Transparent"
+                DataContext="{Binding LoanTotal}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*" />
+                    <ColumnDefinition Width="38" />
+                    <ColumnDefinition Width="50*" />
+                    <ColumnDefinition Width="83" />
+                    <ColumnDefinition Width="85*" />
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="417*" />
+                    <ColumnDefinition Width="130" />
+                    <ColumnDefinition Width="191*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.Column="1"
+                    Width="120"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Regular"
+                    Foreground="#FE5C73"
+                    Text="Total"
+                    TextAlignment="Center" />
+                <TextBlock
+                    Grid.Column="3"
+                    Width="120"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Regular"
+                    Foreground="#FE5C73"
+                    Text="{Binding TotalLoanMoney}"
+                    TextAlignment="Center" />
+                <TextBlock
+                    Grid.Column="5"
+                    FontSize="16"
+                    FontWeight="Regular"
+                    Foreground="#FE5C73"
+                    Style="{DynamicResource AlightmentCenter}"
+                    Text="{Binding TotalLeftToRepay}" />
+                <TextBlock
+                    Grid.Column="7"
+                    Width="120"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Regular"
+                    Foreground="#FE5C73"
+                    Text="{Binding Installment}" />
+            </Grid>
+        </Grid>
+    </Border>
+
+</UserControl>

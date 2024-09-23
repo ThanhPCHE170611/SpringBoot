@@ -1,0 +1,80 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--<DataTemplate x:Key="CardSettingTemplateItem" DataType="ListViewItem">
+        <Grid Margin="0,10,0,10" Style="{DynamicResource AlightmentCenterLeft}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    Grid.Column="0"
+                    Width="60"
+                    Height="60"
+                    Margin="0,0,20,0"
+                    Background="{Binding IconBackground}"
+                    CornerRadius="20">
+                    <Image
+                        Width="25"
+                        Height="22.26"
+                        Source="{Binding IconCard}" />
+                </Border>
+                <Grid Grid.Column="1" VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="DemiBold"
+                        Foreground="{DynamicResource ColorDarGray}"
+                        LineHeight="19.36"
+                        Text="{Binding CardSettingTitle}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        FontSize="15"
+                        FontWeight="Light"
+                        Foreground="{DynamicResource ColorSteelBlue}"
+                        LineHeight="18.15"
+                        Text="{Binding CardSettingContent}" />
+                </Grid>
+            </Grid>
+        </Grid>
+    </DataTemplate>-->
+    <ControlTemplate x:Key="CardSetting" TargetType="ListViewItem">
+        <Grid
+            Width="255"
+            Margin="0,0,0,20"
+            Style="{DynamicResource AlightmentCenterLeft}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="20*" />
+                <ColumnDefinition Width="175*" />
+            </Grid.ColumnDefinitions>
+            <Image
+                Grid.Column="0"
+                Width="60"
+                Height="60"
+                Source="{Binding IconCard}" />
+            <Grid Grid.Column="2" VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    FontSize="16"
+                    FontWeight="DemiBold"
+                    Foreground="{DynamicResource ColorDarGray}"
+                    LineHeight="19.36"
+                    Text="{Binding CardSettingTitle}" />
+                <TextBlock
+                    Grid.Row="1"
+                    FontSize="15"
+                    FontWeight="Light"
+                    Foreground="{DynamicResource ColorSteelBlue}"
+                    LineHeight="18.15"
+                    Text="{Binding CardSettingContent}" />
+            </Grid>
+        </Grid>
+
+    </ControlTemplate>
+</ResourceDictionary>

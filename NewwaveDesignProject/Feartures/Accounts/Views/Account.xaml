@@ -1,0 +1,289 @@
+﻿<UserControl
+    x:Class="NewwaveDesignProject.Feartures.Accounts.Views.Account"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:local="clr-namespace:NewwaveDesignProject.Feartures.Accounts.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:textBlock="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    mc:Ignorable="d">
+    <Grid Margin="40,0,40,40" Background="{StaticResource ColorTranparent}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120*" />
+            <RowDefinition Height="23*" />
+            <RowDefinition Height="282*" />
+            <RowDefinition Height="24*" />
+            <RowDefinition Height="411*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="730" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="350" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="255" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition MinWidth="255" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition MinWidth="255" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition MinWidth="255" />
+            </Grid.ColumnDefinitions>
+
+            <textBlock:TextBlockUC
+                Title="{Binding BalanceStatistic.Title}"
+                Grid.Column="0"
+                BackgroundColor="{Binding BalanceStatistic.BackgroundColor}"
+                Detail="{Binding BalanceStatistic.Detail}"
+                Icon="{Binding BalanceStatistic.Icon}"
+                Style="{DynamicResource CenterLeftAlignmentStyle}" />
+
+
+            <textBlock:TextBlockUC
+                Title="{Binding statisticalItem1.Title}"
+                Grid.Column="2"
+                BackgroundColor="{Binding statisticalItem1.BackgroundColor}"
+                DataContext="{Binding statisticalItemViewModel}"
+                Detail="{Binding statisticalItem1.Detail}"
+                Icon="{Binding statisticalItem1.Icon}"
+                Style="{DynamicResource CenterLeftAlignmentStyle}" />
+
+
+            <textBlock:TextBlockUC
+                Title="{Binding statisticalItem2.Title}"
+                Grid.Column="4"
+                BackgroundColor="{Binding statisticalItem2.BackgroundColor}"
+                DataContext="{Binding statisticalItemViewModel}"
+                Detail="{Binding statisticalItem2.Detail}"
+                Icon="{Binding statisticalItem2.Icon}"
+                Style="{DynamicResource CenterLeftAlignmentStyle}" />
+
+
+            <textBlock:TextBlockUC
+                Title="{Binding statisticalItem3.Title}"
+                Grid.Column="6"
+                BackgroundColor="{Binding statisticalItem3.BackgroundColor}"
+                DataContext="{Binding statisticalItemViewModel}"
+                Detail="{Binding statisticalItem3.Detail}"
+                Icon="{Binding statisticalItem3.Icon}"
+                Style="{DynamicResource CenterLeftAlignmentStyle}" />
+
+        </Grid>
+
+        <Grid
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="0,10,0,0"
+            Style="{StaticResource LeftHorizontalAlignment}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="96*" />
+                <ColumnDefinition Width="91*" />
+                <ColumnDefinition Width="102*" />
+                <ColumnDefinition Width="263*" />
+                <ColumnDefinition Width="71*" />
+                <ColumnDefinition Width="107*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="27*" />
+                <RowDefinition Height="20*" />
+                <RowDefinition Height="235*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.ColumnSpan="6"
+                Style="{DynamicResource Title}"
+                Text="Transactions" />
+
+            <textBlock:TransactionUC
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="6"
+                MinWidth="730"
+                Margin="0,15,0,0"
+                TransactionList="{Binding listTransaction}" />
+        </Grid>
+
+        <Grid
+            Grid.Row="2"
+            Grid.Column="2"
+            Margin="0,10,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*" />
+                <RowDefinition Height="90*" />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    VerticalAlignment="Bottom"
+                    Style="{DynamicResource Title}"
+                    Text="My Card" />
+                <Button
+                    Grid.Column="1"
+                    Background="{StaticResource ColorTranparent}"
+                    BorderThickness="0"
+                    Command="{Binding SeeAllCommand}"
+                    Content="See All"
+                    FontSize="17"
+                    FontWeight="Bold"
+                    Style="{StaticResource CenterRightAlignmentStyle}"
+                    Template="{StaticResource CustomButtonTemplate}" />
+
+            </Grid>
+
+            <textBlock:MyCardItem
+                Grid.Row="1"
+                Margin="0,15,0,0"
+                HorizontalAlignment="Left"
+                BackgroundGradientEnd="{Binding CardData.BackgroundGradientEnd}"
+                BackgroundGradientStart="{Binding CardData.BackgroundGradientStart}"
+                BorderBackgroundBottom="{Binding CardData.BorderBackgroundBottom}"
+                ChipCardSource="{Binding CardData.ChipSource}"
+                Circle="{Binding CardData.Circle}"
+                ColorContent="{Binding CardData.ColorContent}"
+                ColorTitle="{Binding CardData.ColorTitle}"
+                DockPanel.Dock="Left"
+                TextBlock1="{Binding CardData.BlanceTitle}"
+                TextBlock2="{Binding CardData.BlanceAmount}"
+                TextBlock3="{Binding CardData.HolderTitle}"
+                TextBlock4="{Binding CardData.HolderName}"
+                TextBlock5="{Binding CardData.ValidThruTitle}"
+                TextBlock6="{Binding CardData.ValidThruValue, StringFormat=\{0:MM/yy\}}"
+                TextBlock7="{Binding CardData.Number}" />
+
+
+        </Grid>
+
+
+
+        <Grid
+            Grid.Row="4"
+            Grid.Column="2"
+            Style="{StaticResource LeftHorizontalAlignment}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="27*" />
+                <RowDefinition Height="235*" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,10,0,20"
+                DockPanel.Dock="Top"
+                Style="{DynamicResource Title}"
+                Text="Invoices Sent" />
+
+            <textBlock:InvoiceSentUC Grid.Row="1" ListInvoiceSent="{Binding listInvoiceSent}" />
+        </Grid>
+
+
+        <Grid
+            Grid.Row="4"
+            Grid.Column="0"
+            Width="730"
+            Style="{StaticResource LeftHorizontalAlignment}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="27*" />
+                <RowDefinition Height="235*" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,10,0,20"
+                Style="{DynamicResource Title}"
+                Text="Debit Credit Overview" />
+            <Border Grid.Row="1" Style="{StaticResource BorderRadiusItem}">
+                <Grid Margin="30,27,30,27">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="15*" />
+                        <RowDefinition Height="85*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300*" />
+                            <ColumnDefinition Width="67*" />
+                            <ColumnDefinition Width="300*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Orientation="Horizontal">
+                            <TextBlock
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Style="{StaticResource CenterAlignmentStyle}"
+                                Text="$7,560 " />
+                            <TextBlock
+                                Grid.Column="3"
+                                HorizontalAlignment="Right"
+                                FontSize="16"
+                                Style="{StaticResource TextColorGray}"
+                                Text=" Debited &amp; " />
+                            <TextBlock
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Style="{StaticResource CenterAlignmentStyle}"
+                                Text=" $5,420 " />
+                            <TextBlock
+                                Grid.Column="3"
+                                HorizontalAlignment="Right"
+                                FontSize="16"
+                                Style="{StaticResource TextColorGray}"
+                                Text=" Credited in this Week " />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Column="2"
+                            Orientation="Horizontal"
+                            Style="{StaticResource CenterRightAlignmentStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="15" Source="pack://application:,,,/NewwaveDesignProject;component/UI/Images/Accounts/bluerectangle.png" />
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    FontSize="16"
+                                    Style="{StaticResource TextColorGray}"
+                                    Text=" Debit   " />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="15" Source="pack://application:,,,/NewwaveDesignProject;component/UI/Images/Accounts/pinkrectangle.png" />
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    FontSize="16"
+                                    Style="{StaticResource TextColorGray}"
+                                    Text=" Credit " />
+                            </StackPanel>
+                        </StackPanel>
+
+                    </Grid>
+                    <lc:CartesianChart
+                        Grid.Row="1"
+                        MinHeight="293"
+                        Series="{Binding RevenueStaticByColumn}">
+                        <lc:CartesianChart.AxisX>
+                            <lc:Axis
+                                Title="Day"
+                                Foreground="{StaticResource ColorSteelBlue}"
+                                LabelFormatter="{Binding FormatterColumn}"
+                                Labels="{Binding Labels}"
+                                ShowLabels="True">
+                                <lc:Axis.Separator>
+                                    <lc:Separator Step="1" StrokeThickness="0" />
+                                </lc:Axis.Separator>
+                            </lc:Axis>
+                        </lc:CartesianChart.AxisX>
+                        <lc:CartesianChart.AxisY>
+                            <lc:Axis ShowLabels="False" />
+                        </lc:CartesianChart.AxisY>
+                    </lc:CartesianChart>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

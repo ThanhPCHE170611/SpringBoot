@@ -1,0 +1,123 @@
+﻿<UserControl
+    x:Class="NewwaveDesignProject.UI.UserControls.QuickTransferUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    xmlns:m="clr-namespace:NewwaveDesignProject.Feartures.DashBoard.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Border
+        Background="{StaticResource ColorWhite}"
+        BorderBrush="{StaticResource ColorWhite}"
+        BorderThickness="1"
+        CornerRadius="25">
+        <Grid MinHeight="250">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.7*" />
+                <RowDefinition Height="0.3*" />
+            </Grid.RowDefinitions>
+            <Grid Width="Auto">
+                <ListView
+                    Width="Auto"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ItemsSource="{Binding QuickTransfers, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Template" Value="{StaticResource Quick_Transfer_Template}" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Margin" Value="20" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    MinWidth="103"
+                    Margin="16"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    FontWeight="Medium"
+                    Foreground="#718EBF"
+                    Text="Write Amount" />
+                <Border
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,22,0"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource ColorGhostWhite}"
+                    BorderBrush="#EDF1F7"
+                    BorderThickness="1"
+                    CornerRadius="50">
+                    <Grid Height="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                            Background="Transparent"
+                            BorderThickness="0"
+                            FontSize="16"
+                            Foreground="#718EBF"
+                            Style="{StaticResource CenterAlignmentStyle}"
+                            Text="525.50" />
+                        <Border
+                            Grid.Column="1"
+                            Background="#1814F3"
+                            BorderBrush="DarkBlue"
+                            BorderThickness="0"
+                            CornerRadius="30">
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    HorizontalAlignment="Right"
+                                    FontSize="16"
+                                    FontWeight="Medium"
+                                    Foreground="{StaticResource ColorWhite}"
+                                    Text="Sent" />
+                                <Image
+                                    Grid.Column="1"
+                                    Width="26"
+                                    Height="26"
+                                    Source="/UI/Images/QuickTransfer/Sent.png" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+            <Border
+                Grid.RowSpan="2"
+                Width="50"
+                Height="50"
+                Margin="0,0,20,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                BorderBrush="{StaticResource ColorWhite}"
+                BorderThickness="1"
+                CornerRadius="50">
+                <Image
+                    Width="10"
+                    Height="10"
+                    Source="/UI/Images/QuickTransfer/Next.png"
+                    Stretch="Fill" />
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

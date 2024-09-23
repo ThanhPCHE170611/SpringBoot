@@ -1,0 +1,174 @@
+﻿<UserControl
+    x:Class="NewwaveDesignProject.Feartures.Investments.Views.Investment"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:lc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:local="clr-namespace:NewwaveDesignProject.Feartures.Investments.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:txtBlock="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    d:DesignHeight="924"
+    d:DesignWidth="1190"
+    mc:Ignorable="d">
+    <Grid Margin="40,0,40,40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120*" />
+            <RowDefinition Height="24*" />
+            <RowDefinition Height="329*" />
+            <RowDefinition Height="24*" />
+            <RowDefinition Height="345*" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="350" />
+            </Grid.ColumnDefinitions>
+            <txtBlock:TextBlockUC
+                Title="{Binding TotalInvestAmount.Title}"
+                Grid.Column="0"
+                BackgroundColor="{Binding TotalInvestAmount.BackgroundColor}"
+                Detail="{Binding TotalInvestAmount.Detail}"
+                DockPanel.Dock="Left"
+                HeightTextBlock="120"
+                Icon="{Binding TotalInvestAmount.Icon}"
+                WidthTextBlock="350" />
+            <txtBlock:TextBlockUC
+                Title="{Binding NumberOfInvestments.Title}"
+                Grid.Column="2"
+                BackgroundColor="{Binding NumberOfInvestments.BackgroundColor}"
+                Detail="{Binding NumberOfInvestments.Detail}"
+                DockPanel.Dock="Left"
+                HeightTextBlock="120"
+                Icon="{Binding NumberOfInvestments.Icon}"
+                WidthTextBlock="350" />
+            <txtBlock:TextBlockUC
+                Title="{Binding RateOfReturn.Title}"
+                Grid.Column="4"
+                BackgroundColor="{Binding RateOfReturn.BackgroundColor}"
+                Detail="{Binding RateOfReturn.Detail}"
+                DockPanel.Dock="Left"
+                HeightTextBlock="120"
+                Icon="{Binding RateOfReturn.Icon}"
+                WidthTextBlock="350" />
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="545*" />
+                <ColumnDefinition Width="545*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Width="540" Style="{StaticResource LeftHorizontalAlignment}">
+                <TextBlock
+                    Margin="0,0,0,20"
+                    DockPanel.Dock="Top"
+                    Style="{StaticResource Title}"
+                    Text="Yearly Total Investment" />
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    MinHeight="280"
+                    Style="{StaticResource BorderRadiusItem}">
+                    <lc:CartesianChart Margin="29,26,30,28" Series="{Binding SeriesCollectionLineStraight}">
+                        <lc:CartesianChart.AxisX>
+                            <lc:Axis
+                                Foreground="{StaticResource ColorBlack}"
+                                LabelFormatter="{Binding Formatter}"
+                                MaxValue="5"
+                                MinValue="0"
+                                ShowLabels="True">
+                                <lc:Axis.Separator>
+                                    <lc:Separator Step="1" StrokeThickness="0" />
+                                </lc:Axis.Separator>
+                            </lc:Axis>
+                        </lc:CartesianChart.AxisX>
+                        <lc:CartesianChart.AxisY>
+                            <lc:Axis
+                                Foreground="{StaticResource ColorBlack}"
+                                MaxValue="40000"
+                                MinValue="0">
+                                <lc:Axis.Separator>
+                                    <lc:Separator Step="10000" StrokeThickness="0" />
+                                </lc:Axis.Separator>
+                            </lc:Axis>
+                        </lc:CartesianChart.AxisY>
+
+                    </lc:CartesianChart>
+                </Border>
+            </DockPanel>
+
+            <DockPanel
+                Grid.Column="1"
+                Width="540"
+                Style="{StaticResource RightHorizontalAlignment}">
+                <TextBlock
+                    Margin="0,0,0,20"
+                    DockPanel.Dock="Top"
+                    Style="{StaticResource Title}"
+                    Text="Monthly Revenue" />
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{StaticResource BorderRadiusItem}">
+                    <lc:CartesianChart Margin="29,26,30,28" Series="{Binding SeriesCollectionLineSmooth}">
+                        <lc:CartesianChart.AxisX>
+                            <lc:Axis
+                                Foreground="{StaticResource ColorBlack}"
+                                LabelFormatter="{Binding Formatter}"
+                                MaxValue="5"
+                                MinValue="0"
+                                ShowLabels="True">
+                                <lc:Axis.Separator>
+                                    <lc:Separator Step="1" StrokeThickness="0" />
+                                </lc:Axis.Separator>
+                            </lc:Axis>
+                        </lc:CartesianChart.AxisX>
+                        <lc:CartesianChart.AxisY>
+                            <lc:Axis Foreground="{StaticResource ColorBlack}" ShowLabels="True">
+                                <lc:Axis.Separator>
+                                    <lc:Separator Step="10000" StrokeThickness="0" />
+                                </lc:Axis.Separator>
+                            </lc:Axis>
+                        </lc:CartesianChart.AxisY>
+                    </lc:CartesianChart>
+                </Border>
+            </DockPanel>
+        </Grid>
+        <Grid
+            Grid.Row="4"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="720*" />
+                <ColumnDefinition Width="470*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <DockPanel Style="{StaticResource CenterLeftAlignmentStyle}">
+                    <TextBlock
+                        Margin="0,0,0,20"
+                        DockPanel.Dock="Top"
+                        Style="{StaticResource Title}"
+                        Text="My Investment" />
+                    <txtBlock:MyInvestment
+                        Width="635"
+                        Height="300"
+                        ListInvestment="{Binding ListMyInvestment}" />
+                </DockPanel>
+            </Grid>
+            <Grid Grid.Column="1">
+                <DockPanel Style="{StaticResource CenterLeftAlignmentStyle}">
+                    <TextBlock
+                        Margin="0,0,0,20"
+                        DockPanel.Dock="Top"
+                        Style="{StaticResource Title}"
+                        Text="Trending Stocks" />
+                    <txtBlock:TrendingStock List="{Binding ListTrendingStock}" />
+                </DockPanel>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,113 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DataTemplate x:Key="ServicesListViewItem" DataType="ListViewItem">
+        <DataTemplate.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="ColorStyle.xaml" />
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </DataTemplate.Resources>
+        <Border
+            Height="90"
+            Margin="0,10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Background="{StaticResource ColorMilkWhite}"
+            BorderThickness="0"
+            CornerRadius="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="15*" />
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="20*" />
+                    <ColumnDefinition Width="159" />
+                    <ColumnDefinition Width="84*" />
+                    <ColumnDefinition Width="116" />
+                    <ColumnDefinition Width="82*" />
+                    <ColumnDefinition Width="116" />
+                    <ColumnDefinition Width="82*" />
+                    <ColumnDefinition Width="116" />
+                    <ColumnDefinition Width="80*" />
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="30*" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    Grid.Column="1"
+                    Width="60"
+                    Height="60"
+                    CornerRadius="20">
+                    <Image Source="{Binding ServiceImage}" />
+                </Border>
+
+                <StackPanel
+                    Grid.Column="3"
+                    Width="159"
+                    Height="44">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource ColorBlackText}"
+                        Text="{Binding ServiceName}" />
+                    <TextBlock
+                        FontSize="15"
+                        Foreground="{StaticResource ColorLightBlueText}"
+                        Text="{Binding Description}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="5"
+                    Width="116"
+                    Height="44">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource ColorBlackText}"
+                        Text="{Binding FirstText}" />
+                    <TextBlock
+                        FontSize="15"
+                        Foreground="{StaticResource ColorLightBlueText}"
+                        Text="{Binding SecondText}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="7"
+                    Width="116"
+                    Height="44">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource ColorBlackText}"
+                        Text="{Binding ThirdText}" />
+                    <TextBlock
+                        FontSize="15"
+                        Foreground="{StaticResource ColorLightBlueText}"
+                        Text="{Binding FourthText}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="9"
+                    Width="116"
+                    Height="44">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource ColorBlackText}"
+                        Text="{Binding FifthText}" />
+                    <TextBlock
+                        FontSize="15"
+                        Foreground="{StaticResource ColorLightBlueText}"
+                        Text="{Binding SixthText}" />
+                </StackPanel>
+                <Button
+                    Grid.Column="11"
+                    Width="150"
+                    Height="35"
+                    Background="{StaticResource ColorWhite}"
+                    BorderBrush="{StaticResource ColorLightBlueText}"
+                    BorderThickness="1"
+                    Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                    CommandParameter="{Binding}"
+                    Content="View Details"
+                    Foreground="{StaticResource ColorLightBlueText}"
+                    Style="{DynamicResource CustomButtonStyle}" />
+            </Grid>
+        </Border>
+    </DataTemplate>
+</ResourceDictionary>

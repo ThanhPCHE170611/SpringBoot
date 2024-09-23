@@ -1,0 +1,58 @@
+﻿<Page
+    x:Class="NewwaveDesignProject.Views.ServicesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NewwaveDesignProject.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    d:DesignHeight="924"
+    d:DesignWidth="1190"
+    mc:Ignorable="d">
+    <Grid Margin="40,30,40,44" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120*" />
+            <RowDefinition Height="24*" />
+            <RowDefinition Height="27*" />
+            <RowDefinition Height="18*" />
+            <RowDefinition Height="660*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="350" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="350" />
+        </Grid.ColumnDefinitions>
+        <userControls:ServicesCardsUC
+            Grid.Column="0"
+            CardImageSource="{Binding MostUsedService.ServiceImage}"
+            ServiceName="{Binding MostUsedService.ServiceName}"
+            Slogan="{Binding MostUsedService.Slogan}" />
+        <userControls:ServicesCardsUC
+            Grid.Column="2"
+            CardImageSource="{Binding SecondUsedService.ServiceImage}"
+            ServiceName="{Binding SecondUsedService.ServiceName}"
+            Slogan="{Binding SecondUsedService.Slogan}" />
+        <userControls:ServicesCardsUC
+            Grid.Column="4"
+            CardImageSource="{Binding ThirdUsedService.ServiceImage}"
+            ServiceName="{Binding ThirdUsedService.ServiceName}"
+            Slogan="{Binding ThirdUsedService.Slogan}" />
+
+        <TextBlock
+            Grid.Row="2"
+            VerticalAlignment="Center"
+            DockPanel.Dock="Top"
+            FontSize="22"
+            FontWeight="Bold"
+            Foreground="{StaticResource ColorDeepOcean}"
+            Text="Bank Services List" />
+
+        <userControls:ListViewItemUC
+            Grid.Row="4"
+            Grid.ColumnSpan="5"
+            BorderThickness="0"
+            ListItems="{Binding ListServicesItem}" />
+    </Grid>
+</Page>

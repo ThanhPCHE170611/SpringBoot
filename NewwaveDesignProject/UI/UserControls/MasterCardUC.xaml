@@ -1,0 +1,107 @@
+﻿<UserControl
+    x:Class="NewwaveDesignProject.UI.UserControls.MasterCardUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:NewwaveDesignProject.UI.UserControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Border
+        MinWidth="341"
+        MinHeight="235"
+        BorderBrush="{Binding CardBoderColor}"
+        BorderThickness="1"
+        CornerRadius="25">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                <GradientStop Offset="0" Color="{Binding StartBColor, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                <GradientStop Offset="0.8" Color="{Binding EndBColor, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid Margin="26,24,26,10">
+                <Label
+                    Content="Balance"
+                    FontSize="12"
+                    Foreground="{Binding LaberColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Style="{StaticResource TopLeftAlignmentStyle}" />
+                <TextBlock
+                    Margin="4,0,0,0"
+                    FontSize="20"
+                    Foreground="{Binding ContentColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Style="{StaticResource BottomLeftAlignmentStyle}"
+                    Text="{Binding Balance, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            </Grid>
+            <Image
+                Grid.Row="0"
+                Grid.Column="1"
+                Width="36"
+                Margin="106,24,0,26"
+                HorizontalAlignment="Left"
+                Source="{Binding ChipSource, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Stretch="Fill" />
+            <Grid
+                Grid.Row="1"
+                Height="45"
+                Margin="26,24,26,10">
+                <Label
+                    Content="CARD HOLDER"
+                    FontSize="12"
+                    Foreground="{Binding LaberColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Style="{StaticResource TopLeftAlignmentStyle}" />
+                <TextBlock
+                    Margin="4,0,0,0"
+                    FontSize="15"
+                    Foreground="{Binding ContentColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Style="{StaticResource BottomLeftAlignmentStyle}"
+                    Text="{Binding CardHolder, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            </Grid>
+            <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                Height="45"
+                Margin="26,24,26,10">
+                <Label
+                    Content="VALID THRU"
+                    FontSize="12"
+                    Foreground="{Binding LaberColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Style="{StaticResource TopLeftAlignmentStyle}" />
+                <TextBlock
+                    Margin="4,0,0,0"
+                    FontSize="15"
+                    Foreground="{Binding ContentColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Style="{StaticResource BottomLeftAlignmentStyle}"
+                    Text="{Binding ValidThru, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            </Grid>
+            <Border
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                BorderBrush="{StaticResource ColorWhite}"
+                BorderThickness="0,1,0,0">
+                <Grid>
+                    <TextBlock
+                        Margin="26,24,90,10"
+                        FontSize="24"
+                        FontWeight="Medium"
+                        Foreground="{Binding ContentColor, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Text="{Binding CardNumber, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                    <Image
+                        Width="44"
+                        Height="33"
+                        Margin="0,0,26,0"
+                        HorizontalAlignment="Right"
+                        Source="{Binding MasterCardLogo, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>
