@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,26 +20,22 @@ import org.springframework.ui.Model;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private UserDetailsService userDetailsService;
-    private final UserRepository  userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
-        String password = authentication.getCredentials().toString();
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if (userDetails == null) {
-            throw new AuthenticationServiceException("User not found");
-        }
-        else if (passwordEncoder.matches(password, userDetails.getPassword()) || password.equals(userDetails.getPassword())) {
-            if(!userRepository.findUsersByUsername(username).get().getStatus().equals("active")){
-                throw new BadCredentialsException("Bad credentials");
-            } else {
-                return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-            }
-        } else {
+        String rawPassword = authentication.getCredentials().toString();
+
+        UserDetails user = userDetailsService.loadUserByUsername(username);
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword()) && !rawPassword.equals(user.getPassword())) {
             throw new BadCredentialsException("Bad credentials");
         }
+
+        return new UsernamePasswordAuthenticationToken(
+                user, null, user.getAuthorities()
+        );
     }
 
     @Override

@@ -1,56 +1,63 @@
 package com.example.schoolmanagement.SecurityConfig;
 
-import com.example.schoolmanagement.Provide.CustomAuthenticationProvider;
-import com.example.schoolmanagement.Service.CustomeUserDetailService;
+import com.example.schoolmanagement.Filter.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private CustomAuthenticationProvider customAuthenticationProvider;
-    private CustomeUserDetailService customeUserDetailService;
-    @Bean
-    @Lazy
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(auth -> {
-                    auth.antMatchers("/**").permitAll()
-                            .antMatchers("/admin/**").hasRole("admin")
-                            .antMatchers("/student/**").hasRole("student")
-                            .antMatchers("/teacher/**").hasRole("teacher");
-                    auth.anyRequest().authenticated();
-                })
-                .oauth2Login()
-                .loginPage("/oauth2/authorization/google")
-                .failureUrl("/auth/login?error=true")
-                .defaultSuccessUrl("/user/welcome")
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeRequests()
+                .antMatchers("/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html").permitAll()
+                .antMatchers("/api/auth/**", "/oauth2/**").permitAll()
+                .antMatchers("/admin/**").hasRole("admin")
+                .antMatchers("/student/**").hasRole("student")
+                .antMatchers("/teacher/**").hasRole("teacher")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/auth/login")
-                .failureUrl("/auth/login?error=true")
-                .defaultSuccessUrl("/otpvalidate")
-                .permitAll()
-                .and()
-                .csrf().disable()
-                .authenticationProvider(customAuthenticationProvider)
-                .userDetailsService(customeUserDetailService)
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, e) -> {
+                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"error\":\"Unauthorized\"}");
+                        })
+                        .accessDeniedHandler((req, res, e) -> {
+                            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            res.setContentType("application/json");
+                            res.getWriter().write("{\"error\":\"Forbidden\"}");
+                        })
+                )
+                .addFilterBefore(jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-
+    @Bean
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
 }
